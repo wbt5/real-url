@@ -1,4 +1,5 @@
 # 获取斗鱼直播间的真实流媒体地址，可在PotPlayer、flv.js等播放器中播放。
+# 2019年11月2日修复预览地址获取的方法；新增未开播房间的判断。
 
 
 import requests
@@ -54,7 +55,8 @@ def mix_room(rid):
 def get_pre_url(rid, tt):
     request_url = 'https://playweb.douyucdn.cn/lapi/live/hlsH5Preview/' + rid
     post_data = {
-        'rid': rid
+        'rid': rid,
+        'did': '10000000000000000000000000001501'
     }
     auth = hashlib.md5((rid + str(tt)).encode('utf-8')).hexdigest()
     header = {
@@ -110,13 +112,16 @@ def get_real_url(rid):
     tt = get_tt()
     url = get_pre_url(rid, tt[1])
     if url:
-        return url
+        return "http://tx2play1.douyucdn.cn/live/" + url + ".flv?uuid="
     else:
         result = get_homejs(rid)
         real_rid = result[1]
         homejs = result[0]
         real_url = get_sign_url(tt[2], real_rid, tt[0], homejs)
-        real_url = "http://tx2play1.douyucdn.cn/live/" + real_url + ".flv?uuid="
+        if real_url != 0:
+            real_url = "http://tx2play1.douyucdn.cn/live/" + real_url + ".flv?uuid="
+        else:
+            real_url = '未开播'
         return real_url
 
 
