@@ -16,6 +16,7 @@ def get_real_url(rid):
     result = re.findall(pattern, response.text, re.I)
     if result:
         real_url = result[0]
+        real_url = re.sub(r'_\d{3,4}.m3u8', '.flv', result[0])
     else:
         real_url = '未开播或直播间不存在'
     return real_url
