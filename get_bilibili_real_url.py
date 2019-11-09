@@ -9,8 +9,12 @@ import re
 def get_real_rid(rid):
     room_url = 'https://api.live.bilibili.com/room/v1/Room/room_init?id=' + str(rid)
     response = requests.get(url=room_url).json()
-    live_status = response.get('data').get('live_status')
-    room_id = response.get('data').get('room_id')
+    data = response.get('data', 0)
+    if data:
+        live_status = data.get('live_status', 0)
+        room_id = data.get('room_id', 0)
+    else:
+        live_status = room_id = 0
     return live_status, room_id
 
 
