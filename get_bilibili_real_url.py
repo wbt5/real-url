@@ -25,10 +25,14 @@ def get_real_url(rid):
     if live_status:
         room_url = 'https://api.live.bilibili.com/room/v1/Room/playUrl?cid=' +str(room_id) + '&platform=h5&otype=json&quality=4'
         response = requests.get(url=room_url).json()
-        result = response.get('data').get('durl')[0].get('url')
-        pattern = r'.com/live-[\S]*/([\s\S]*.m3u8)'
-        pattern_result = re.findall(pattern, result, re.I)[0]
-        real_url = 'https://cn-hbxy-cmcc-live-01.live-play.acgvideo.com/live-bvc/' + pattern_result
+        durl = response.get('data').get('durl', 0)
+        if durl:
+            result = durl[0].get('url')
+            pattern = r'.com/live-[\S]*/([\s\S]*.m3u8)'
+            pattern_result = re.findall(pattern, result, re.I)[0]
+            real_url = 'https://cn-hbxy-cmcc-live-01.live-play.acgvideo.com/live-bvc/' + pattern_result
+        else:
+            real_url = '疑似部分国外IP无法GET到正确数据，待验证'
     else:
         real_url = '未开播或直播间不存在'
     return real_url
