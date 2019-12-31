@@ -1,26 +1,28 @@
-# 获取快手直播的真实流媒体地址。
-# 输出是最高画质
+# 获取快手直播的真实流媒体地址，默认输出最高画质
+# 2019年12月31日更新，headers中需要添加cookie，失效更换
 
 
 import requests
+import json
 import re
 
 
-def get_real_url(url):
+def get_real_url(rid):
     try:
-        room_url = 'https://m.gifshow.com/fw/live/' + \
-            re.findall(r'[u|live|profile]/([\w-]*)[\s\S]*?', url)[0]
+        url = 'https://live.kuaishou.com/u/' + str(rid)
         headers = {
-            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'}
-        response = requests.get(url=room_url, headers=headers).text
-        m3u8_url = re.findall(
-            r'type="video/mp4" src="([\s\S]*?.m3u8)', response)[0]
-        real_url = re.sub(r'_sd1000', '', m3u8_url)
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
+            'cookie': 'did=web_8ad78a7e9b64441293b9f53788a41109'
+        }
+        response = requests.get(url, headers=headers).text
+        pattern = r'{"liveStream":{"type":"json","json":{"liveStreamId":.*"playUrls":(.*),"coverUrl":'
+        real_url = json.loads(re.findall(pattern, response)[0])[0]
     except:
-        real_url = '直播间不存在或未开播'
+        real_url = '该直播间不存在或未开播'
     return real_url
 
 
-rid = input('请输入快手直播间地址：\n')
+rid = input('请输入快手直播间ID：\n')
 real_url = get_real_url(rid)
-print('该直播源地址为：\n' + real_url)
+print('该直播源地址为：')
+print(real_url)
