@@ -1,8 +1,7 @@
-# 获取快手直播的真实流媒体地址。
-# 输出是最高画质
-
+# 获取快手直播的真实流媒体地址，默认输出最高画质
 
 import requests
+import json
 import re
 
 
@@ -15,7 +14,7 @@ def get_real_url(rid):
         m3u8_url = re.findall(r'type="video/mp4" src="([\s\S]*?)_sd1000tp.m3u8', response)[0]
         real_url = [m3u8_url + i for i in ['.flv', '.m3u8']]
     except:
-        real_url = '直播间不存在或未开播'
+        real_url = '该直播间不存在或未开播'
     return real_url
 
 
