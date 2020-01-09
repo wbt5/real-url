@@ -12,7 +12,7 @@ def get_real_url(rid):
     return real_url
 
 
-rid = input('请输入龙珠直播房间号：\n')
+rid = input('请输入酷狗直播房间号：\n')
 real_url = get_real_url(rid)
 print('该直播间源地址为：')
 print(real_url)
