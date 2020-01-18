@@ -10,7 +10,7 @@ import re
 def get_real_url(rid):
     try:
         if 'v.douyin.com' in rid:
-            room_id = re.findall(r'live/(\d+)\?utm', requests.get(url=rid).url)[0]
+            room_id = re.findall(r'(\d{19})', requests.get(url=rid).url)[0]
         else:
             room_id = rid
         room_url = 'https://webcast-hl.amemv.com/webcast/room/reflow/info/?room_id={}&live_id=1'.format(room_id)
