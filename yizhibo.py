@@ -7,7 +7,7 @@ import re
 
 def get_real_url(room_url):
     try:
-        scid = re.findall(r'/l/(\w*).html', room_url)[0]
+        scid = re.findall(r'/l/(\S*).html', room_url)[0]
         flvurl = 'http://alcdn.f01.xiaoka.tv/live/{}.flv'.format(scid)
         m3u8url = 'http://al01.alcdn.hls.xiaoka.tv/live/{}.m3u8'.format(scid)
         rtmpurl = 'rtmp://alcdn.r01.xiaoka.tv/live/live/{}'.format(scid)
@@ -23,7 +23,7 @@ def get_real_url(room_url):
 
 def get_status(room_url):
     try:
-        scid = re.findall(r'/l/(\w*).html', room_url)[0]
+        scid = re.findall(r'/l/(\S*).html', room_url)[0]
         response = requests.get(
             url='https://m.yizhibo.com/www/live/get_live_video?scid=' + str(scid)).json()
         status_code = response.get('data').get('info').get('status')
