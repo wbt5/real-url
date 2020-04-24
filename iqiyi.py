@@ -11,7 +11,7 @@ import urllib.parse
 
 def get_real_url(rid):
     try:
-        response = requests.get('https://m-live.iqiyi.com/w/' + rid).text
+        response = requests.get('https://m-gamelive.iqiyi.com/w/' + rid).text
         # 获取直播间的qipuId
         qipuId = re.findall(r'"qipuId":(\d*?),"roomId', response)[0]
         callback = 'jsonp_' + str(int((time.time() * 1000))) + '_0000'
