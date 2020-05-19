@@ -1,30 +1,24 @@
 # 获取PPS奇秀直播的真实流媒体地址。
 
 import requests
-import json
 import re
+import time
 
 
 def get_real_url(rid):
     try:
         response = requests.get('http://m-x.pps.tv/room/' + str(rid)).text
         anchor_id = re.findall(r'anchor_id":(\d*),"online_uid', response)[0]
-        url = 'https://x.pps.tv/api/room/getStreamConfig'
-        params = {
-            "type_id": 1,
-            "vid": 1,
-            "anchor_id": anchor_id,
-            }
+        tt = int(time.time() * 1000)
+        url = 'http://api-live.iqiyi.com/stream/geth5?qd_tm={}&typeId=1&platform=7&vid=0&qd_vip=0&qd_uid={}&qd_ip=114.114.114.114&qd_vipres=0&qd_src=h5_xiu&qd_tvid=0&callback='.format(tt, anchor_id)
         headers = {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Referer': 'http://m-x.pps.tv/'
         }
-        response = requests.post(url=url, data=json.dumps(params), headers=headers).json()
-        if response.get('data'):
-            real_url = response.get('data').get('flv')
-        else:
-            real_url = '未开播'
+        response = requests.get(url=url, headers=headers).text
+        real_url = re.findall(r'"hls":"(.*)","rate_list', response)[0]
     except:
-        real_url = '直播间不存在'
+        real_url = '直播间未开播或不存在'
     return real_url
 
 

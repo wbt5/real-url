@@ -9,7 +9,8 @@ def get_real_url(rid):
     try:
         room_url = 'https://m.gifshow.com/fw/live/' + str(rid)
         headers = {
-            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'}
+            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+            'cookie': 'did=web_'}
         response = requests.get(url=room_url, headers=headers).text
         m3u8_url = re.findall(r'type="application/x-mpegURL" src="([\s\S]*?)_sd1000(tp)?(/index)?.m3u8', response)[0]
         real_url = [m3u8_url[0] + i for i in ['.flv', '.m3u8']]
