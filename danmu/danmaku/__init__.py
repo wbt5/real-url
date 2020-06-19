@@ -6,6 +6,7 @@ from .bilibili import Bilibili
 from .douyu import Douyu
 from .huya import Huya
 from .kuaishou import KuaiShou
+from .huomao import HuoMao
 
 __all__ = ['DanmakuClient']
 
@@ -26,7 +27,8 @@ class DanmakuClient:
         for u, s in {'douyu.com': Douyu,
                      'live.bilibili.com': Bilibili,
                      'huya.com': Huya,
-                     'kuaishou.com': KuaiShou}.items():
+                     'huomao.com': HuoMao,
+                     'kuaishou.com': KuaiShou,}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 break
