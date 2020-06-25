@@ -27,3 +27,5 @@ asyncio.run(main(a))
 # 斗鱼：https://www.douyu.com/85894
 # B站：https://live.bilibili.com/70155
 # 快手：https://live.kuaishou.com/u/jjworld126
+# 火猫：
+# 企鹅电竞：https://egame.qq.com/383204988

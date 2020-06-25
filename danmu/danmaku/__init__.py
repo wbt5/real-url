@@ -7,6 +7,7 @@ from .douyu import Douyu
 from .huya import Huya
 from .kuaishou import KuaiShou
 from .huomao import HuoMao
+from .egame import eGame
 
 __all__ = ['DanmakuClient']
 
@@ -28,7 +29,8 @@ class DanmakuClient:
                      'live.bilibili.com': Bilibili,
                      'huya.com': Huya,
                      'huomao.com': HuoMao,
-                     'kuaishou.com': KuaiShou,}.items():
+                     'kuaishou.com': KuaiShou,
+                     'egame.qq.com': eGame}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 break
