@@ -1,0 +1,174 @@
+syntax = "proto2";
+package HuaJiaoPack;
+
+message Message {
+    required uint32 msgid = 1;
+    required uint64 sn = 2;
+    optional string sender = 3;
+    optional string receiver = 4;
+    optional string receiver_type = 5;
+    optional Request req = 6;
+    optional Response resp = 7;
+    optional Notify notify = 8;
+    optional string sender_type = 12;
+
+    message Request {
+        optional LoginReq login = 2;
+        optional InitLoginReq init_login_req = 9;
+        optional Service_Req service_req = 11;
+
+        message LoginReq {
+            required string mobile_type = 1;
+            required uint32 net_type = 2;
+            required string server_ram = 3;
+            optional bytes secret_ram = 4;
+            optional uint32 app_id = 5[default  = 2000];
+            optional string platform = 8;
+            optional string verf_code = 9;
+            optional bool not_encrypt = 10;
+        }
+
+        message InitLoginReq {
+            required string client_ram = 1;
+            optional string sig = 2;
+        }
+
+        message Service_Req {
+            required uint32 service_id = 1;
+            required bytes request = 2;
+        }
+    }
+
+    message Response {
+        optional LoginResp login = 3;
+		optional ChatResp chat = 4;
+        optional InitLoginResp init_login_resp = 10;
+		optional Service_Resp service_resp = 12;
+
+        message LoginResp {
+            required uint32 timestamp = 1;
+            required string session_id = 2;
+            required string session_key = 3;
+            optional string client_login_ip = 4;
+            optional string serverip = 5;
+        }
+
+        message InitLoginResp {
+            required string client_ram = 1;
+            required string server_ram = 2;
+        }
+		
+		message Service_Resp {
+			required uint32 service_id = 1;
+            required bytes response = 2;
+		}
+		
+		message ChatResp {
+			required uint32 result = 1;
+			optional uint32 body_id = 2;
+		}
+    }
+	
+	message Notify {
+		optional NewMessageNotify newinfo_ntf = 1;
+		
+		message NewMessageNotify {
+			required string info_type = 1;
+			optional bytes info_content = 2;
+			optional int64 info_id = 3;
+			optional uint32 query_after_seconds = 4;
+		}
+		
+	}
+	
+}
+
+message ChatRoomPacket {
+    required bytes roomid = 1;
+    optional ChatRoomUpToServer to_server_data = 2;
+    optional ChatRoomDownToUser to_user_data = 3;
+    optional string uuid = 4;
+    optional uint64 client_sn = 5;
+    optional uint32 appid = 6;
+
+    message ChatRoomUpToServer {
+        required uint32 payloadtype = 1;
+        optional ApplyJoinChatRoomRequest applyjoinchatroomreq = 4;
+
+        message ApplyJoinChatRoomRequest {
+            required bytes roomid = 1;
+            optional ChatRoom room = 2;
+            optional int32 userid_type = 3;
+        }
+    }
+
+    message ChatRoomDownToUser {
+        required int32 result = 1;
+        required uint32 payloadtype = 2;
+        optional CreateChatRoomResponse createchatroomresp = 3;
+        optional ApplyJoinChatRoomResponse applyjoinchatroomresp = 5;
+        optional QuitChatRoomResponse quitchatroomresp = 6;
+        optional ChatRoomNewMsg newmsgnotify = 13;
+        optional MemberJoinChatRoomNotify memberjoinnotify = 16;
+        optional MemberQuitChatRoomNotify memberquitnotify = 17;
+        repeated ChatRoomMNotify multinotify = 200;
+		
+		
+		message CreateChatRoomResponse {
+			optional ChatRoom room = 1;
+		}
+		
+		message ApplyJoinChatRoomResponse {
+			optional ChatRoom room = 1;
+		}
+		
+		message QuitChatRoomResponse {
+			optional ChatRoom room = 1;
+		}
+		
+		message ChatRoomNewMsg {
+			required bytes roomid = 1;
+			optional CRUser sender = 2;
+			optional int32 msgtype = 3;
+			optional bytes msgcontent = 4;
+			optional int32 regmemcount = 5;
+			optional int32 memcount = 6;
+			optional uint32 msgid = 7;
+			optional uint32 maxid = 8;
+			optional uint64 timestamp = 9;
+		}
+		
+		message MemberJoinChatRoomNotify {
+			required ChatRoom room = 1;
+		}
+		
+		message MemberQuitChatRoomNotify {
+			required ChatRoom room = 1;
+		}
+		
+		message ChatRoomMNotify {
+			required int32 type = 1;
+			required bytes data = 2;
+			optional int32 regmemcount = 3;
+			optional int32 memcount = 4;
+		}
+    }
+}
+
+message ChatRoom {
+	required bytes roomid = 1;
+	repeated CRPair properties = 8;
+	repeated CRUser members = 9;
+	optional bytes partnerdata = 13;
+}
+
+message CRUser {
+	optional bytes userid = 1;
+	optional string name = 2;
+	optional bytes userdata = 6;
+}
+
+message CRPair {
+	required string key = 1;
+	optional bytes value = 2;
+}

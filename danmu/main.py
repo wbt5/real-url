@@ -29,3 +29,4 @@ asyncio.run(main(a))
 # 快手：https://live.kuaishou.com/u/jjworld126
 # 火猫：
 # 企鹅电竞：https://egame.qq.com/383204988
+# 花椒直播：https://www.huajiao.com/l/303344861?qd=hu

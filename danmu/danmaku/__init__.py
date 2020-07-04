@@ -8,6 +8,7 @@ from .huya import Huya
 from .kuaishou import KuaiShou
 from .huomao import HuoMao
 from .egame import eGame
+from .huajiao import HuaJiao
 
 __all__ = ['DanmakuClient']
 
@@ -30,9 +31,11 @@ class DanmakuClient:
                      'huya.com': Huya,
                      'huomao.com': HuoMao,
                      'kuaishou.com': KuaiShou,
-                     'egame.qq.com': eGame}.items():
+                     'egame.qq.com': eGame,
+                     'huajiao.com': HuaJiao}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
+                self.__u = u
                 break
         if self.__site is None:
             print('Invalid link!')
@@ -63,10 +66,31 @@ class DanmakuClient:
             await asyncio.sleep(1)
             await self.init_ws()
             await asyncio.sleep(1)
+            
+    async def init_ws_huajiao(self):
+        rid = re.search(r'\d+', self.__url).group(0)
+        s = self.__site(rid)
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        await self.__ws.send_bytes(s.sendHandshakePack())
+        count = 0
+        async for msg in self.__ws:
+            if count == 0:
+                await self.__ws.send_bytes(s.sendLoginPack(msg.data))
+            elif count == 1:
+                await self.__ws.send_bytes(s.sendJoinChatroomPack(msg.data))
+            elif count > 2:
+                ms = s.decode_msg(msg.data)
+                for m in ms:
+                    await self.__dm_queue.put(m)
+            count += 1
+        await self.heartbeats()
 
     async def start(self):
-        await self.init_ws()
-        await asyncio.gather(
-            self.heartbeats(),
-            self.fetch_danmaku(),
-        )
+        if self.__u == 'huajiao.com':
+            await self.init_ws_huajiao()
+        else:
+            await self.init_ws()
+            await asyncio.gather(
+                self.heartbeats(),
+                self.fetch_danmaku(),
+            )
