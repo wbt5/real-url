@@ -9,6 +9,7 @@ from .kuaishou import KuaiShou
 from .huomao import HuoMao
 from .egame import eGame
 from .huajiao import HuaJiao
+from .inke import Inke
 
 __all__ = ['DanmakuClient']
 
@@ -32,7 +33,8 @@ class DanmakuClient:
                      'huomao.com': HuoMao,
                      'kuaishou.com': KuaiShou,
                      'egame.qq.com': eGame,
-                     'huajiao.com': HuaJiao}.items():
+                     'huajiao.com': HuaJiao,
+                     'inke.cn': Inke}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
@@ -84,10 +86,17 @@ class DanmakuClient:
                     await self.__dm_queue.put(m)
             count += 1
         await self.heartbeats()
+        
+    async def init_ws_inke(self):
+        ws_url = await self.__site.get_ws_info(self.__url)
+        self.__ws = await self.__hs.ws_connect(ws_url)
+        await self.fetch_danmaku()
 
     async def start(self):
         if self.__u == 'huajiao.com':
             await self.init_ws_huajiao()
+        elif self.__u == 'inke.cn':
+            await self.init_ws_inke()
         else:
             await self.init_ws()
             await asyncio.gather(
