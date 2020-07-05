@@ -4,6 +4,30 @@
 
 import requests
 import re
+import base64
+import urllib.parse
+import hashlib
+import time
+
+
+def live(e):
+    i, b = e.split('?')
+    r = i.split('/')
+    s = re.sub(r'.(flv|m3u8)', '', r[-1])
+    c = b.split('&', 3)
+    c = [i for i in c if i != '']
+    n = {i.split('=')[0]: i.split('=')[1] for i in c}
+    fm = urllib.parse.unquote(n['fm'])
+    u = base64.b64decode(fm).decode('utf-8')
+    p = u.split('_')[0]
+    f = str(int(time.time() * 1e7))
+    l = n['wsTime']
+    t = '0'
+    h = '_'.join([p, t, s, f, l])
+    m = hashlib.md5(h.encode('utf-8')).hexdigest()
+    y = c[-1]
+    url = "{}?wsSecret={}&wsTime={}&u={}&seqid={}&{}".format(i, m, l, t, f, y)
+    return url
 
 
 def get_real_url(room_id):
@@ -20,7 +44,8 @@ def get_real_url(room_id):
             if 'replay' in liveLineUrl:
                 return '直播录像：' + liveLineUrl
             else:
-                real_url = ["https:" + re.sub(r'_\d{4}.m3u8', '.m3u8', liveLineUrl), "https:" + liveLineUrl]
+                liveLineUrl = live(liveLineUrl)
+                real_url = ["https:" + liveLineUrl, "https:" + re.sub(r'_\d{4}.m3u8', '.m3u8', liveLineUrl)]
         else:
             real_url = '未开播或直播间不存在'
     except:
