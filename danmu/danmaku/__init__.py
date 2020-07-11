@@ -10,6 +10,7 @@ from .huomao import HuoMao
 from .egame import eGame
 from .huajiao import HuaJiao
 from .inke import Inke
+from .cc import CC
 
 __all__ = ['DanmakuClient']
 
@@ -34,7 +35,8 @@ class DanmakuClient:
                      'kuaishou.com': KuaiShou,
                      'egame.qq.com': eGame,
                      'huajiao.com': HuaJiao,
-                     'inke.cn': Inke}.items():
+                     'inke.cn': Inke,
+                     'cc.163.com': CC}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
