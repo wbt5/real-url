@@ -5,6 +5,7 @@ import json
 
 
 class Inke:
+    heartbeat = None
 
     @staticmethod
     async def get_ws_info(url):
@@ -16,7 +17,7 @@ class Inke:
             async with session.get(cr) as resp:
                 res = await resp.text()
                 wss_url = json.loads(res).get('url')
-        return wss_url
+        return wss_url, None
 
     @staticmethod
     def decode_msg(data):
