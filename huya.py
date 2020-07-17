@@ -42,7 +42,7 @@ def get_real_url(room_id):
         liveLineUrl = re.findall(r'liveLineUrl = "([\s\S]*?)";', response)[0]
         if liveLineUrl:
             if 'replay' in liveLineUrl:
-                return '直播录像：' + liveLineUrl
+                return '直播录像：https:' + liveLineUrl
             else:
                 liveLineUrl = live(liveLineUrl)
                 real_url = ["https:" + liveLineUrl, "https:" + re.sub(r'_\d{4}.m3u8', '.m3u8', liveLineUrl)]
