@@ -1,0 +1,250 @@
+syntax = "proto2";
+package KuGouPack;
+
+message LoginRequest {
+    optional int32 cmd = 1;
+    optional int32 roomid = 2;
+    optional int64 kugouid = 3;
+    optional string token = 4;
+    optional string key = 5;
+    optional int32 appid = 6;
+    optional int32 platid = 7;
+    optional int32 subplatid = 8;
+    optional string version = 9;
+    optional string deviceNo = 10;
+    optional string imei = 11;
+    optional int32 v = 12;
+    optional int32 referer = 13;
+    optional int32 clientid = 14;
+    optional string soctoken = 15;
+    optional string offset = 16;
+    optional int32 appChannel = 17;
+    optional string sid = 18;
+    optional int32 source = 19;
+    optional string uuid = 20;
+    optional string systemVersion = 21;
+    optional string entryid = 22;
+    optional string socsid = 23;
+    optional string deviceid = 24;
+}
+
+message LoginResponse {
+    optional string nickname = 1;
+    optional int32 richlevel = 2;
+    optional int64 userid = 3;
+    optional int64 kugouid = 4;
+    optional int32 fanstags = 5;
+    optional int32 v = 6;
+    optional int32 referer = 7;
+    optional string wellcomes = 8;
+    optional string img = 9;
+}
+
+message ErrorResponse {
+	optional int32 cmd = 1;
+	optional int32 type = 2;
+	optional int64 seq = 3;
+	optional int32 status = 4;
+	optional int32 errorno = 5;
+	optional string msg = 6;
+	optional string socsid = 7;
+}
+
+message ChatResponse {
+	optional string chatmsg = 1;
+	optional int64 senderid = 2;
+	optional int64 senderkugouid = 3;
+	optional string sendername = 4;
+	optional int32 senderrichlevel = 5;
+	optional int64 receiverid = 6;
+	optional int64 receiverkugouid = 7;
+	optional string receivername = 8;
+	optional int32 receiverrichlevel = 9;
+	optional int32 issecrect = 10;
+	optional AdditionalInfo additionalInfo = 11;
+	optional int32 v = 12;
+	optional int64 seq = 13;
+	optional int32 isa = 14;
+	optional int32 rlight = 15;
+	optional int32 rdiffExp = 16;
+	optional int32 rsvip = 17;
+	optional int32 rsvipl = 18;
+	optional string mac = 19;
+	optional Complain complain = 20;
+}
+
+message AdditionalInfo {
+	optional int32 fanstags = 1;
+}
+
+message Complain {
+	optional string msg = 1;
+	optional string url = 2;
+}
+
+message Message {
+    optional string offset = 1;
+    optional int32 ack = 2;
+    optional int32 rpt = 3;
+    optional string msgId = 4;
+    optional MCompression compression = 5;
+    optional MCodec codec = 6;
+    optional bytes content = 7;
+}
+
+message ContentMessage {
+    optional int32 cmd = 1;
+    optional bytes content = 2;
+    optional int32 roomid = 3;
+    optional int64 receiverid = 4;
+    optional int64 receiverkugouid = 5;
+    optional int64 senderid = 6;
+    optional int64 sendkugouid = 7;
+    optional int32 appId = 8;
+    optional int64 gid = 9;
+    optional int32 rpt = 10;
+    optional int64 time = 11;
+    optional int64 plev = 12;
+    optional int64 pvalue = 13;
+    optional bytes ext = 14;
+    optional Sinfo sinfo = 15;
+    optional MCodec codec = 16;
+    optional Risk risk = 17;
+}
+
+message Risk {
+    optional string m = 1;
+    optional string l = 2;
+    optional int32 t = 3;
+}
+
+message Sinfo {
+    optional int32 light = 1;
+    optional int32 de = 2;
+    optional int32 svip = 3;
+    optional int32 svipl = 4;
+    optional int32 ck = 5;
+    optional string ckname = 6;
+    optional string skname = 7;
+    optional string ckid = 8;
+    optional string ckimg = 9;
+    optional string logo = 10;
+    optional int32 sex = 11;
+    optional int32 bt = 12;
+}
+
+enum MCompression {
+    M_NONE = 0;
+    M_GZIP = 1;
+	M_LZ4 = 2;
+    M_SNAPPY = 3;
+	M_ZSTD = 4;
+}
+
+enum MCodec {
+    M_JSON = 0;
+    M_PROTOBUF = 1;
+}
+
+message Extension {
+    optional int32 ui = 1;
+    optional int32 isSpRoom = 2;
+    optional StliVo stli = 3;
+    optional VipDataVo vipData = 4;
+    optional UsingMountVo usingMount = 5;
+    optional UsingMedalVo usingMedal = 6;
+    optional HonorMedalVo honorMedal = 7;
+    optional UserGuardVo userGuard = 8;
+    optional LittleGuardVo littleGuard = 9;
+    optional WoreUserPlateVo defaultPlate = 10;
+    optional string plateName = 11;
+    optional int32 starCard = 12;
+    optional int32 external = 13;
+    optional string exMemo = 14;
+    optional bool p = 15;
+    optional int32 worship = 16;
+    optional BubbleVo bubble = 17;
+    optional int32 z = 18;
+    optional int32 isGoldFans = 19;
+    optional string token = 20;
+    optional int64 kugouId = 21;
+    optional StarFollowerVo starFollower = 22;
+    optional int32 v_tme = 23;
+    optional int32 v_kg = 24;
+    optional string ar = 25;
+    optional int32 isAndroid = 26;
+    optional int32 clientPlat = 27;
+    optional int32 blackCard = 28;
+    optional int32 v_l = 29;
+    optional BossGroupVo bossGroup = 30;
+    optional CeremonyVo ceremony = 31;
+    optional int32 referer = 32;
+    optional int32 isNew = 33;
+}
+
+message StliVo {
+    optional int32 st = 1;
+    optional int32 sl = 2;
+    optional int32 isAdmin = 3;
+}
+
+message VipDataVo {
+    optional int32 v = 1;
+    optional string c = 2;
+    optional int32 vl = 3;
+}
+
+message UsingMountVo {
+    optional string id = 1;
+    optional string n = 2;
+    optional string swf = 3;
+    optional string bi = 4;
+    optional string si = 5;
+    optional string p = 6;
+    optional int32 s = 7;
+}
+
+message UsingMedalVo {
+    optional string medalList = 1;
+}
+
+message HonorMedalVo {
+    optional string honorList = 1;
+}
+
+message UserGuardVo {
+    optional string g = 1;
+    optional string i = 2;
+}
+
+message LittleGuardVo {
+    optional int32 l = 1;
+    optional int32 g = 2;
+}
+
+message WoreUserPlateVo {
+    optional int64 kid = 1;
+    optional string plateName = 2;
+    optional int32 type = 3;
+    optional int32 l = 4;
+    optional int32 i = 5;
+}
+
+message BubbleVo {
+    optional int32 id = 1;
+    optional string bg = 2;
+}
+
+message StarFollowerVo {
+    optional int32 l = 1;
+}
+
+message BossGroupVo {
+    optional int64 gid = 1;
+	optional string gn = 2;
+	optional int32 gr = 3;
+}
+
+message CeremonyVo {
+    optional int32 pl = 1;
+}
