@@ -11,6 +11,11 @@ from .egame import eGame
 from .huajiao import HuaJiao
 from .inke import Inke
 from .cc import CC
+from .kugou import KuGou
+from .zhanqi import ZhanQi
+from .longzhu import LongZhu
+from .pps import QiXiu
+from .qf import QF
 
 __all__ = ['DanmakuClient']
 
@@ -36,7 +41,12 @@ class DanmakuClient:
                      'egame.qq.com': eGame,
                      'huajiao.com': HuaJiao,
                      'inke.cn': Inke,
-                     'cc.163.com': CC}.items():
+                     'cc.163.com': CC,
+                     'fanxing.kugou.com': KuGou,
+                     'zhanqi.tv': ZhanQi,
+                     'longzhu.com': LongZhu,
+                     'pps.tv': QiXiu,
+                     'qf.56.com': QF}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
@@ -49,14 +59,21 @@ class DanmakuClient:
     async def init_ws(self):
         ws_url, reg_datas = await self.__site.get_ws_info(self.__url)
         self.__ws = await self.__hs.ws_connect(ws_url)
-        for reg_data in reg_datas:
-            await self.__ws.send_bytes(reg_data)
+        if reg_datas:
+            for reg_data in reg_datas:
+                if self.__u == 'qf.56.com':
+                    await self.__ws.send_str(reg_data)
+                else:
+                    await self.__ws.send_bytes(reg_data)
 
     async def heartbeats(self):
-        while not self.__stop:
+        while not self.__stop and self.__site.heartbeat:
             await asyncio.sleep(self.__site.heartbeatInterval)
             try:
-                await self.__ws.send_bytes(self.__site.heartbeat)
+                if self.__u == 'qf.56.com':
+                    await self.__ws.send_str(self.__site.heartbeat)
+                else:
+                    await self.__ws.send_bytes(self.__site.heartbeat)
             except:
                 pass
 
@@ -70,7 +87,7 @@ class DanmakuClient:
             await asyncio.sleep(1)
             await self.init_ws()
             await asyncio.sleep(1)
-            
+
     async def init_ws_huajiao(self):
         rid = re.search(r'\d+', self.__url).group(0)
         s = self.__site(rid)
@@ -88,17 +105,10 @@ class DanmakuClient:
                     await self.__dm_queue.put(m)
             count += 1
         await self.heartbeats()
-        
-    async def init_ws_inke(self):
-        ws_url = await self.__site.get_ws_info(self.__url)
-        self.__ws = await self.__hs.ws_connect(ws_url)
-        await self.fetch_danmaku()
 
     async def start(self):
         if self.__u == 'huajiao.com':
             await self.init_ws_huajiao()
-        elif self.__u == 'inke.cn':
-            await self.init_ws_inke()
         else:
             await self.init_ws()
             await asyncio.gather(
