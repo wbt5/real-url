@@ -5,7 +5,7 @@ import re
 
 
 class eGame:
-    heartbeats = b'\x00\x00\x00\x12\x00\x12\x00\x01\x00\x07\x00\x00\x00\x01\x00\x00\x00\x00'
+    heartbeat = b'\x00\x00\x00\x12\x00\x12\x00\x01\x00\x07\x00\x00\x00\x01\x00\x00\x00\x00'
     heartbeatInterval = 60
 
     @staticmethod
@@ -35,7 +35,7 @@ class eGame:
                 headerbuf = struct.pack('!ihhhihh', 18 + len(bodybuf), 18, 1, 1, 0, 0, 0)
                 data = headerbuf + bodybuf
                 reg_datas.append(data)
-                reg_datas.append(eGame.heartbeats)
+                reg_datas.append(eGame.heartbeat)
 
         return 'wss://barragepush.egame.qq.com/sub', reg_datas
 

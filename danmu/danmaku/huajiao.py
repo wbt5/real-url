@@ -9,7 +9,7 @@ import time
 
 class HuaJiao:
 
-    heartbeats = b'\x00\x00\x00\x00'
+    heartbeat = b'\x00\x00\x00\x00'
     ws_url = 'wss://bridge.huajiao.com'
 
     def __init__(self, rid=None):

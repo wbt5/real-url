@@ -249,7 +249,7 @@ class CC:
     s = CC_Init()
 
     heartbeatInterval = 30
-    heartbeats = s.get_beat()
+    heartbeat = s.get_beat()
 
     @staticmethod
     async def get_ws_info(url):

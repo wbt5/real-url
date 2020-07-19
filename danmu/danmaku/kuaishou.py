@@ -8,7 +8,7 @@ import re
 
 
 class KuaiShou:
-    heartbeats = b'\x08\x01\x1A\x07\x08'  # 发送心跳可固定
+    heartbeat = b'\x08\x01\x1A\x07\x08'  # 发送心跳可固定
     heartbeatInterval = 20
 
     @staticmethod
