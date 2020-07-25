@@ -31,10 +31,11 @@ asyncio.run(main(a))
 # 企鹅电竞：https://egame.qq.com/383204988
 # 花椒直播：https://www.huajiao.com/l/303344861?qd=hu
 # 映客直播：https://www.inke.cn/liveroom/index.html?uid=87493223&id=1593906372018299
-# CC直播：https://cc.163.com/363936598/a
+# CC直播：https://cc.163.com/363936598/
 # 酷狗直播：https://fanxing.kugou.com/1676290
 # 战旗直播
 # 龙珠直播：http://star.longzhu.com/wsde135864219
 # PPS奇秀直播：https://x.pps.tv/room/208337
 # 搜狐千帆直播：https://qf.56.com/520208a
 # 来疯直播：https://v.laifeng.com/656428
+# LOOK直播：https://look.163.com/live?id=196257915
