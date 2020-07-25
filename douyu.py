@@ -101,8 +101,8 @@ def get_sign_url(post_v, rid, tt, ub9):
         if 'mix=1' in real_url:
             result1 = mix_room(rid)
         else:
-            pattern1 = r'live/(\d{1,8}[0-9a-zA-Z]+)_?[\d]{0,4}/playlist'
-            result1 = re.findall(pattern1, real_url, re.I)[0]
+            pattern = r'/(\d{1,8}[0-9a-zA-Z]+)_?[\d]{0,4}.m3u8'
+            result1 = re.search(pattern, real_url).group(1)
     else:
         result1 = 0
     return result1
