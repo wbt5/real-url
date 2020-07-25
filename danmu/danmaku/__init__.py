@@ -17,6 +17,7 @@ from .longzhu import LongZhu
 from .pps import QiXiu
 from .qf import QF
 from .laifeng import LaiFeng
+from .look import Look
 
 __all__ = ['DanmakuClient']
 
@@ -48,7 +49,8 @@ class DanmakuClient:
                      'longzhu.com': LongZhu,
                      'pps.tv': QiXiu,
                      'qf.56.com': QF,
-                     'laifeng.com': LaiFeng}.items():
+                     'laifeng.com': LaiFeng,
+                     'look.163.com': Look}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
@@ -63,7 +65,7 @@ class DanmakuClient:
         self.__ws = await self.__hs.ws_connect(ws_url)
         if reg_datas:
             for reg_data in reg_datas:
-                if self.__u == 'qf.56.com' or self.__u == 'laifeng.com':
+                if self.__u == 'qf.56.com' or self.__u == 'laifeng.com' or self.__u == 'look.163.com':
                     await self.__ws.send_str(reg_data)
                 else:
                     await self.__ws.send_bytes(reg_data)
@@ -72,7 +74,7 @@ class DanmakuClient:
         while not self.__stop and self.__site.heartbeat:
             await asyncio.sleep(self.__site.heartbeatInterval)
             try:
-                if self.__u == 'qf.56.com' or self.__u == 'laifeng.com':
+                if self.__u == 'qf.56.com' or self.__u == 'laifeng.com' or self.__u == 'look.163.com':
                     await self.__ws.send_str(self.__site.heartbeat)
                 else:
                     await self.__ws.send_bytes(self.__site.heartbeat)
