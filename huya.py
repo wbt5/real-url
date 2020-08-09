@@ -45,8 +45,8 @@ def huya(room_id):
                 s_url = live(livelineurl)
                 b_url = live(livelineurl.replace('_2000', ''))
                 real_url = {
-                    '2000p': s_url,
-                    'BD': b_url
+                    '2000p': "https:" + s_url,
+                    'BD': "https:" + b_url
                 }
         else:
             real_url = '未开播或直播间不存在'
