@@ -1,0 +1,204 @@
+syntax = "proto2";
+package KuaiShouPack;
+
+message CSWebHeartbeat {
+	optional uint64 timestamp = 1;
+}
+
+message SocketMessage {
+    optional PayloadType payloadType = 1;
+    optional CompressionType compressionType = 2;
+    optional bytes payload = 3;
+
+    enum CompressionType {
+        UNKNOWN = 0;
+        NONE = 1;
+        GZIP = 2;
+        AES = 3;
+    }
+}
+
+enum PayloadType {
+    UNKNOWN = 0;
+    CS_HEARTBEAT = 1;
+    CS_ERROR = 3;
+    CS_PING = 4;
+    PS_HOST_INFO = 51;
+    SC_HEARTBEAT_ACK = 101;
+    SC_ECHO = 102;
+    SC_ERROR = 103;
+    SC_PING_ACK = 104;
+    SC_INFO = 105;
+    CS_ENTER_ROOM = 200;
+    CS_USER_PAUSE = 201;
+    CS_USER_EXIT = 202;
+    CS_AUTHOR_PUSH_TRAFFIC_ZERO = 203;
+    CS_HORSE_RACING = 204;
+    CS_RACE_LOSE = 205;
+    CS_VOIP_SIGNAL = 206;
+    SC_ENTER_ROOM_ACK = 300;
+    SC_AUTHOR_PAUSE = 301;
+    SC_AUTHOR_RESUME = 302;
+    SC_AUTHOR_PUSH_TRAFFIC_ZERO = 303;
+    SC_AUTHOR_HEARTBEAT_MISS = 304;
+    SC_PIP_STARTED = 305;
+    SC_PIP_ENDED = 306;
+    SC_HORSE_RACING_ACK = 307;
+    SC_VOIP_SIGNAL = 308;
+    SC_FEED_PUSH = 310;
+    SC_ASSISTANT_STATUS = 311;
+    SC_REFRESH_WALLET = 312;
+    SC_LIVE_CHAT_CALL = 320;
+    SC_LIVE_CHAT_CALL_ACCEPTED = 321;
+    SC_LIVE_CHAT_CALL_REJECTED = 322;
+    SC_LIVE_CHAT_READY = 323;
+    SC_LIVE_CHAT_GUEST_END = 324;
+    SC_LIVE_CHAT_ENDED = 325;
+    SC_RENDERING_MAGIC_FACE_DISABLE = 326;
+    SC_RENDERING_MAGIC_FACE_ENABLE = 327;
+    SC_RED_PACK_FEED = 330;
+    SC_LIVE_WATCHING_LIST = 340;
+    SC_LIVE_QUIZ_QUESTION_ASKED = 350;
+    SC_LIVE_QUIZ_QUESTION_REVIEWED = 351;
+    SC_LIVE_QUIZ_SYNC = 352;
+    SC_LIVE_QUIZ_ENDED = 353;
+    SC_LIVE_QUIZ_WINNERS = 354;
+    SC_SUSPECTED_VIOLATION = 355;
+    SC_SHOP_OPENED = 360;
+    SC_SHOP_CLOSED = 361;
+    SC_GUESS_OPENED = 370;
+    SC_GUESS_CLOSED = 371;
+    SC_PK_INVITATION = 380;
+    SC_PK_STATISTIC = 381;
+    SC_RIDDLE_OPENED = 390;
+    SC_RIDDLE_CLOESED = 391;
+    SC_RIDE_CHANGED = 412;
+    SC_BET_CHANGED = 441;
+    SC_BET_CLOSED = 442;
+    SC_LIVE_SPECIAL_ACCOUNT_CONFIG_STATE = 645;
+}
+
+message CSWebEnterRoom {
+    optional string token = 1;
+    optional string liveStreamId = 2;
+    optional uint32 reconnectCount = 3;
+    optional uint32 lastErrorCode = 4;
+    optional string expTag = 5;
+    optional string attach = 6;
+    optional string pageId = 7;
+}
+
+message SCWebFeedPush {
+    optional string displayWatchingCount = 1;
+    optional string displayLikeCount = 2;
+    optional uint64 pendingLikeCount = 3;
+    optional uint64 pushInterval = 4;
+    repeated WebCommentFeed commentFeeds = 5;
+    optional string commentCursor = 6;
+    repeated WebComboCommentFeed comboCommentFeed = 7;
+    repeated WebLikeFeed likeFeeds = 8;
+    repeated WebGiftFeed giftFeeds = 9;
+    optional string giftCursor = 10;
+    repeated WebSystemNoticeFeed systemNoticeFeeds = 11;
+    repeated WebShareFeed shareFeeds = 12;
+
+}
+
+message WebCommentFeed {
+    optional string id = 1;
+    optional SimpleUserInfo user = 2;
+    optional string content = 3;
+    optional string deviceHash = 4;
+    optional uint64 sortRank = 5;
+    optional string color = 6;
+    optional WebCommentFeedShowType showType = 7;
+}
+
+message SimpleUserInfo {
+    optional string principalId = 1;
+    optional string userName = 2;
+    optional string headUrl = 3;
+}
+
+enum WebCommentFeedShowType {
+    FEED_SHOW_UNKNOWN = 0;
+    FEED_SHOW_NORMAL = 1;
+    FEED_HIDDEN = 2;
+}
+
+message WebComboCommentFeed {
+    optional string id = 1;
+    optional string content = 2;
+    optional uint32 comboCount = 3;
+}
+
+message WebLikeFeed {
+    optional string id = 1;
+    optional SimpleUserInfo user = 2;
+    optional uint64 sortRank = 3;
+    optional string deviceHash = 4;
+}
+
+message WebGiftFeed {
+    optional string id = 1;
+    optional SimpleUserInfo user = 2;
+    optional uint64 time = 3;
+    optional uint32 giftId = 4;
+    optional uint64 sortRank = 5;
+    optional string mergeKey = 6;
+    optional uint32 batchSize = 7;
+    optional uint32 comboCount = 8;
+    optional uint32 rank = 9;
+    optional uint64 expireDuration = 10;
+    optional uint64 clientTimestamp = 11;
+    optional uint64 slotDisplayDuration = 12;
+    optional uint32 starLevel = 13;
+    optional StyleType styleType = 14;
+    optional WebLiveAssistantType liveAssistantType = 15;
+    optional string deviceHash = 16;
+    optional bool danmakuDisplay = 17;
+
+    enum StyleType {
+        UNKNOWN_STYLE = 0;
+        BATCH_STAR_0 = 1;
+        BATCH_STAR_1 = 2;
+        BATCH_STAR_2 = 3;
+        BATCH_STAR_3 = 4;
+        BATCH_STAR_4 = 5;
+        BATCH_STAR_5 = 6;
+        BATCH_STAR_6 = 7;
+    }
+}
+
+enum WebLiveAssistantType {
+    UNKNOWN_ASSISTANT_TYPE = 0;
+    SUPER = 1;
+    JUNIOR = 2;
+}
+
+message WebSystemNoticeFeed {
+    optional string id = 1;
+    optional SimpleUserInfo user = 2;
+    optional uint64 time = 3;
+    optional string content = 4;
+    optional uint64 displayDuration = 5;
+    optional uint64 sortRank = 6;
+    optional DisplayType displayType = 7;
+
+    enum DisplayType {
+        UNKNOWN_DISPLAY_TYPE = 0;
+        COMMENT = 1;
+        ALERT = 2;
+        TOAST = 3;
+    }
+}
+
+message WebShareFeed {
+    optional string id = 1;
+    optional SimpleUserInfo user = 2;
+    optional uint64 time = 3;
+    optional uint32 thirdPartyPlatform = 4;
+    optional uint64 sortRank = 5;
+    optional WebLiveAssistantType liveAssistantType = 6;
+    optional string deviceHash = 7;
+}

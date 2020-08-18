@@ -1,14 +1,12 @@
-# 快手代码来源及思路：https://github.com/py-wuhao/ks_barrage
-
+from . import kuaishou_pb2 as pb
 import aiohttp
-import random
-import time
-import json
 import re
+import json
+import time
+import random
 
 
 class KuaiShou:
-    heartbeat = b'\x08\x01\x1A\x07\x08'  # 发送心跳可固定
     heartbeatInterval = 20
 
     @staticmethod
@@ -18,7 +16,7 @@ class KuaiShou:
             直播间完整地址
         Returns:
             webSocketUrls:wss地址
-            reg_datas:第一次send数据
+            data:第一次send数据
             liveStreamId:
             token:
             page_id:
@@ -29,27 +27,33 @@ class KuaiShou:
         headers = {
             'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, '
                           'like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-            'Cookie': 'did=web_e8436e86a8ec476c801c1d534f56db0c'}  # 请求失败则更换cookie中的did字段
+            'Cookie': 'did=web_d563dca728d28b00336877723e0359ed'}  # 请求失败则更换cookie中的did字段
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers) as resp:
-                wsFeedInfo = re.findall(r'wsFeedInfo":(.*),"liveExist', await resp.text())
-                wsFeedInfo = json.loads(wsFeedInfo[0])
-                liveStreamId = wsFeedInfo['liveStreamId']
-                token = wsFeedInfo['token']
-                webSocketUrls = wsFeedInfo['webSocketUrls'][0]
+                res = await resp.text()
 
-                reg_datas = []
-                part1 = b'\x08\xC8\x01\x1A\xC8\x01\x0A\x98\x01'
-                part2 = token.encode()
-                part3 = b'\x12\x0B'
-                part4 = liveStreamId.encode()
-                part5 = b'\x3A\x1E'
-                page_id = KuaiShou.get_page_id()
-                part6 = page_id.encode()
-                s = part1 + part2 + part3 + part4 + part5 + part6
-                reg_datas.append(s)
+        wsfeedinfo = re.search(r'wsFeedInfo":(.*),"liveExist', res)
+        if wsfeedinfo:
+            wsfeedinfo = json.loads(wsfeedinfo.group(1))
+        else:
+            raise Exception('找不到 wsFeedInfo，可能链接错误或 Cookie 过期')
 
-        return webSocketUrls, reg_datas
+        livestreamid, [websocketurls], token = wsfeedinfo.values()
+        page_id = KuaiShou.get_page_id()
+
+        p, s = pb.SocketMessage(), pb.CSWebEnterRoom()
+        s.liveStreamId, s.pageId, s.token = livestreamid, page_id, token
+        p.payload = s.SerializeToString()
+        p.payloadType = 200
+        reg_data = p.SerializeToString()
+
+        t = pb.CSWebHeartbeat()
+        t.timestamp = int(time.time() * 1000)
+        p.payload = t.SerializeToString()
+        p.payloadType = 1
+        KuaiShou.heartbeat = p.SerializeToString()  # 心跳可固定
+
+        return websocketurls, [reg_data]
 
     @staticmethod
     def get_page_id():
@@ -62,324 +66,48 @@ class KuaiShou:
         return page_id
 
     @staticmethod
-    def decode_msg(data):
-        msgs = []
-        msg = {}
-        s = MessageDecode(data)
-        c = s.decode()
-        if c.get('payloadType', 0) == 310:  # SC_FEED_PUSH = 310 时有弹幕数据
-            m = s.feed_decode(c['payload'])  # 弹幕解码方法
-            if m.get('comment'):
-                for user in m.get('comment'):
-                    msg['name'] = user.get('user').get('userName').encode('utf-16', 'surrogatepass').decode('utf-16')
-                    msg['content'] = user.get('content').encode('utf-16', 'surrogatepass').decode('utf-16')
-                    msg['msg_type'] = 'danmaku'
-                    msgs.append(msg.copy())
-                return msgs
-            else:
-                msg = {'name': '', 'content': '', 'msg_type': 'other'}
-        else:
-            msg = {'name': '', 'content': '', 'msg_type': 'other'}
-        msgs.append(msg)
+    def decode_msg(message):
+        msgs = [{'name': '', 'content': '', 'msg_type': 'other'}]
+
+        p, s = pb.SocketMessage(), pb.SCWebFeedPush()
+        p.ParseFromString(message)
+        if p.payloadType == 310:
+            s.ParseFromString(p.payload)
+
+            def f(*feeds):
+                gift = {
+                    1: '荧光棒', 2: '棒棒糖', 3: '荧光棒', 4: 'PCL加油', 7: '么么哒', 9: '啤酒', 10: '甜甜圈',
+                    14: '钻戒', 16: '皇冠', 25: '凤冠', 33: '烟花', 41: '跑车', 56: '稳', 113: '火箭',
+                    114: '玫瑰', 132: '绷带', 133: '平底锅', 135: '红爸爸', 136: '蓝爸爸', 137: '铭文碎片',
+                    143: '太阳女神', 147: '赞', 149: '血瓶', 150: 'carry全场', 152: '大红灯笼', 156: '穿云箭',
+                    159: '膨胀了', 160: '秀你一脸', 161: 'MVP', 163: '加油', 164: '猫粮', 165: '小可爱',
+                    169: '男神', 172: '联盟金猪', 173: '有钱花', 193: '蛋糕', 197: '棒棒糖', 198: '瓜',
+                    199: '小可爱', 201: '赞', 207: '快手卡', 208: '灵狐姐', 216: 'LPL加油', 218: '烟花',
+                    219: '告白气球', 220: '大红灯笼', 221: '怦然心动', 222: '凤冠', 223: '火箭', 224: '跑车',
+                    225: '穿云箭', 226: '金话筒', 227: 'IG冲鸭', 228: 'GRF冲鸭', 229: 'FPX冲鸭', 230: 'FNC冲鸭',
+                    231: 'SKT冲鸭', 232: 'SPY冲鸭', 233: 'DWG冲鸭', 234: 'G2冲鸭', 235: '爆单', 236: '入团券',
+                    237: '陪着你540', 238: '支持牌', 239: '陪着你', 242: '金龙', 243: '豪车幻影', 244: '超级6',
+                    245: '水晶', 246: '金莲', 247: '福袋', 248: '铃铛', 249: '巧克力', 250: '感恩的心',
+                    254: '武汉加油', 256: '金龙', 257: '财神', 258: '金龙', 259: '天鹅湖', 260: '珍珠',
+                    261: '金莲', 262: '招财猫', 263: '铃铛', 264: '巧克力', 266: '幸运魔盒', 267: '吻你',
+                    268: '梦幻城堡', 269: '游乐园', 271: '萌宠', 272: '小雪豹', 275: '喜欢你', 276: '三级头',
+                    277: '喜欢你', 278: '财神', 279: '锦鲤', 281: '廉颇', 282: '开黑卡', 283: '付费直播门票（不下线）',
+                    285: '喜欢你呀', 286: '629', 287: '真爱大炮', 289: '玫瑰花园', 290: '珠峰', 292: '鹿角',
+                    296: '666', 297: '超跑车队', 298: '奥利给', 302: '互粉', 303: '冰棒', 304: '龙之谷',
+                    306: '浪漫游轮', 307: '壁咚', 308: '壁咚', 309: '鹿角', 310: '么么哒', 311: '私人飞机',
+                    312: '巅峰票', 313: '巅峰王者', 315: '莫吉托', 316: '地表最强', 318: '阳光海滩', 319: '12号唱片'
+                }
+                infos = [{'name': '', 'content': '', 'msg_type': 'other'}]
+                for feed in feeds:
+                    if feed:
+                        for i in feed:
+                            name = i.user.userName
+                            content = i.content if hasattr(i, 'content') else '送 ' + gift.get(i.giftId, '') \
+                                if hasattr(i, 'giftId') else '点亮了 ❤'
+                            info = {'name': name, 'content': content, 'msg_type': 'danmaku'}
+                            infos.append(info.copy())
+                return infos
+
+            msgs = f(s.commentFeeds, s.giftFeeds, s.likeFeeds)
+
         return msgs
-
-
-class MessageDecode:
-    """
-    返回的数据流解码
-    """
-
-    def __init__(self, buf):
-        self.buf = buf
-        self.pos = 0
-        self.message = {}
-
-    def __len__(self):
-        return len(self.buf)
-
-    def int_(self):
-        res = 0
-        i = 0
-        while self.buf[self.pos] >= 128:
-            res = res | (127 & self.buf[self.pos]) << 7 * i
-            self.pos += 1
-            i += 1
-        res = res | self.buf[self.pos] << 7 * i
-        self.pos += 1
-        return res
-
-    def decode(self):
-        """
-        服务器返回数据第一次解码
-        Return:m
-            payloadType:
-            101: "SC_HEARTBEAT_ACK",
-            103: "SC_ERROR",
-            105: "SC_INFO",
-            300: "SC_ENTER_ROOM_ACK",
-            310: "SC_FEED_PUSH", # 310是弹幕信息
-            330: "SC_RED_PACK_FEED",
-            340: "SC_LIVE_WATCHING_LIST",
-            370: "SC_GUESS_OPENED",
-            371: "SC_GUESS_CLOSED",
-            412: "SC_RIDE_CHANGED",
-            441: "SC_BET_CHANGED",
-            442: "SC_BET_CLOSED",
-            645: "SC_LIVE_SPECIAL_ACCOUNT_CONFIG_STATE"
-        """
-        m = {}
-        self.pos = 0
-        length = len(self)
-        while self.pos < length:
-            t = self.int_()
-            tt = t >> 3
-            if tt == 1:
-                m['payloadType'] = self.int_()
-            elif tt == 2:
-                m['compressionType'] = self.int_()
-            elif tt == 3:
-                m['payload'] = self.bytes()
-            else:
-                self.skipType(t & 7)
-        return m
-
-    def skipType(self, e):
-        if e == 0:
-            self.skip()
-        elif e == 1:
-            self.skip(8)
-        elif e == 2:
-            self.skip(self.int_())
-        elif e == 3:
-            while True:
-                e = 7 & self.int_()
-                if 4 != e:
-                    self.skipType(e)
-        elif e == 5:
-            self.skip(4)
-        else:
-            raise Exception('跳过类型错误')
-
-    def bytes(self):
-        e = self.int_()
-        if e + self.pos > len(self.buf):
-            raise Exception('index out of range')
-        res = self.buf[self.pos: (e + self.pos)]
-        self.pos += e
-        return res
-
-    def skip(self, e=None):
-        """跳过多少字节"""
-        if e is None:
-            while self.pos < len(self.buf):
-                if 128 & self.buf[self.pos] == 0:
-                    self.pos += 1
-                    return
-                self.pos += 1
-            return
-        self.pos += e
-        if self.pos >= len(self.buf):
-            self.pos -= 1
-
-    def feed_decode(self, payload):
-        """
-        payload解码,即还原JS中的function SCWebFeedPush$decode(r, l)
-        Args:
-            decode函数返回的paylod
-        Returns:
-            m解码后的数据
-        """
-        self.pos = 0
-        self.buf = payload
-        m = {}
-        length = len(self.buf)
-        while self.pos < length:
-            t = self.int_()
-            tt = t >> 3
-            if tt == 1:
-                m['displayWatchingCount'] = self.string()
-            elif tt == 2:
-                m['displayLikeCount'] = self.string()
-            elif tt == 3:
-                m['pendingLikeCount'] = self.int_()
-            elif tt == 4:
-                m['pushInterval'] = self.int_()
-            elif tt == 5:
-                if not m.get('comment'):
-                    m['comment'] = []
-                m['comment'].append(self.comment_decode(self.buf, self.int_()))
-            elif tt == 6:
-                m['commentCursor'] = self.string()
-            elif tt == 7:
-                if not m.get('comboComment'):
-                    m['comboComment'] = []
-                m['comboComment'].append(self.comboComment_decode(self.buf, self.int_()))
-            elif tt == 8:
-                if not m.get('like'):
-                    m['like'] = []
-                m['like'].append(self.web_like_feed_decode(self.buf, self.int_()))
-            elif tt == 9:  # 礼物
-                if not m.get('gift'):
-                    m['gift'] = []
-                m['gift'].append(self.gift_decode(self.buf, self.int_()))
-            elif tt == 10:
-                m['giftCursor'] = self.string()
-            elif tt == 11:
-                if not m.get('systemNotice'):
-                    m['systemNotice'] = []
-                m['systemNotice'].append(self.systemNotice_decode(self.buf, self.int_()))
-            elif tt == 12:
-                if not m.get('share'):
-                    m['share'] = []
-                m['share'].append(self.share_decode(self.buf, self.int_()))
-            else:
-                self.skipType(t & 7)
-        return m
-
-    def comment_decode(self, r, l):
-        c = self.pos + l
-        m = {}
-        while self.pos < c:
-            t = self.int_()
-            tt = t >> 3
-            if tt == 1:
-                m['id'] = self.string()
-            elif tt == 2:
-                m['user'] = self.user_info_decode(self.buf, self.int_())
-            elif tt == 3:
-                m['content'] = self.string()
-            elif tt == 4:
-                m['deviceHash'] = self.string()
-            elif tt == 5:
-                m['sortRank'] = self.int_()
-            elif tt == 6:
-                m['color'] = self.string()
-            elif tt == 7:
-                m['showType'] = self.int_()
-            else:
-                self.skipType(t & 7)
-        return m
-
-    def comboComment_decode(self, r, l):
-        pass
-
-    def systemNotice_decode(self, r, l):
-        pass
-
-    def share_decode(self, r, l):
-        pass
-
-    def user_info_decode(self, r, l):
-        c = self.pos + l
-        m = {}
-        while self.pos < c:
-            t = self.int_()
-            tt = t >> 3
-            if tt == 1:
-                m['principalId'] = self.string()
-            elif tt == 2:
-                m['userName'] = self.string()
-            elif tt == 3:
-                m['headUrl'] = self.string()
-            else:
-                self.skipType(t & 7)
-        return m
-
-    def web_like_feed_decode(self, r, l):
-        c = self.pos + l
-        m = {}
-        while self.pos < c:
-            t = self.int_()
-            tt = t >> 3
-            if tt == 1:
-                m['id'] = self.string()
-            elif tt == 2:
-                m['user'] = self.user_info_decode(self.buf, self.int_())
-            elif tt == 3:
-                m['sortRank'] = self.int_()
-            elif tt == 4:
-                m['deviceHash'] = self.string()
-            else:
-                self.skipType(t & 7)
-        return m
-
-    def gift_decode(self, r, l):
-        c = self.pos + l
-        m = {}
-        while self.pos < c:
-            t = self.int_()
-            tt = t >> 3
-            if tt == 1:
-                m['id'] = self.string()
-            elif tt == 2:
-                m['user'] = self.user_info_decode(self.buf, self.int_())
-            elif tt == 3:
-                m['time'] = self.int_()
-            elif tt == 4:
-                m['giftId'] = self.int_()
-            elif tt == 5:
-                m['sortRank'] = self.int_()
-            elif tt == 6:
-                m['mergeKey'] = self.string()
-            elif tt == 7:
-                m['batchSize'] = self.int_()
-            elif tt == 8:
-                m['comboCount'] = self.int_()
-            elif tt == 9:
-                m['rank'] = self.int_()
-            elif tt == 10:
-                m['expireDuration'] = self.int_()
-            elif tt == 11:
-                m['clientTimestamp'] = self.int_()
-            elif tt == 12:
-                m['slotDisplayDuration'] = self.int_()
-            elif tt == 13:
-                m['starLevel'] = self.int_()
-            elif tt == 14:
-                m['styleType'] = self.int_()
-            elif tt == 15:
-                m['liveAssistantType'] = self.int_()
-            elif tt == 16:
-                m['deviceHash'] = self.string()
-            elif tt == 17:
-                m['danmakuDisplay'] = self.int_()
-            else:
-                self.skipType(t & 7)
-        return m
-
-    def string(self):
-        e = self.bytes()
-        n = len(e)
-        if n < 1:
-            return ""
-        s = []
-        t = 0
-        while t < n:
-            r = e[t]
-            t += 1
-            if r < 128:
-                s.append(r)
-            elif 191 < r < 224:
-                s.append((31 & r) << 6 | 63 & e[t])
-                t += 1
-            elif 239 < r < 365:
-                x = (7 & r) << 18 | (63 & e[t]) << 12
-                t += 1
-                y = (63 & e[t]) << 6
-                t += 1
-                z = 63 & e[t]
-                t += 1
-                r = (x | y | z) - 65536
-                s.append(55296 + (r >> 10))
-                s.append(56320 + (1023 & r))
-            else:
-                x = (15 & r) << 12
-                y = (63 & e[t]) << 6
-                t += 1
-                z = 63 & e[t]
-                t += 1
-                s.append(x | y | z)
-        string = ''
-        for w in s:
-            string += chr(w)
-        return string
