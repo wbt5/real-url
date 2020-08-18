@@ -1,0 +1,437 @@
+syntax = "proto2";
+package AcFunPack;
+
+message RegisterRequest {
+    optional AppInfo appInfo = 1;
+    optional DeviceInfo deviceInfo = 2;
+    optional EnvInfo envInfo = 3;
+    optional PresenceStatus presenceStatus = 4;
+    optional ActiveStatus appActiveStatus = 5;
+    optional bytes appCustomStatus = 6;
+    optional PushServiceToken pushServiceToken = 7;
+    optional int64 instanceId = 8;
+    repeated PushServiceToken pushServiceTokenList = 9;
+    optional int32 keepaliveIntervalSec = 10;
+    optional ZtCommonInfo ztCommonInfo = 11;
+
+    enum PresenceStatus {
+        kPresenceOffline = 0;
+        kPresenceOnline = 1;
+    }
+
+    enum ActiveStatus {
+        kInvalid = 0;
+        kAppInForeground = 1;
+        kAppInBackground = 2;
+    }
+}
+
+message RegisterResponse {
+    optional AccessPointsConfig accessPointsConfig = 1;
+    optional bytes sessKey = 2;
+    optional int64 instanceId = 3;
+    optional SdkOption sdkOption = 4;
+    optional AccessPointsConfig accessPointsConfigIpv6 = 5;
+}
+
+message AccessPointsConfig {
+    repeated AccessPoint optimalAps = 1;
+    repeated AccessPoint backupAps = 2;
+    repeated uint32 availablePorts = 3;
+    optional AccessPoint forceLastConnectedAp = 4;
+}
+
+message AccessPoint {
+    optional AddressType addressType = 1;
+    optional uint32 port = 2;
+    optional fixed32 ipV4 = 3;
+    optional bytes ipV6 = 4;
+    optional string domain = 5;
+
+    enum AddressType {
+        kIPV4 = 0;
+        kIPV6 = 1;
+        kDomain = 2;
+    }
+}
+
+message SdkOption {
+    optional int32 reportIntervalSeconds = 1;
+    optional string reportSecurity = 2;
+    optional int32 lz4CompressionThresholdBytes = 3;
+    repeated string netCheckServers = 4;
+}
+
+message ZtLiveCsEnterRoom {
+	optional bool isAuthor = 1;
+	optional uint32 reconnectCount = 2;
+	optional uint32 lastErrorCode = 3;
+	optional string enterRoomAttach = 4;
+	optional string clientLiveSdkVersion = 5;
+}
+
+message ZtLiveCsHeartbeat {
+	optional uint64 clientTimestampMs = 1;
+	optional bool sequence = 2;
+}
+
+message CsCmd {
+	optional string cmdType = 1;
+	optional bytes payload = 2;
+	optional string ticket = 3;
+	optional string liveId = 4;
+}
+
+message AppInfo {
+    optional string appName = 1;
+    optional string appVersion = 2;
+    optional string appChannel = 3;
+    optional string sdkVersion = 4;
+    map < string,
+    string > extensionInfo = 5;
+}
+
+message DeviceInfo {
+    optional PlatformType platformType = 1;
+    optional string osVersion = 2;
+    optional string deviceModel = 3;
+    optional bytes imeiMd5 = 4;
+    optional string deviceId = 5;
+    optional string softDid = 6;
+    optional string kwaiDid = 7;
+    optional string manufacturer = 8;
+    optional string deviceName = 9;
+
+    enum PlatformType {
+        kInvalid = 0;
+        kAndroid = 1;
+        kiOS = 2;
+        kWindows = 3;
+        WECHAT_ANDROID = 4;
+        WECHAT_IOS = 5;
+        H5 = 6;
+        H5_ANDROID = 7;
+        H5_IOS = 8;
+        H5_WINDOWS = 9;
+        H5_MAC = 10;
+        kPlatformNum = 11;
+    }
+}
+
+message EnvInfo {
+    optional NetworkType networkType = 1;
+    optional bytes apnName = 2;
+
+    enum NetworkType {
+        kInvalid = 0;
+        kWIFI = 1;
+        kCellular = 2;
+    }
+}
+
+message PushServiceToken {
+    optional PushType pushType = 1;
+    optional bytes token = 2;
+    optional bool isPassThrough = 3;
+
+    enum PushType {
+        kPushTypeInvalid = 0;
+        kPushTypeAPNS = 1;
+        kPushTypeXmPush = 2;
+        kPushTypeJgPush = 3;
+        kPushTypeGtPush = 4;
+        kPushTypeOpPush = 5;
+        kPushTypeVvPush = 6;
+        kPushTypeHwPush = 7;
+        kPushTypeFcm = 8;
+    }
+}
+
+message ZtCommonInfo {
+    optional string kpn = 1;
+    optional string kpf = 2;
+    optional int64 uid = 4;
+    optional string did = 5;
+}
+
+message PingResponse {
+    optional sfixed32 serverTimestamp = 1;
+    optional fixed32 clientIp = 2;
+    optional fixed32 redirectIp = 3;
+    optional uint32 redirectPort = 4;
+}
+
+message PingRequest {
+    optional PingType pingType = 1;
+    optional uint32 pingRound = 2;
+
+    enum PingType {
+        kInvalid = 0;
+        kPriorRegister = 1;
+        kPostRegister = 2;
+    }
+}
+
+message UpstreamPayload {
+    optional string command = 1;
+    optional int64 seqId = 2;
+    optional uint32 retryCount = 3;
+    optional bytes payloadData = 4;
+    optional UserInstance userInstance = 5;
+    optional int32 errorCode = 6;
+    optional SettingInfo settingInfo = 7;
+    optional RequsetBasicInfo requestBasicInfo = 8;
+    optional string subBiz = 9;
+    optional FrontendInfo frontendInfo = 10;
+    optional string kpn = 11;
+    optional bool anonymouseUser = 12;
+}
+
+message DownstreamPayload {
+    optional string command = 1;
+    optional int64 seqId = 2;
+    optional int32 errorCode = 3;
+    optional bytes payloadData = 4;
+    optional string errorMsg = 5;
+    optional bytes errorData = 6;
+    optional string subBiz = 7;
+}
+
+message UserInstance {
+    optional User user = 1;
+    optional int64 instanceId = 2;
+}
+
+message User {
+    optional int32 appId = 1;
+    optional int64 uid = 2;
+}
+
+message SettingInfo {
+    optional string locale = 1;
+    optional sint32 timezone = 2;
+}
+
+message RequsetBasicInfo {
+    optional DeviceInfo.PlatformType clientType = 1;
+    optional string deviceId = 2;
+    optional string clientIp = 3;
+    optional string appVersion = 4;
+    optional string channel = 5;
+    optional AppInfo appInfo = 6;
+    optional DeviceInfo deviceInfo = 7;
+    optional EnvInfo envInfo = 8;
+    optional int32 clientPort = 9;
+    optional string location = 10;
+    optional string kpf = 11;
+}
+
+message FrontendInfo {
+    optional string ip = 1;
+    optional int32 port = 2;
+}
+
+message PacketHeader {
+    optional int32 appId = 1;
+    optional int64 uid = 2;
+    optional int64 instanceId = 3;
+    optional uint32 flags = 4;
+    optional EncodingType encodingType = 6;
+    optional uint32 decodedPayloadLen = 7;
+    optional EncryptionMode encryptionMode = 8;
+    optional TokenInfo tokenInfo = 9;
+    optional int64 seqId = 10;
+    repeated Feature features = 11;
+    optional string kpn = 12;
+
+    enum Flags {
+        option allow_alias = true;
+        kDirUpstream = 0;
+        kDirDownstream = 1;
+        kDirMask = 1;
+    }
+
+    enum EncodingType {
+        kEncodingNone = 0;
+        kEncodingLz4 = 1;
+    }
+
+    enum EncryptionMode {
+        kEncryptionNone = 0;
+        kEncryptionServiceToken = 1;
+        kEncryptionSessionKey = 2;
+    }
+
+    enum Feature {
+        kReserve = 0;
+        kCompressLz4 = 1;
+    }
+}
+
+message TokenInfo {
+    optional TokenType tokenType = 1;
+    optional bytes token = 2;
+
+    enum TokenType {
+        kInvalid = 0;
+        kServiceToken = 1;
+    }
+}
+
+message KeepAliveRequest {
+    optional RegisterRequest.PresenceStatus presenceStatus = 1;
+    optional RegisterRequest.ActiveStatus appActiveStatus = 2;
+    optional PushServiceToken pushServiceToken = 3;
+    repeated PushServiceToken pushServiceTokenList = 4;
+    repeated int32 keepaliveIntervalSec = 5;
+}
+
+message ZtLiveScMessage {
+    optional string messageType = 1;
+    optional int32 compressionType = 2;
+    optional bytes payload = 3;
+    optional string liveId = 4;
+    optional string ticket = 5;
+    optional uint64 serverTimestampMs = 6;
+}
+
+message ZtLiveScNotifySignal {
+    repeated ZtLiveNotifySignalItem item = 1;
+
+    message ZtLiveNotifySignalItem {
+        optional string signalType = 1;
+        repeated bytes payload = 2;
+    }
+}
+
+message ZtLiveScActionSignal {
+    repeated ZtLiveActionSignalItem item = 1;
+
+    message ZtLiveActionSignalItem {
+        optional string signalType = 1;
+        repeated bytes payload = 2;
+    }
+}
+
+message ZtLiveScStateSignal {
+    repeated ZtLiveStateSignalItem item = 1;
+
+    message ZtLiveStateSignalItem {
+        optional string signalType = 1;
+        repeated bytes payload = 2;
+    }
+}
+
+message ZtLiveScStatusChanged {
+    optional int32 type = 1;
+    optional uint64 maxRandomDelayMs = 2;
+    optional BannedInfo bannedInfo = 3;
+
+    message BannedInfo {
+        optional string banReason = 1;
+    }
+}
+
+message CommonActionSignalComment {
+    optional string content = 1;
+    optional uint64 sendTimeMs = 2;
+    optional ZtLiveUserInfo userInfo = 3;
+}
+
+message CommonActionSignalLike {
+    optional ZtLiveUserInfo userInfo = 1;
+    optional uint64 sendTimeMs = 2;
+}
+
+message CommonActionSignalGift {
+    optional ZtLiveUserInfo userInfo = 1;
+    optional uint64 sendTimeMs = 2;
+    optional uint64 giftId = 3;
+    optional uint32 batchSize = 4;
+    optional uint32 comboCount = 5;
+    optional uint64 rank = 6;
+    optional string comboKey = 7;
+    optional uint64 slotDisplayDurationMs = 8;
+    optional uint64 expireDurationMs = 9;
+}
+
+message CommonStateSignalDisplayInfo {
+    optional string watchingCount = 1;
+    optional string likeCount = 2;
+    optional uint32 likeDelta = 3;
+}
+
+message CommonStateSignalTopUsers {
+    repeated TopUser topUser = 1;
+
+    message TopUser {
+        optional ZtLiveUserInfo userInfo = 1;
+        optional string customWatchingListData = 2;
+        optional string displaySendAmount = 3;
+        optional bool anonymousUser = 4;
+    }
+}
+
+message CommonActionSignalUserEnterRoom {
+    optional ZtLiveUserInfo userInfo = 1;
+    optional uint64 sendTimeMs = 2;
+}
+
+message CommonActionSignalUserFollowAuthor {
+    optional ZtLiveUserInfo userInfo = 1;
+    optional uint64 sendTimeMs = 2;
+}
+
+message CommonNotifySignalKickedOut {
+    optional string reason = 1;
+}
+
+message CommonNotifySignalViolationAlert {
+    optional string violationContent = 1;
+}
+
+message CommonStateSignalCurrentRedpackList {
+	
+}
+
+message CommonStateSignalRecentComment {
+	optional CommonActionSignalComment comment = 1;
+}
+
+message CommonStateSignalChatReady {
+	optional string chatId = 1;
+	optional ZtLiveUserInfo guestUserInfo = 2;
+	optional int32 mediaType = 3;
+}
+
+message CommonStateSignalChatEnd {
+	optional string chatId = 1;
+	optional int32 endType = 2;
+}
+
+message AcfunActionSignalThrowBanana {
+    optional UserInfo visitor = 1;
+    optional int32 count = 2;
+    optional uint64 sendTimeMs = 3;
+}
+
+message AcfunStateSignalDisplayInfo {
+    optional string bananaCount = 1;
+}
+
+message ZtLiveUserInfo {
+    optional uint64 userId = 1;
+    optional string nickname = 2;
+    optional ImageCdnNode avatar = 3;
+}
+
+message ImageCdnNode {
+    optional string cdn = 1;
+    optional string url = 2;
+    optional string urlPattern = 3;
+}
+
+message UserInfo {
+    optional uint64 userId = 1;
+    optional string name = 2;
+}
