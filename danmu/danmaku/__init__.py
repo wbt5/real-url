@@ -1,23 +1,26 @@
-import aiohttp
 import asyncio
 import re
 
+import aiohttp
+
+from ._173 import YiQiShan
+from .acfun import AcFun
 from .bilibili import Bilibili
+from .cc import CC
 from .douyu import Douyu
-from .huya import Huya
-from .kuaishou import KuaiShou
-from .huomao import HuoMao
 from .egame import eGame
 from .huajiao import HuaJiao
+from .huomao import HuoMao
+from .huya import Huya
 from .inke import Inke
-from .cc import CC
+from .kuaishou import KuaiShou
 from .kugou import KuGou
-from .zhanqi import ZhanQi
+from .laifeng import LaiFeng
 from .longzhu import LongZhu
+from .look import Look
 from .pps import QiXiu
 from .qf import QF
-from .laifeng import LaiFeng
-from .look import Look
+from .zhanqi import ZhanQi
 
 __all__ = ['DanmakuClient']
 
@@ -50,14 +53,16 @@ class DanmakuClient:
                      'pps.tv': QiXiu,
                      'qf.56.com': QF,
                      'laifeng.com': LaiFeng,
-                     'look.163.com': Look}.items():
+                     'look.163.com': Look,
+                     'acfun.cn': AcFun,
+                     '173.com': YiQiShan}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
                 break
         if self.__site is None:
             print('Invalid link!')
-            exit
+            exit()
         self.__hs = aiohttp.ClientSession()
 
     async def init_ws(self):
@@ -108,14 +113,89 @@ class DanmakuClient:
                 for m in ms:
                     await self.__dm_queue.put(m)
             count += 1
-        await self.heartbeats()
+
+    async def init_ws_acfun(self, s):
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        await self.__ws.send_bytes(s.encode_packet('register'))
+
+    async def ping_acfun(self, s):
+        while True:
+            await asyncio.sleep(1)
+            await self.__ws.send_bytes(s.encode_packet('ping'))
+
+    async def keepalive_acfun(self, s):
+        while True:
+            await asyncio.sleep(50)
+            await self.__ws.send_bytes(s.encode_packet('keepalive'))
+
+    async def heartbeat_acfun(self, s):
+        while True:
+            await asyncio.sleep(10)
+            await self.__ws.send_bytes(s.encode_packet('ztlivecsheartbeat'))
+
+    async def fetch_danmaku_acfun(self, s):
+        count = 0
+        async for msg in self.__ws:
+            self.__link_status = True
+            ms = s.decode_packet(msg.data)
+            if count == 0:
+                await self.__ws.send_bytes(s.encode_packet('ztlivecsenterroom'))
+                count += 1
+            for m in ms:
+                await self.__dm_queue.put(m)
+
+    async def init_ws_173(self, s):
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        await self.__ws.send_bytes(s.pack('startup'))
+        await asyncio.sleep(1)
+        await self.__ws.send_bytes(s.pack('enterroomreq'))
+
+    async def tcphelloreq_173(self, s):
+        while True:
+            await asyncio.sleep(10)
+            await self.__ws.send_bytes(s.pack('tcphelloreq'))
+
+    async def roomhelloreq_173(self, s):
+        while True:
+            await asyncio.sleep(5)
+            await self.__ws.send_bytes(s.pack('roomhelloreq'))
+
+    async def fetch_danmaku_173(self, s):
+        async for msg in self.__ws:
+            self.__link_status = True
+            ms = s.unpack(msg.data)
+            for m in ms:
+                await self.__dm_queue.put(m)
 
     async def start(self):
         if self.__u == 'huajiao.com':
             await self.init_ws_huajiao()
+        elif self.__u == 'acfun.cn':
+            rid = re.search(r'\d+', self.__url).group(0)
+            s = self.__site(rid)
+            await self.init_ws_acfun(s)
+            await asyncio.gather(
+                self.ping_acfun(s),
+                self.fetch_danmaku_acfun(s),
+                self.keepalive_acfun(s),
+                self.heartbeat_acfun(s),
+            )
+        elif self.__u == '173.com':
+            rid = self.__url.split('/')[-1]
+            s = self.__site(rid)
+            await self.init_ws_173(s)
+            await asyncio.gather(
+                self.fetch_danmaku_173(s),
+                self.tcphelloreq_173(s),
+                self.roomhelloreq_173(s),
+            )
         else:
             await self.init_ws()
             await asyncio.gather(
                 self.heartbeats(),
                 self.fetch_danmaku(),
             )
+
+    async def stop(self):
+        self.__stop = True
+        await self.__hs.close()
