@@ -3,7 +3,7 @@ import re
 
 import aiohttp
 
-from ._173 import YiQiShan
+from .yqs import YiQiShan
 from .acfun import AcFun
 from .bilibili import Bilibili
 from .cc import CC
@@ -21,6 +21,7 @@ from .look import Look
 from .pps import QiXiu
 from .qf import QF
 from .zhanqi import ZhanQi
+from .yy import YY
 
 __all__ = ['DanmakuClient']
 
@@ -55,7 +56,8 @@ class DanmakuClient:
                      'laifeng.com': LaiFeng,
                      'look.163.com': Look,
                      'acfun.cn': AcFun,
-                     '173.com': YiQiShan}.items():
+                     '173.com': YiQiShan,
+                     'yy.com': YY}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
@@ -114,56 +116,77 @@ class DanmakuClient:
                     await self.__dm_queue.put(m)
             count += 1
 
-    async def init_ws_acfun(self, s):
+    async def init_ws_acfun(self):
         self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
-        await self.__ws.send_bytes(s.encode_packet('register'))
+        await self.__ws.send_bytes(self.__s.encode_packet('register'))
 
-    async def ping_acfun(self, s):
+    async def ping_acfun(self):
         while True:
             await asyncio.sleep(1)
-            await self.__ws.send_bytes(s.encode_packet('ping'))
+            await self.__ws.send_bytes(self.__s.encode_packet('ping'))
 
-    async def keepalive_acfun(self, s):
+    async def keepalive_acfun(self):
         while True:
             await asyncio.sleep(50)
-            await self.__ws.send_bytes(s.encode_packet('keepalive'))
+            await self.__ws.send_bytes(self.__s.encode_packet('keepalive'))
 
-    async def heartbeat_acfun(self, s):
+    async def heartbeat_acfun(self):
         while True:
             await asyncio.sleep(10)
-            await self.__ws.send_bytes(s.encode_packet('ztlivecsheartbeat'))
+            await self.__ws.send_bytes(self.__s.encode_packet('ztlivecsheartbeat'))
 
-    async def fetch_danmaku_acfun(self, s):
+    async def fetch_danmaku_acfun(self):
         count = 0
         async for msg in self.__ws:
             self.__link_status = True
-            ms = s.decode_packet(msg.data)
+            ms = self.__s.decode_packet(msg.data)
             if count == 0:
-                await self.__ws.send_bytes(s.encode_packet('ztlivecsenterroom'))
+                await self.__ws.send_bytes(self.__s.encode_packet('ztlivecsenterroom'))
                 count += 1
             for m in ms:
                 await self.__dm_queue.put(m)
 
-    async def init_ws_173(self, s):
+    async def init_ws_173(self):
         self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
-        await self.__ws.send_bytes(s.pack('startup'))
+        await self.__ws.send_bytes(self.__s.pack('startup'))
         await asyncio.sleep(1)
-        await self.__ws.send_bytes(s.pack('enterroomreq'))
+        await self.__ws.send_bytes(self.__s.pack('enterroomreq'))
 
-    async def tcphelloreq_173(self, s):
+    async def tcphelloreq_173(self):
         while True:
             await asyncio.sleep(10)
-            await self.__ws.send_bytes(s.pack('tcphelloreq'))
+            await self.__ws.send_bytes(self.__s.pack('tcphelloreq'))
 
-    async def roomhelloreq_173(self, s):
+    async def roomhelloreq_173(self):
         while True:
             await asyncio.sleep(5)
-            await self.__ws.send_bytes(s.pack('roomhelloreq'))
+            await self.__ws.send_bytes(self.__s.pack('roomhelloreq'))
 
-    async def fetch_danmaku_173(self, s):
+    async def fetch_danmaku_173(self):
         async for msg in self.__ws:
             self.__link_status = True
-            ms = s.unpack(msg.data)
+            ms = self.__s.unpack(msg.data)
+            for m in ms:
+                await self.__dm_queue.put(m)
+
+    async def init_ws_yy(self):
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        await self.__ws.send_bytes(self.__s.LoginUDB())
+
+    async def heartbeat_yy(self):
+        while True:
+            await asyncio.sleep(10)
+            await self.__ws.send_bytes(self.__s.pingAp())
+
+    async def fetch_danmaku_yy(self):
+        count = 0
+        async for msg in self.__ws:
+            self.__link_status = True
+            ms = self.__s.onProto(msg.data)
+            if count == 0:
+                await self.__ws.send_bytes(self.__s.loginAp())
+                await self.__ws.send_bytes(self.__s.joinServiceBc())
+                count += 1
             for m in ms:
                 await self.__dm_queue.put(m)
 
@@ -172,22 +195,30 @@ class DanmakuClient:
             await self.init_ws_huajiao()
         elif self.__u == 'acfun.cn':
             rid = re.search(r'\d+', self.__url).group(0)
-            s = self.__site(rid)
-            await self.init_ws_acfun(s)
+            self.__s = self.__site(rid)
+            await self.init_ws_acfun()
             await asyncio.gather(
-                self.ping_acfun(s),
-                self.fetch_danmaku_acfun(s),
-                self.keepalive_acfun(s),
-                self.heartbeat_acfun(s),
+                self.ping_acfun(),
+                self.fetch_danmaku_acfun(),
+                self.keepalive_acfun(),
+                self.heartbeat_acfun(),
             )
         elif self.__u == '173.com':
             rid = self.__url.split('/')[-1]
-            s = self.__site(rid)
-            await self.init_ws_173(s)
+            self.__s = self.__site(rid)
+            await self.init_ws_173()
             await asyncio.gather(
-                self.fetch_danmaku_173(s),
-                self.tcphelloreq_173(s),
-                self.roomhelloreq_173(s),
+                self.fetch_danmaku_173(),
+                self.tcphelloreq_173(),
+                self.roomhelloreq_173(),
+            )
+        elif self.__u == 'yy.com':
+            rid = self.__url.split('/')[-1]
+            self.__s = self.__site(int(rid))
+            await self.init_ws_yy()
+            await asyncio.gather(
+                self.fetch_danmaku_yy(),
+                self.heartbeat_yy()
             )
         else:
             await self.init_ws()
