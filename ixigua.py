@@ -8,10 +8,10 @@ import json
 def get_real_url(rid):
     try:
         room_url = rid
-        header = {
+        headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0'
         }
-        response = requests.get(url=room_url, headers=header).text
+        response = requests.get(url=room_url, headers=headers).text
         real_url = re.findall(r'playInfo":([\s\S]*?),"authStatus', response)[0]
 #        real_url = re.sub(r'\\u002F', '/', real_url)
     except:
