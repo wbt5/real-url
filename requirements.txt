@@ -1,0 +1,15 @@
+aiohttp==3.6.2
+async-timeout==3.0.1
+attrs==20.2.0
+certifi==2020.6.20
+chardet==3.0.4
+idna==2.10
+multidict==4.7.6
+protobuf==3.12.2
+pycryptodome==3.9.8
+PyExecJS==1.5.1
+requests==2.24.0
+six==1.15.0
+typing-extensions==3.7.4.3
+urllib3==1.25.10
+yarl==1.5.1
