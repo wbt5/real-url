@@ -5,17 +5,30 @@ import requests
 import re
 
 
+class QF:
+
+    def __init__(self, rid):
+        self.rid = rid
+
+    def get_real_url(self):
+        try:
+            response = requests.post(url='https://qf.56.com/' + self.rid).text
+            real_url = re.findall(r"flvUrl:'(.*)\?wsSecret", response)
+            real_url = real_url[0]
+        except:
+            raise Exception('直播间不存在或未开播')
+        return real_url
+
+
 def get_real_url(rid):
     try:
-        response = requests.post(url='https://qf.56.com/' + rid).text
-        real_url = re.findall(r"flvUrl:'(.*)\?wsSecret", response)
-        real_url = real_url[0]
-    except:
-        real_url = '该直播间不存在或未开播' 
-    return real_url
+        qf = QF(rid)
+        return qf.get_real_url()
+    except Exception as e:
+        print('Exception：', e)
+        return False
 
 
-rid = input('请输入千帆直播房间号：\n')
-real_url = get_real_url(rid)
-print('该直播间源地址为：')
-print(real_url)
+if __name__ == '__main__':
+    r = input('请输入千帆直播房间号：\n')
+    print(get_real_url(r))

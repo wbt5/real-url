@@ -1,4 +1,5 @@
 # 获取斗鱼直播间的真实流媒体地址，默认最高画质。
+
 import requests
 import re
 import execjs
@@ -74,7 +75,7 @@ class DouYu:
     def get_real_url(self):
         error, key = self.get_pre()
         if error == 0:
-            pass
+            raise Exception('未知错误')
         elif error == 102:
             raise Exception('房间不存在')
         elif error == 104:
@@ -85,7 +86,15 @@ class DouYu:
         return "http://tx2play1.douyucdn.cn/live/{}.flv?uuid=".format(key)
 
 
+def get_real_url(rid):
+    try:
+        dy = DouYu(rid)
+        return dy.get_real_url()
+    except Exception as e:
+        print('Exception：', e)
+        return False
+
+
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')
-    s = DouYu(r)
-    print(s.get_real_url())
+    print(get_real_url(r))
