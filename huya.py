@@ -1,5 +1,5 @@
 # 获取虎牙直播的真实流媒体地址。
-# 虎牙"一起看"频道的直播间可能会卡顿
+# 虎牙"一起看"频道的直播间可能会卡顿，尝试将返回地址 tx.hls.huya.com 中的 tx 改为 bd、migu-bd。
 
 import requests
 import re
@@ -34,7 +34,9 @@ class HuYa:
                     b_url = self.live(livelineurl.replace('_2000', ''))
                     real_url = {
                         '2000p': "https:" + s_url,
-                        'BD': "https:" + b_url
+                        'tx': "https:" + b_url,
+                        'bd': "https:" + b_url.replace('tx.hls.huya.com', 'bd.hls.huya.com'),
+                        'migu-bd': "https:" + b_url.replace('tx.hls.huya.com', 'migu-bd.hls.huya.com'),
                     }
             else:
                 raise Exception('未开播或直播间不存在')
