@@ -21,7 +21,7 @@ from .look import Look
 from .pps import QiXiu
 from .qf import QF
 from .zhanqi import ZhanQi
-from .yy import YY
+# from .yy import YY
 
 __all__ = ['DanmakuClient']
 
@@ -57,7 +57,7 @@ class DanmakuClient:
                      'look.163.com': Look,
                      'acfun.cn': AcFun,
                      '173.com': YiQiShan,
-                     'yy.com': YY}.items():
+                     'yy.com': ''}.items():
             if re.match(r'^(?:http[s]?://)?.*?%s/(.+?)$' % u, url):
                 self.__site = s
                 self.__u = u
