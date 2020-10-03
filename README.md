@@ -115,4 +115,5 @@
 
 感谢 [JetBrains](https://www.jetbrains.com/?from=real-url) 提供的 free JetBrains Open Source license
 
-[![JetBrains-logo](https://i.loli.net/2020/10/03/2ksNFdcSGpLIfXv.png)](https://www.jetbrains.com/?from=real-url)
+[![JetBrains-logo](https://i.loli.net/2020/10/03/YAnXsuE71rhRQlb.png)](https://www.jetbrains.com/?from=real-url)
+
