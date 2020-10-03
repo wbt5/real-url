@@ -111,3 +111,8 @@
 
 2019.11.02：修复斗鱼预览地址获取的方法；新增未开播房间的判断。
 
+## 鸣谢
+
+感谢 [JetBrains](https://www.jetbrains.com/?from=real-url) 提供的 free JetBrains Open Source license
+
+[![JetBrains-logo](https://i.loli.net/2020/10/03/2ksNFdcSGpLIfXv.png)](https://www.jetbrains.com/?from=real-url)
