@@ -14,7 +14,7 @@ class IXiGua:
             headers = {
                 'user-agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:83.0) Gecko/20100101 Firefox/83.0'
             }
-            room_url = self.rid
+            room_url = 'https://live.ixigua.com/' + str(self.rid)
             response = requests.get(url=room_url, headers=headers).text
             real_url = re.findall(r'playInfo":([\s\S]*?),"authStatus', response)[0]
             real_url = re.sub(r'\\u002F', '/', real_url)
