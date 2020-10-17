@@ -25,7 +25,7 @@ class YY:
             if data.get('hls', 0):
                 xa = data['audio']
                 xv = data['video']
-                xv = re.sub(r'0_\d+_0', '0_0_0', xv)
+                xv = re.sub(r'_0_\d+_0', '_0_0_0', xv)
                 url = 'https://interface.yy.com/hls/get/stream/15013/{}/15013/{}?source=h5player&type=m3u8'.format(xv, xa)
                 res = s.get(url).json()
                 real_url = res['hls']
