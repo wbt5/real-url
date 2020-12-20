@@ -1,4 +1,6 @@
 # 获取快手直播的真实流媒体地址，默认输出最高画质
+# https://live.kuaishou.com/u/KPL704668133
+# 如获取失败，尝试修改 cookie 中的 did
 
 import json
 import re
@@ -14,7 +16,7 @@ class KuaiShou:
         headers = {
             'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 '
                           '(KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-            'cookie': 'did=web_'}
+            'cookie': 'did=web_d563dca728d28b00336877723e0359ed'}
         with requests.Session() as s:
             res = s.get('https://m.gifshow.com/fw/live/{}'.format(self.rid), headers=headers)
             livestream = re.search(r'liveStream":(.*),"obfuseData', res.text)
@@ -38,5 +40,6 @@ def get_real_url(rid):
 
 
 if __name__ == '__main__':
-    r = input('请输入快手直播房间地址：\n')
+    # KPL704668133
+    r = input('请输入快手直播房间ID：\n')
     print(get_real_url(r))

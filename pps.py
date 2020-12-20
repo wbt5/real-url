@@ -15,7 +15,7 @@ class PPS:
             response = requests.get('http://m-x.pps.tv/room/' + str(self.rid)).text
             anchor_id = re.findall(r'anchor_id":(\d*),"online_uid', response)[0]
             tt = int(time.time() * 1000)
-            url = 'http://api-live.iqiyi.com/stream/geth5?qd_tm={}&typeId=1&platform=7&vid=0&qd_vip=0&qd_uid={}&qd_ip=114.114.114.114&qd_vipres=0&qd_src=h5_xiu&qd_tvid=0&callback='.format(tt, anchor_id)
+            url = 'http://m-x.pps.tv/api/stream/getH5?qd_tm={}&typeId=1&platform=7&vid=0&qd_vip=0&qd_uid={}&qd_ip=114.114.114.114&qd_vipres=0&qd_src=h5_xiu&qd_tvid=0&callback='.format(tt, anchor_id)
             headers = {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Referer': 'http://m-x.pps.tv/'

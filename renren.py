@@ -18,14 +18,14 @@ class RenRen:
             try:
                 s = re.search(r'"playUrl":"([\s\S]*?)"', res.text).group(1)
                 if livestate.group(1) == '0':
-                    accesskey = re.search(r'accesskey=(\w+)', s).group(1)
-                    expire = re.search(r'expire=(\d+)', s).group(1)
-                    live = re.search(r'(/live/\d+)', s).group(1)
-                    c = accesskey + expire + live
-                    key = hashlib.md5(c.encode('utf-8')).hexdigest()
-                    e = s.split('?')[0].split('/')[4]
-                    t = 'http://ksy-hls.renren.com/live/' + e + '/index.m3u8?key=' + key
-                    return t
+                    # accesskey = re.search(r'accesskey=(\w+)', s).group(1)
+                    # expire = re.search(r'expire=(\d+)', s).group(1)
+                    # live = re.search(r'(/live/\d+)', s).group(1)
+                    # c = accesskey + expire + live
+                    # key = hashlib.md5(c.encode('utf-8')).hexdigest()
+                    # e = s.split('?')[0].split('/')[4]
+                    # t = 'http://ksy-hls.renren.com/live/' + e + '/index.m3u8?key=' + key
+                    return s
                 elif livestate.group(1) == '1':
                     return '回放：' + s
             except IndexError:

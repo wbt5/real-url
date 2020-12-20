@@ -11,10 +11,10 @@ class LongZhu:
 
     def get_real_url(self):
         try:
-            response = requests.get('http://m.longzhu.com/' + str(self.rid)).text
-            roomId = re.findall(r'roomId = (\d*);', response)[0]
-            response = requests.get('http://livestream.longzhu.com/live/getlivePlayurl?roomId={}&hostPullType=2&isAdvanced=true&playUrlsType=1'.format(roomId)).json()
-            real_url = response.get('playLines')[0].get('urls')[-1].get('securityUrl')
+            response = requests.get('http://star.longzhu.com/' + str(self.rid)).text
+            roomId = re.findall(r'roomid":(\d+)', response)[0]
+            response = requests.get('http://livestream.longzhu.com/live/getlivePlayurl?roomId={}&utmSr=&platform=h5&device=ios'.format(roomId)).json()
+            real_url = response.get('playLines')[0].get('urls')[0].get('securityUrl')
         except:
             raise Exception('直播间不存在或未开播')
         return real_url

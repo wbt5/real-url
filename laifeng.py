@@ -17,7 +17,7 @@ class LaiFeng:
             stream_name = re.findall(r"initAlias:'(.*)?'", response_main)[0]
             real_url = {}
             for stream_format in ['HttpFlv', 'Hls']:
-                request_url = 'https://lapi.lcloud.laifeng.com/Play?AppId=101&StreamName={}&Action=Schedule&Version=2.0&Format={}'.format(stream_name, stream_format)
+                request_url = 'https://lapi.lcloud.laifeng.com/Play?AppId=101&CallerVersion=2.0&StreamName={}&Action=Schedule&Version=2.0&Format={}'.format(stream_name, stream_format)
                 response = requests.get(url=request_url).json()
                 real_url[stream_format] = response.get(stream_format)[0].get('Url')
         except:

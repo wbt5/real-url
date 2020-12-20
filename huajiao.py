@@ -8,12 +8,15 @@ class HuaJiao:
 
     def __init__(self, rid):
         self.rid = rid
+        self.headers = {
+            'Referer': 'https://h.huajiao.com/l/index?liveid={}&qd=hu'.format(rid)
+        }
 
     def get_real_url(self):
         tt = str(time.time())
         try:
             room_url = 'https://h.huajiao.com/api/getFeedInfo?sid={tt}&liveid={rid}'.format(tt=tt, rid=self.rid)
-            response = requests.get(url=room_url).json()
+            response = requests.get(url=room_url, headers=self.headers).json()
             real_url = response.get('data').get('live').get('main')
         except:
             raise Exception('直播间不存在或未开播')
