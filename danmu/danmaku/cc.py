@@ -311,8 +311,8 @@ class CC:
                 elif ms_type == 'gamechat':
                     name = json.loads(m[7])['nickname']
                     content = m[4]
-                msg = {'name': name, 'content': content, 'msg_type': 'danmaku'}
+                msg = {'name': name, 'content': content, 'msg_type': ms_type, 'platform': 'cc'}
                 msgs.append(msg.copy())
         else:
-            msgs = [{'name': '', 'content': '', 'msg_type': 'other'}]
+            msgs = [{'name': '', 'content': '', 'msg_type': 'other', 'platform':'none'}]
         return msgs

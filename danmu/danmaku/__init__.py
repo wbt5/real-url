@@ -94,6 +94,7 @@ class DanmakuClient:
                 self.__link_status = True
                 ms = self.__site.decode_msg(msg.data)
                 for m in ms:
+                    m["url"] = self.__url
                     await self.__dm_queue.put(m)
             await asyncio.sleep(1)
             await self.init_ws()

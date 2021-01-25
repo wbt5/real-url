@@ -4,13 +4,23 @@
 
 import asyncio
 import danmaku
+from source.cc import CCDanMu
+from storage.mysql import Persist
+import time
 
 
 async def printer(q):
+    p = Persist()
     while True:
         m = await q.get()
-        if m['msg_type'] == 'danmaku':
-            print(f'{m["name"]}：{m["content"]}')
+        if m['platform'] == 'cc':
+            cc = CCDanMu(content=m['content'], name=m['name'].encode(encoding='UTF-8',errors='strict'), content_type=m['msg_type'], url=m['url'],created_at=int(time.time()))
+            try:
+                p.save(cc)
+            except:
+                print(f'log fail: {m["name"]}：{m["content"]}@{m["url"]}')
+                continue
+            print(f'{m["name"]}：{m["content"]}@{m["url"]}')
 
 
 async def main(url):
