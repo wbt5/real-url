@@ -24,6 +24,7 @@ class HuYa:
             }
             response = requests.get(url=room_url, headers=header).text
             livelineurl = re.findall(r'liveLineUrl = "([\s\S]*?)";', response)[0]
+            livelineurl = base64.b64decode(livelineurl).decode('utf-8')
             if livelineurl:
                 if 'replay' in livelineurl:
                     real_url = {
