@@ -191,7 +191,6 @@ class PPSport:
             url = f"http://{dt['bh']['content']}/live/{interval}/{delay}/{rid}.m3u8?playback=0&{urlencode(k)}" \
                 if self.liveflag == '1' else f"http://{dt['bh']}/{rid}.m3u8?fpp.ver=1.0.0&{urlencode(k)}"
             return url
-
         else:
             raise Exception('Invalid parameters')
 
