@@ -12,13 +12,17 @@ class DouYin:
         self.rid = rid
 
     def get_real_url(self):
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, '
+                          'like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        }
         try:
             if 'v.douyin.com' in self.rid:
                 room_id = re.findall(r'(\d{19})', requests.get(url=self.rid).url)[0]
             else:
                 room_id = self.rid
             room_url = 'https://webcast.amemv.com/webcast/reflow/{}'.format(room_id)
-            response = requests.get(url=room_url).text
+            response = requests.get(url=room_url, headers= headers).text
             rtmp_pull_url = re.search(r'"rtmp_pull_url":"(.*?flv)"', response).group(1)
             hls_pull_url = re.search(r'"hls_pull_url":"(.*?m3u8)"', response).group(1)
             real_url = [rtmp_pull_url, hls_pull_url]
