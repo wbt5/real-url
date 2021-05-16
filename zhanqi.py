@@ -33,7 +33,7 @@ class ZhanQi:
 
             # 获取cdn_host
             res = self.s.get('https://umc.danuoyi.alicdn.com/dns_resolve_https?app=zqlive&host_key=alhdl-cdn.zhanqi.tv')
-            cdn_host, = res.json().get('redirect_domain')
+            cdn_host, *_ = res.json().get('redirect_domain')
 
             # 获取chain_key
             data = {
