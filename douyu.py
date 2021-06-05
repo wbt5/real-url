@@ -2,6 +2,7 @@
 import hashlib
 import re
 import time
+import json
 
 import execjs
 import requests
@@ -24,6 +25,9 @@ class DouYu:
         else:
             raise Exception('房间号错误')
 
+    def set_rate(self, rate):
+        self.live_rate = rate
+    
     @staticmethod
     def md5(data):
         return hashlib.md5(data.encode('utf-8')).hexdigest()
@@ -47,7 +51,8 @@ class DouYu:
         if data:
             rtmp_live = data['rtmp_live']
             key = re.search(r'(\d{1,7}[0-9a-zA-Z]+)_?\d{0,4}(/playlist|.m3u8)', rtmp_live).group(1)
-        return error, key
+        return error, data['rtmp_url'] + '/' + data['rtmp_live']
+        # return error, key
 
     def get_js(self):
         result = re.search(r'(function ub98484234.*)\s(var.*)', self.res).group()
@@ -64,15 +69,17 @@ class DouYu:
 
         js = execjs.compile(func_sign)
         params = js.call('sign', self.rid, self.did, self.t10)
-        params += '&ver=219032101&rid={}&rate=-1'.format(self.rid)
+        # params += '&ver=219032101&rid={}&rate=-1'.format(self.rid)
+        params += '&ver=219032101&rid={}&rate={}'.format(self.rid, self.live_rate)
 
         url = 'https://m.douyu.com/api/room/ratestream'
-        res = self.s.post(url, params=params).text
-        key = re.search(r'(\d{1,7}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res).group(1)
+        res = self.s.post(url, params=params).json()['data']
+        key = re.search(r'(\d{1,7}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res['url']).group(1)
 
-        return key
+        return res['url']
+        # return key
 
-    def get_pc_js(self, cdn='ws-h5', rate=0):
+    def get_pc_js(self, cdn='ws-h5'):
         """
         通过PC网页端的接口获取完整直播源。
         :param cdn: 主线路ws-h5、备用线路tct-h5
@@ -95,26 +102,32 @@ class DouYu:
         js = execjs.compile(func_sign)
         params = js.call('sign', self.rid, self.did, self.t10)
 
-        params += '&cdn={}&rate={}'.format(cdn, rate)
+        params += '&cdn={}&rate={}'.format(cdn, self.live_rate)
         url = 'https://www.douyu.com/lapi/live/getH5Play/{}'.format(self.rid)
-        res = self.s.post(url, params=params).json()
+        res = self.s.post(url, params=params).json()['data']
 
-        return res
+        return res['rtmp_url'] + '/' + res['rtmp_live']
 
     def get_real_url(self):
-        error, key = self.get_pre()
+        ret = []
+        error, url = self.get_pre()
         if error == 0:
-            pass
+            ret.append(url)
         elif error == 102:
             raise Exception('房间不存在')
         elif error == 104:
             raise Exception('房间未开播')
-        else:
-            key = self.get_js()
-        return "http://tx2play1.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        # else:
+        #     key = self.get_js()
+        ret.append(self.get_js())
+        ret.append(self.get_pc_js())
+        return ret
+        # return "http://tx2play1.douyucdn.cn/live/{}.flv?uuid=".format(key)
 
 
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')
     s = DouYu(r)
+    r = input('输入画质(1流畅；2高清；3超清；4蓝光4M；0蓝光8M或10M)：\n')
+    s.set_rate(r)
     print(s.get_real_url())
