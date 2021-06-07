@@ -45,14 +45,10 @@ class DouYu:
             'auth': auth
         }
         res = self.s.post(url, headers=headers, data=data).json()
-        error = res['error']
-        data = res['data']
-        key = ''
-        if data:
-            rtmp_live = data['rtmp_live']
-            key = re.search(r'(\d{1,7}[0-9a-zA-Z]+)_?\d{0,4}(/playlist|.m3u8)', rtmp_live).group(1)
-        return error, data['rtmp_url'] + '/' + data['rtmp_live']
-        # return error, key
+        if 0 != res['error']:
+            print('error at url:{}\nresponse:{}'.format(url, res))
+            return None
+        return data['rtmp_url'] + '/' + data['rtmp_live']
 
     def get_js(self):
         result = re.search(r'(function ub98484234.*)\s(var.*)', self.res).group()
@@ -74,10 +70,7 @@ class DouYu:
 
         url = 'https://m.douyu.com/api/room/ratestream'
         res = self.s.post(url, params=params).json()['data']
-        key = re.search(r'(\d{1,7}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res['url']).group(1)
-
         return res['url']
-        # return key
 
     def get_pc_js(self, cdn='ws-h5'):
         """
@@ -105,24 +98,14 @@ class DouYu:
         params += '&cdn={}&rate={}'.format(cdn, self.live_rate)
         url = 'https://www.douyu.com/lapi/live/getH5Play/{}'.format(self.rid)
         res = self.s.post(url, params=params).json()['data']
-
         return res['rtmp_url'] + '/' + res['rtmp_live']
 
     def get_real_url(self):
         ret = []
-        error, url = self.get_pre()
-        if error == 0:
-            ret.append(url)
-        elif error == 102:
-            raise Exception('房间不存在')
-        elif error == 104:
-            raise Exception('房间未开播')
-        # else:
-        #     key = self.get_js()
+        ret.append(self.get_pre())
         ret.append(self.get_js())
         ret.append(self.get_pc_js())
         return ret
-        # return "http://tx2play1.douyucdn.cn/live/{}.flv?uuid=".format(key)
 
 
 if __name__ == '__main__':
