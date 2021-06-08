@@ -46,9 +46,8 @@ class DouYu:
         }
         res = self.s.post(url, headers=headers, data=data).json()
         if 0 != res['error']:
-            print('error at url:{}\nresponse:{}'.format(url, res))
-            return None
-        return data['rtmp_url'] + '/' + data['rtmp_live']
+            raise Exception(res["msg"])
+        return res['data']['rtmp_url'] + '/' + res['data']['rtmp_live']
 
     def get_js(self):
         result = re.search(r'(function ub98484234.*)\s(var.*)', self.res).group()
@@ -69,8 +68,10 @@ class DouYu:
         params += '&ver=219032101&rid={}&rate={}'.format(self.rid, self.live_rate)
 
         url = 'https://m.douyu.com/api/room/ratestream'
-        res = self.s.post(url, params=params).json()['data']
-        return res['url']
+        res = self.s.post(url, params=params).json()
+        if 0 != res['code']:
+            return None
+        return res['data']['url']
 
     def get_pc_js(self, cdn='ws-h5'):
         """
@@ -97,8 +98,10 @@ class DouYu:
 
         params += '&cdn={}&rate={}'.format(cdn, self.live_rate)
         url = 'https://www.douyu.com/lapi/live/getH5Play/{}'.format(self.rid)
-        res = self.s.post(url, params=params).json()['data']
-        return res['rtmp_url'] + '/' + res['rtmp_live']
+        res = self.s.post(url, params=params).json()
+        if 0 != res['error']:
+            return None
+        return res['data']['rtmp_url'] + '/' + res['data']['rtmp_live']
 
     def get_real_url(self):
         ret = []
