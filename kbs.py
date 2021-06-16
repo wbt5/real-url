@@ -32,7 +32,7 @@ class KBS:
         tt = int(time.time())
         week = int(time.strftime('%w'))
         s = ('06fc1464', '4244ce1b', '77de31c5', 'e0149fa2', '60394ced', '2da639f0', 'c2f0cf9f')
-        ha = f'{s[week - 1]}{self.vid}{tt}*#06#402011'
+        ha = f'{s[week - 1]}{self.vid}{tt}*#06#40201'
         ckey = hashlib.md5(ha.encode('utf-8')).hexdigest()
         params = {
             'cmd': 2,
@@ -40,11 +40,11 @@ class KBS:
             'pla': 0,
             'stream': 2,
             'system': 0,
-            'appVer': '3.0.0.138',
-            'encryptVer': f'7.{week}',
+            'appVer': '3.0.0.142',
+            'encryptVer': f'7.{7 if week == 0 else week}',
             'qq': 0,
             'device': 'PC',
-            'guid': '7dbd5b801e49ace0c8b3eba6b70c9ad6',
+            'guid': 'f56776a1fa52e9c8c4987bfecfbf0503',
             'defn': 'shd',  # shd默认超清
             'host': 'qq.com',
             'livepid': self.livepid,
