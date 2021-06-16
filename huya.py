@@ -31,19 +31,26 @@ class HuYa:
                         'replay': "https:" + livelineurl,
                     }
                 else:
-                    s_url = self.live(livelineurl)
-                    b_url = self.live(livelineurl.replace('ratio=2000', 'ratio=').replace('_2000', ''))
+                    stream_name = self.get_stream_name(livelineurl)
+                    base_url = 'http://121.12.115.15/tx.hls.huya.com/src/' + stream_name
                     real_url = {
-                        '2000p': "https:" + s_url,
-                        'tx': "https:" + b_url,
-                        'bd': "https:" + b_url.replace('txdirect.hls.huya.com','tx.hls.huya.com').replace('tx.hls.huya.com', 'bd.hls.huya.com'),
-                        'migu-bd': "https:" + b_url.replace('txdirect.hls.huya.com','tx.hls.huya.com').replace('tx.hls.huya.com', 'migu-bd.hls.huya.com'),
+                        'hls': base_url + '.m3u8',
+                        'flv': base_url + '.flv',
+                        'hls_2m': base_url + '.m3u8?ratio=2000',
+                        'flv_2m': base_url + '.flv?ratio=2000'
                     }
             else:
                 raise Exception('未开播或直播间不存在')
         except Exception as e:
             raise Exception('未开播或直播间不存在')
         return real_url
+
+    @staticmethod
+    def get_stream_name(e):
+        i, b = e.split('?')
+        r = i.split('/')
+        s = re.sub(r'.(flv|m3u8)', '', r[-1])
+        return s
 
     @staticmethod
     def live(e):
@@ -64,10 +71,13 @@ class HuYa:
         ratio = n.get('ratio')
         if ratio is None:
             ratio = ''
-        uid = '0'
+        uid = '1279523789849'
         h = '_'.join([p, uid, s, mf, ll])
         m = hashlib.md5(h.encode('utf-8')).hexdigest()
-        url = "{}?wsSecret={}&wsTime={}&uid={}&seqid={}&ratio={}&ctype={}&ver=1&t={}".format(i, m, ll, uid, seqid, ratio, ctype, t)
+        txyp = n['txyp']
+        fs = n['fs']
+        url = "{}?wsSecret={}&wsTime={}&uuid=&uid={}&seqid={}&ratio={}&txyp={}&fs={}&ctype={}&ver=1&t={}".format(
+            i, m, ll, uid, seqid, ratio, txyp, fs, ctype, t)
         return url
 
 
