@@ -23,7 +23,7 @@ class HuYa:
                               '(KHTML, like Gecko) Chrome/75.0.3770.100 Mobile Safari/537.36 '
             }
             response = requests.get(url=room_url, headers=header).text
-            livelineurl = re.findall(r'liveLineUrl = "([\s\S]*?)";', response)[0]
+            livelineurl = re.findall(r'"liveLineUrl":"([\s\S]*?)",', response)[0]
             livelineurl = base64.b64decode(livelineurl).decode('utf-8')
             if livelineurl:
                 if 'replay' in livelineurl:
@@ -32,7 +32,7 @@ class HuYa:
                     }
                 else:
                     stream_name = self.get_stream_name(livelineurl)
-                    base_url = 'http://121.12.115.15/tx.hls.huya.com/src/' + stream_name
+                    base_url = 'http://121.12.115.26/tx.hls.huya.com/src/' + stream_name
                     real_url = {
                         'hls': base_url + '.m3u8',
                         'flv': base_url + '.flv',
