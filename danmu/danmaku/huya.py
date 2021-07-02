@@ -22,11 +22,11 @@ class Huya:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers) as resp:
                 room_page = await resp.text()
-                m = re.search(r"ayyuid: +'([0-9]+)'", room_page, re.MULTILINE)
+                m = re.search(r"lYyid\":([0-9]+)", room_page, re.MULTILINE)
                 ayyuid = m.group(1)
-                m = re.search(r"TOPSID += +'([0-9]+)'", room_page, re.MULTILINE)
+                m = re.search(r"lChannelId\":([0-9]+)", room_page, re.MULTILINE)
                 tid = m.group(1)
-                m = re.search(r"SUBSID += +'([0-9]+)'", room_page, re.MULTILINE)
+                m = re.search(r"lSubChannelId\":([0-9]+)", room_page, re.MULTILINE)
                 sid = m.group(1)
 
         oos = tarscore.TarsOutputStream()
