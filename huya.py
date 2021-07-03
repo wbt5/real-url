@@ -32,11 +32,11 @@ class HuYa:
                     }
                 else:
                     stream_name = self.get_stream_name(livelineurl)
-                    base_url = 'http://121.12.115.26/tx.hls.huya.com/src/' + stream_name
+                    base_url = 'http://121.12.115.29/tx.hls.huya.com/src/' + stream_name
                     real_url = {
-                        'hls': base_url + '.m3u8',
+                        # 'hls': base_url + '.m3u8',
                         'flv': base_url + '.flv',
-                        'hls_2m': base_url + '.m3u8?ratio=2000',
+                        # 'hls_2m': base_url + '.m3u8?ratio=2000',
                         'flv_2m': base_url + '.flv?ratio=2000'
                     }
             else:
