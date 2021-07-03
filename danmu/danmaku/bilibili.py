@@ -76,12 +76,25 @@ class Bilibili:
                 msg = {}
                 if ops[i] == 5:
                     j = json.loads(d)
-                    msg['msg_type'] = {'SEND_GIFT': 'gift', 'DANMU_MSG': 'danmaku',
-                                       'WELCOME': 'enter', 'NOTICE_MSG': 'broadcast'}.get(j.get('cmd'), 'other')
+                    msg['msg_type'] = {
+                        'SEND_GIFT': 'gift',
+                        'DANMU_MSG': 'danmaku',
+                        'WELCOME': 'enter',
+                        'NOTICE_MSG': 'broadcast',
+                        'LIVE_INTERACTIVE_GAME': 'interactive_danmaku'  # 新增互动弹幕，经测试与弹幕内容一致
+                    }.get(j.get('cmd'), 'other')
+
+                    # 2021-06-03 bilibili 字段更新, 形如 DANMU_MSG:4:0:2:2:2:0
+                    if msg.get('msg_type', 'UNKNOWN').startswith('DANMU_MSG'):
+                        msg['msg_type'] = 'danmaku'
+
                     if msg['msg_type'] == 'danmaku':
                         msg['name'] = (j.get('info', ['', '', ['', '']])[2][1]
                                        or j.get('data', {}).get('uname', ''))
                         msg['content'] = j.get('info', ['', ''])[1]
+                    elif msg['msg_type'] == 'interactive_danmaku':
+                        msg['name'] = j.get('data', {}).get('uname', '')
+                        msg['content'] = j.get('data', {}).get('msg', '')
                     elif msg['msg_type'] == 'broadcast':
                         msg['type'] = j.get('msg_type', 0)
                         msg['roomid'] = j.get('real_roomid', 0)
