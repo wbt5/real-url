@@ -51,7 +51,8 @@ class eGame:
         if body:
             bin_datas = body['bin_data']
             for bin_data in bin_datas:
-                if bin_data['type'] in (0, 3, 9):
+                # if bin_data['type'] in (0, 3, 9):
+                if bin_data.get('type', '') in (0, 3, 9):
                     msg['name'] = bin_data['nick']
                     msg['content'] = bin_data['content']
                     msg['msg_type'] = 'danmaku'
@@ -230,6 +231,8 @@ class MessageDecode:
             value, position = self.f9(i, s_position)
         elif type == 12:
             value, position = self.f12(i, s_position)
+        elif type == 13:
+            value, position = self.f13(i, s_position)
 
         i = ''
 
