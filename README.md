@@ -26,6 +26,8 @@
 有直播平台失效或新增其他平台解析的，可发 [issue](https://github.com/wbt5/real-url/issues/new)。
 
 ## 更新
+2021.7.4：:art:更新哔哩哔哩直播源；:bug:修复Acfun直播弹幕；:bug:修复企鹅电竞弹幕。
+
 2021.6.20：:sparkles:新增爱奇艺体育直播。
 
 2021.6.13：:bug:修复腾讯体育。

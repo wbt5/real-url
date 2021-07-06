@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0b\x61\x63\x66un.proto\x12\tAcFunPack\"\xfe\x04\n\x0fRegisterRequest\x12#\n\x07\x61ppInfo\x18\x01 \x01(\x0b\x32\x12.AcFunPack.AppInfo\x12)\n\ndeviceInfo\x18\x02 \x01(\x0b\x32\x15.AcFunPack.DeviceInfo\x12#\n\x07\x65nvInfo\x18\x03 \x01(\x0b\x32\x12.AcFunPack.EnvInfo\x12\x41\n\x0epresenceStatus\x18\x04 \x01(\x0e\x32).AcFunPack.RegisterRequest.PresenceStatus\x12@\n\x0f\x61ppActiveStatus\x18\x05 \x01(\x0e\x32\'.AcFunPack.RegisterRequest.ActiveStatus\x12\x17\n\x0f\x61ppCustomStatus\x18\x06 \x01(\x0c\x12\x35\n\x10pushServiceToken\x18\x07 \x01(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x12\n\ninstanceId\x18\x08 \x01(\x03\x12\x39\n\x14pushServiceTokenList\x18\t \x03(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x1c\n\x14keepaliveIntervalSec\x18\n \x01(\x05\x12-\n\x0cztCommonInfo\x18\x0b \x01(\x0b\x32\x17.AcFunPack.ZtCommonInfo\";\n\x0ePresenceStatus\x12\x14\n\x10kPresenceOffline\x10\x00\x12\x13\n\x0fkPresenceOnline\x10\x01\"H\n\x0c\x41\x63tiveStatus\x12\x0c\n\x08kInvalid\x10\x00\x12\x14\n\x10kAppInForeground\x10\x01\x12\x14\n\x10kAppInBackground\x10\x02\"\xda\x01\n\x10RegisterResponse\x12\x39\n\x12\x61\x63\x63\x65ssPointsConfig\x18\x01 \x01(\x0b\x32\x1d.AcFunPack.AccessPointsConfig\x12\x0f\n\x07sessKey\x18\x02 \x01(\x0c\x12\x12\n\ninstanceId\x18\x03 \x01(\x03\x12\'\n\tsdkOption\x18\x04 \x01(\x0b\x32\x14.AcFunPack.SdkOption\x12=\n\x16\x61\x63\x63\x65ssPointsConfigIpv6\x18\x05 \x01(\x0b\x32\x1d.AcFunPack.AccessPointsConfig\"\xb9\x01\n\x12\x41\x63\x63\x65ssPointsConfig\x12*\n\noptimalAps\x18\x01 \x03(\x0b\x32\x16.AcFunPack.AccessPoint\x12)\n\tbackupAps\x18\x02 \x03(\x0b\x32\x16.AcFunPack.AccessPoint\x12\x16\n\x0e\x61vailablePorts\x18\x03 \x03(\r\x12\x34\n\x14\x66orceLastConnectedAp\x18\x04 \x01(\x0b\x32\x16.AcFunPack.AccessPoint\"\xb2\x01\n\x0b\x41\x63\x63\x65ssPoint\x12\x37\n\x0b\x61\x64\x64ressType\x18\x01 \x01(\x0e\x32\".AcFunPack.AccessPoint.AddressType\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x0c\n\x04ipV4\x18\x03 \x01(\x07\x12\x0c\n\x04ipV6\x18\x04 \x01(\x0c\x12\x0e\n\x06\x64omain\x18\x05 \x01(\t\"0\n\x0b\x41\x64\x64ressType\x12\t\n\x05kIPV4\x10\x00\x12\t\n\x05kIPV6\x10\x01\x12\x0b\n\x07kDomain\x10\x02\"\x81\x01\n\tSdkOption\x12\x1d\n\x15reportIntervalSeconds\x18\x01 \x01(\x05\x12\x16\n\x0ereportSecurity\x18\x02 \x01(\t\x12$\n\x1clz4CompressionThresholdBytes\x18\x03 \x01(\x05\x12\x17\n\x0fnetCheckServers\x18\x04 \x03(\t\"\x8b\x01\n\x11ZtLiveCsEnterRoom\x12\x10\n\x08isAuthor\x18\x01 \x01(\x08\x12\x16\n\x0ereconnectCount\x18\x02 \x01(\r\x12\x15\n\rlastErrorCode\x18\x03 \x01(\r\x12\x17\n\x0f\x65nterRoomAttach\x18\x04 \x01(\t\x12\x1c\n\x14\x63lientLiveSdkVersion\x18\x05 \x01(\t\"@\n\x11ZtLiveCsHeartbeat\x12\x19\n\x11\x63lientTimestampMs\x18\x01 \x01(\x04\x12\x10\n\x08sequence\x18\x02 \x01(\x08\"I\n\x05\x43sCmd\x12\x0f\n\x07\x63mdType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\x12\x0e\n\x06ticket\x18\x03 \x01(\t\x12\x0e\n\x06liveId\x18\x04 \x01(\t\"\xca\x01\n\x07\x41ppInfo\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x12\n\nappVersion\x18\x02 \x01(\t\x12\x12\n\nappChannel\x18\x03 \x01(\t\x12\x12\n\nsdkVersion\x18\x04 \x01(\t\x12<\n\rextensionInfo\x18\x05 \x03(\x0b\x32%.AcFunPack.AppInfo.ExtensionInfoEntry\x1a\x34\n\x12\x45xtensionInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x98\x03\n\nDeviceInfo\x12\x38\n\x0cplatformType\x18\x01 \x01(\x0e\x32\".AcFunPack.DeviceInfo.PlatformType\x12\x11\n\tosVersion\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65viceModel\x18\x03 \x01(\t\x12\x0f\n\x07imeiMd5\x18\x04 \x01(\x0c\x12\x10\n\x08\x64\x65viceId\x18\x05 \x01(\t\x12\x0f\n\x07softDid\x18\x06 \x01(\t\x12\x0f\n\x07kwaiDid\x18\x07 \x01(\t\x12\x14\n\x0cmanufacturer\x18\x08 \x01(\t\x12\x12\n\ndeviceName\x18\t \x01(\t\"\xb8\x01\n\x0cPlatformType\x12\x0c\n\x08kInvalid\x10\x00\x12\x0c\n\x08kAndroid\x10\x01\x12\x08\n\x04kiOS\x10\x02\x12\x0c\n\x08kWindows\x10\x03\x12\x12\n\x0eWECHAT_ANDROID\x10\x04\x12\x0e\n\nWECHAT_IOS\x10\x05\x12\x06\n\x02H5\x10\x06\x12\x0e\n\nH5_ANDROID\x10\x07\x12\n\n\x06H5_IOS\x10\x08\x12\x0e\n\nH5_WINDOWS\x10\t\x12\n\n\x06H5_MAC\x10\n\x12\x10\n\x0ckPlatformNum\x10\x0b\"\x86\x01\n\x07\x45nvInfo\x12\x33\n\x0bnetworkType\x18\x01 \x01(\x0e\x32\x1e.AcFunPack.EnvInfo.NetworkType\x12\x0f\n\x07\x61pnName\x18\x02 \x01(\x0c\"5\n\x0bNetworkType\x12\x0c\n\x08kInvalid\x10\x00\x12\t\n\x05kWIFI\x10\x01\x12\r\n\tkCellular\x10\x02\"\xb6\x02\n\x10PushServiceToken\x12\x36\n\x08pushType\x18\x01 \x01(\x0e\x32$.AcFunPack.PushServiceToken.PushType\x12\r\n\x05token\x18\x02 \x01(\x0c\x12\x15\n\risPassThrough\x18\x03 \x01(\x08\"\xc3\x01\n\x08PushType\x12\x14\n\x10kPushTypeInvalid\x10\x00\x12\x11\n\rkPushTypeAPNS\x10\x01\x12\x13\n\x0fkPushTypeXmPush\x10\x02\x12\x13\n\x0fkPushTypeJgPush\x10\x03\x12\x13\n\x0fkPushTypeGtPush\x10\x04\x12\x13\n\x0fkPushTypeOpPush\x10\x05\x12\x13\n\x0fkPushTypeVvPush\x10\x06\x12\x13\n\x0fkPushTypeHwPush\x10\x07\x12\x10\n\x0ckPushTypeFcm\x10\x08\"B\n\x0cZtCommonInfo\x12\x0b\n\x03kpn\x18\x01 \x01(\t\x12\x0b\n\x03kpf\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x04 \x01(\x03\x12\x0b\n\x03\x64id\x18\x05 \x01(\t\"c\n\x0cPingResponse\x12\x17\n\x0fserverTimestamp\x18\x01 \x01(\x0f\x12\x10\n\x08\x63lientIp\x18\x02 \x01(\x07\x12\x12\n\nredirectIp\x18\x03 \x01(\x07\x12\x14\n\x0credirectPort\x18\x04 \x01(\r\"\x94\x01\n\x0bPingRequest\x12\x31\n\x08pingType\x18\x01 \x01(\x0e\x32\x1f.AcFunPack.PingRequest.PingType\x12\x11\n\tpingRound\x18\x02 \x01(\r\"?\n\x08PingType\x12\x0c\n\x08kInvalid\x10\x00\x12\x12\n\x0ekPriorRegister\x10\x01\x12\x11\n\rkPostRegister\x10\x02\"\xe4\x02\n\x0fUpstreamPayload\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\r\n\x05seqId\x18\x02 \x01(\x03\x12\x12\n\nretryCount\x18\x03 \x01(\r\x12\x13\n\x0bpayloadData\x18\x04 \x01(\x0c\x12-\n\x0cuserInstance\x18\x05 \x01(\x0b\x32\x17.AcFunPack.UserInstance\x12\x11\n\terrorCode\x18\x06 \x01(\x05\x12+\n\x0bsettingInfo\x18\x07 \x01(\x0b\x32\x16.AcFunPack.SettingInfo\x12\x35\n\x10requestBasicInfo\x18\x08 \x01(\x0b\x32\x1b.AcFunPack.RequsetBasicInfo\x12\x0e\n\x06subBiz\x18\t \x01(\t\x12-\n\x0c\x66rontendInfo\x18\n \x01(\x0b\x32\x17.AcFunPack.FrontendInfo\x12\x0b\n\x03kpn\x18\x0b \x01(\t\x12\x16\n\x0e\x61nonymouseUser\x18\x0c \x01(\x08\"\x90\x01\n\x11\x44ownstreamPayload\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\r\n\x05seqId\x18\x02 \x01(\x03\x12\x11\n\terrorCode\x18\x03 \x01(\x05\x12\x13\n\x0bpayloadData\x18\x04 \x01(\x0c\x12\x10\n\x08\x65rrorMsg\x18\x05 \x01(\t\x12\x11\n\terrorData\x18\x06 \x01(\x0c\x12\x0e\n\x06subBiz\x18\x07 \x01(\t\"A\n\x0cUserInstance\x12\x1d\n\x04user\x18\x01 \x01(\x0b\x32\x0f.AcFunPack.User\x12\x12\n\ninstanceId\x18\x02 \x01(\x03\"\"\n\x04User\x12\r\n\x05\x61ppId\x18\x01 \x01(\x05\x12\x0b\n\x03uid\x18\x02 \x01(\x03\"/\n\x0bSettingInfo\x12\x0e\n\x06locale\x18\x01 \x01(\t\x12\x10\n\x08timezone\x18\x02 \x01(\x11\"\xbb\x02\n\x10RequsetBasicInfo\x12\x36\n\nclientType\x18\x01 \x01(\x0e\x32\".AcFunPack.DeviceInfo.PlatformType\x12\x10\n\x08\x64\x65viceId\x18\x02 \x01(\t\x12\x10\n\x08\x63lientIp\x18\x03 \x01(\t\x12\x12\n\nappVersion\x18\x04 \x01(\t\x12\x0f\n\x07\x63hannel\x18\x05 \x01(\t\x12#\n\x07\x61ppInfo\x18\x06 \x01(\x0b\x32\x12.AcFunPack.AppInfo\x12)\n\ndeviceInfo\x18\x07 \x01(\x0b\x32\x15.AcFunPack.DeviceInfo\x12#\n\x07\x65nvInfo\x18\x08 \x01(\x0b\x32\x12.AcFunPack.EnvInfo\x12\x12\n\nclientPort\x18\t \x01(\x05\x12\x10\n\x08location\x18\n \x01(\t\x12\x0b\n\x03kpf\x18\x0b \x01(\t\"(\n\x0c\x46rontendInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\"\xdc\x04\n\x0cPacketHeader\x12\r\n\x05\x61ppId\x18\x01 \x01(\x05\x12\x0b\n\x03uid\x18\x02 \x01(\x03\x12\x12\n\ninstanceId\x18\x03 \x01(\x03\x12\r\n\x05\x66lags\x18\x04 \x01(\r\x12:\n\x0c\x65ncodingType\x18\x06 \x01(\x0e\x32$.AcFunPack.PacketHeader.EncodingType\x12\x19\n\x11\x64\x65\x63odedPayloadLen\x18\x07 \x01(\r\x12>\n\x0e\x65ncryptionMode\x18\x08 \x01(\x0e\x32&.AcFunPack.PacketHeader.EncryptionMode\x12\'\n\ttokenInfo\x18\t \x01(\x0b\x32\x14.AcFunPack.TokenInfo\x12\r\n\x05seqId\x18\n \x01(\x03\x12\x31\n\x08\x66\x65\x61tures\x18\x0b \x03(\x0e\x32\x1f.AcFunPack.PacketHeader.Feature\x12\x0b\n\x03kpn\x18\x0c \x01(\t\"?\n\x05\x46lags\x12\x10\n\x0ckDirUpstream\x10\x00\x12\x12\n\x0ekDirDownstream\x10\x01\x12\x0c\n\x08kDirMask\x10\x01\x1a\x02\x10\x01\"3\n\x0c\x45ncodingType\x12\x11\n\rkEncodingNone\x10\x00\x12\x10\n\x0ckEncodingLz4\x10\x01\"]\n\x0e\x45ncryptionMode\x12\x13\n\x0fkEncryptionNone\x10\x00\x12\x1b\n\x17kEncryptionServiceToken\x10\x01\x12\x19\n\x15kEncryptionSessionKey\x10\x02\")\n\x07\x46\x65\x61ture\x12\x0c\n\x08kReserve\x10\x00\x12\x10\n\x0ckCompressLz4\x10\x01\"{\n\tTokenInfo\x12\x31\n\ttokenType\x18\x01 \x01(\x0e\x32\x1e.AcFunPack.TokenInfo.TokenType\x12\r\n\x05token\x18\x02 \x01(\x0c\",\n\tTokenType\x12\x0c\n\x08kInvalid\x10\x00\x12\x11\n\rkServiceToken\x10\x01\"\xa7\x02\n\x10KeepAliveRequest\x12\x41\n\x0epresenceStatus\x18\x01 \x01(\x0e\x32).AcFunPack.RegisterRequest.PresenceStatus\x12@\n\x0f\x61ppActiveStatus\x18\x02 \x01(\x0e\x32\'.AcFunPack.RegisterRequest.ActiveStatus\x12\x35\n\x10pushServiceToken\x18\x03 \x01(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x39\n\x14pushServiceTokenList\x18\x04 \x03(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x1c\n\x14keepaliveIntervalSec\x18\x05 \x03(\x05\"\x8b\x01\n\x0fZtLiveScMessage\x12\x13\n\x0bmessageType\x18\x01 \x01(\t\x12\x17\n\x0f\x63ompressionType\x18\x02 \x01(\x05\x12\x0f\n\x07payload\x18\x03 \x01(\x0c\x12\x0e\n\x06liveId\x18\x04 \x01(\t\x12\x0e\n\x06ticket\x18\x05 \x01(\t\x12\x19\n\x11serverTimestampMs\x18\x06 \x01(\x04\"\x9b\x01\n\x14ZtLiveScNotifySignal\x12\x44\n\x04item\x18\x01 \x03(\x0b\x32\x36.AcFunPack.ZtLiveScNotifySignal.ZtLiveNotifySignalItem\x1a=\n\x16ZtLiveNotifySignalItem\x12\x12\n\nsignalType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\"\x9b\x01\n\x14ZtLiveScActionSignal\x12\x44\n\x04item\x18\x01 \x03(\x0b\x32\x36.AcFunPack.ZtLiveScActionSignal.ZtLiveActionSignalItem\x1a=\n\x16ZtLiveActionSignalItem\x12\x12\n\nsignalType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x03(\x0c\"\x97\x01\n\x13ZtLiveScStateSignal\x12\x42\n\x04item\x18\x01 \x03(\x0b\x32\x34.AcFunPack.ZtLiveScStateSignal.ZtLiveStateSignalItem\x1a<\n\x15ZtLiveStateSignalItem\x12\x12\n\nsignalType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\"\xa1\x01\n\x15ZtLiveScStatusChanged\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x18\n\x10maxRandomDelayMs\x18\x02 \x01(\x04\x12?\n\nbannedInfo\x18\x03 \x01(\x0b\x32+.AcFunPack.ZtLiveScStatusChanged.BannedInfo\x1a\x1f\n\nBannedInfo\x12\x11\n\tbanReason\x18\x01 \x01(\t\"m\n\x19\x43ommonActionSignalComment\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\x12+\n\x08userInfo\x18\x03 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\"Y\n\x16\x43ommonActionSignalLike\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\"\xe9\x01\n\x16\x43ommonActionSignalGift\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\x12\x0e\n\x06giftId\x18\x03 \x01(\x04\x12\x11\n\tbatchSize\x18\x04 \x01(\r\x12\x12\n\ncomboCount\x18\x05 \x01(\r\x12\x0c\n\x04rank\x18\x06 \x01(\x04\x12\x10\n\x08\x63omboKey\x18\x07 \x01(\t\x12\x1d\n\x15slotDisplayDurationMs\x18\x08 \x01(\x04\x12\x18\n\x10\x65xpireDurationMs\x18\t \x01(\x04\"[\n\x1c\x43ommonStateSignalDisplayInfo\x12\x15\n\rwatchingCount\x18\x01 \x01(\t\x12\x11\n\tlikeCount\x18\x02 \x01(\t\x12\x11\n\tlikeDelta\x18\x03 \x01(\r\"\xe5\x01\n\x19\x43ommonStateSignalTopUsers\x12=\n\x07topUser\x18\x01 \x03(\x0b\x32,.AcFunPack.CommonStateSignalTopUsers.TopUser\x1a\x88\x01\n\x07TopUser\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x1e\n\x16\x63ustomWatchingListData\x18\x02 \x01(\t\x12\x19\n\x11\x64isplaySendAmount\x18\x03 \x01(\t\x12\x15\n\ranonymousUser\x18\x04 \x01(\x08\"b\n\x1f\x43ommonActionSignalUserEnterRoom\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\"e\n\"CommonActionSignalUserFollowAuthor\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\"-\n\x1b\x43ommonNotifySignalKickedOut\x12\x0e\n\x06reason\x18\x01 \x01(\t\"<\n CommonNotifySignalViolationAlert\x12\x18\n\x10violationContent\x18\x01 \x01(\t\"%\n#CommonStateSignalCurrentRedpackList\"W\n\x1e\x43ommonStateSignalRecentComment\x12\x35\n\x07\x63omment\x18\x01 \x01(\x0b\x32$.AcFunPack.CommonActionSignalComment\"q\n\x1a\x43ommonStateSignalChatReady\x12\x0e\n\x06\x63hatId\x18\x01 \x01(\t\x12\x30\n\rguestUserInfo\x18\x02 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x11\n\tmediaType\x18\x03 \x01(\x05\";\n\x18\x43ommonStateSignalChatEnd\x12\x0e\n\x06\x63hatId\x18\x01 \x01(\t\x12\x0f\n\x07\x65ndType\x18\x02 \x01(\x05\"g\n\x1c\x41\x63\x66unActionSignalThrowBanana\x12$\n\x07visitor\x18\x01 \x01(\x0b\x32\x13.AcFunPack.UserInfo\x12\r\n\x05\x63ount\x18\x02 \x01(\x05\x12\x12\n\nsendTimeMs\x18\x03 \x01(\x04\"2\n\x1b\x41\x63\x66unStateSignalDisplayInfo\x12\x13\n\x0b\x62\x61nanaCount\x18\x01 \x01(\t\"[\n\x0eZtLiveUserInfo\x12\x0e\n\x06userId\x18\x01 \x01(\x04\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\'\n\x06\x61vatar\x18\x03 \x01(\x0b\x32\x17.AcFunPack.ImageCdnNode\"<\n\x0cImageCdnNode\x12\x0b\n\x03\x63\x64n\x18\x01 \x01(\t\x12\x0b\n\x03url\x18\x02 \x01(\t\x12\x12\n\nurlPattern\x18\x03 \x01(\t\"(\n\x08UserInfo\x12\x0e\n\x06userId\x18\x01 \x01(\x04\x12\x0c\n\x04name\x18\x02 \x01(\t'
+  serialized_pb=b'\n\x0b\x61\x63\x66un.proto\x12\tAcFunPack\"\xfe\x04\n\x0fRegisterRequest\x12#\n\x07\x61ppInfo\x18\x01 \x01(\x0b\x32\x12.AcFunPack.AppInfo\x12)\n\ndeviceInfo\x18\x02 \x01(\x0b\x32\x15.AcFunPack.DeviceInfo\x12#\n\x07\x65nvInfo\x18\x03 \x01(\x0b\x32\x12.AcFunPack.EnvInfo\x12\x41\n\x0epresenceStatus\x18\x04 \x01(\x0e\x32).AcFunPack.RegisterRequest.PresenceStatus\x12@\n\x0f\x61ppActiveStatus\x18\x05 \x01(\x0e\x32\'.AcFunPack.RegisterRequest.ActiveStatus\x12\x17\n\x0f\x61ppCustomStatus\x18\x06 \x01(\x0c\x12\x35\n\x10pushServiceToken\x18\x07 \x01(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x12\n\ninstanceId\x18\x08 \x01(\x03\x12\x39\n\x14pushServiceTokenList\x18\t \x03(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x1c\n\x14keepaliveIntervalSec\x18\n \x01(\x05\x12-\n\x0cztCommonInfo\x18\x0b \x01(\x0b\x32\x17.AcFunPack.ZtCommonInfo\";\n\x0ePresenceStatus\x12\x14\n\x10kPresenceOffline\x10\x00\x12\x13\n\x0fkPresenceOnline\x10\x01\"H\n\x0c\x41\x63tiveStatus\x12\x0c\n\x08kInvalid\x10\x00\x12\x14\n\x10kAppInForeground\x10\x01\x12\x14\n\x10kAppInBackground\x10\x02\"\xda\x01\n\x10RegisterResponse\x12\x39\n\x12\x61\x63\x63\x65ssPointsConfig\x18\x01 \x01(\x0b\x32\x1d.AcFunPack.AccessPointsConfig\x12\x0f\n\x07sessKey\x18\x02 \x01(\x0c\x12\x12\n\ninstanceId\x18\x03 \x01(\x03\x12\'\n\tsdkOption\x18\x04 \x01(\x0b\x32\x14.AcFunPack.SdkOption\x12=\n\x16\x61\x63\x63\x65ssPointsConfigIpv6\x18\x05 \x01(\x0b\x32\x1d.AcFunPack.AccessPointsConfig\"\xb9\x01\n\x12\x41\x63\x63\x65ssPointsConfig\x12*\n\noptimalAps\x18\x01 \x03(\x0b\x32\x16.AcFunPack.AccessPoint\x12)\n\tbackupAps\x18\x02 \x03(\x0b\x32\x16.AcFunPack.AccessPoint\x12\x16\n\x0e\x61vailablePorts\x18\x03 \x03(\r\x12\x34\n\x14\x66orceLastConnectedAp\x18\x04 \x01(\x0b\x32\x16.AcFunPack.AccessPoint\"\xb2\x01\n\x0b\x41\x63\x63\x65ssPoint\x12\x37\n\x0b\x61\x64\x64ressType\x18\x01 \x01(\x0e\x32\".AcFunPack.AccessPoint.AddressType\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x0c\n\x04ipV4\x18\x03 \x01(\x07\x12\x0c\n\x04ipV6\x18\x04 \x01(\x0c\x12\x0e\n\x06\x64omain\x18\x05 \x01(\t\"0\n\x0b\x41\x64\x64ressType\x12\t\n\x05kIPV4\x10\x00\x12\t\n\x05kIPV6\x10\x01\x12\x0b\n\x07kDomain\x10\x02\"\x81\x01\n\tSdkOption\x12\x1d\n\x15reportIntervalSeconds\x18\x01 \x01(\x05\x12\x16\n\x0ereportSecurity\x18\x02 \x01(\t\x12$\n\x1clz4CompressionThresholdBytes\x18\x03 \x01(\x05\x12\x17\n\x0fnetCheckServers\x18\x04 \x03(\t\"\x8b\x01\n\x11ZtLiveCsEnterRoom\x12\x10\n\x08isAuthor\x18\x01 \x01(\x08\x12\x16\n\x0ereconnectCount\x18\x02 \x01(\r\x12\x15\n\rlastErrorCode\x18\x03 \x01(\r\x12\x17\n\x0f\x65nterRoomAttach\x18\x04 \x01(\t\x12\x1c\n\x14\x63lientLiveSdkVersion\x18\x05 \x01(\t\"@\n\x11ZtLiveCsHeartbeat\x12\x19\n\x11\x63lientTimestampMs\x18\x01 \x01(\x04\x12\x10\n\x08sequence\x18\x02 \x01(\x08\"I\n\x05\x43sCmd\x12\x0f\n\x07\x63mdType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x01(\x0c\x12\x0e\n\x06ticket\x18\x03 \x01(\t\x12\x0e\n\x06liveId\x18\x04 \x01(\t\"\xca\x01\n\x07\x41ppInfo\x12\x0f\n\x07\x61ppName\x18\x01 \x01(\t\x12\x12\n\nappVersion\x18\x02 \x01(\t\x12\x12\n\nappChannel\x18\x03 \x01(\t\x12\x12\n\nsdkVersion\x18\x04 \x01(\t\x12<\n\rextensionInfo\x18\x05 \x03(\x0b\x32%.AcFunPack.AppInfo.ExtensionInfoEntry\x1a\x34\n\x12\x45xtensionInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x98\x03\n\nDeviceInfo\x12\x38\n\x0cplatformType\x18\x01 \x01(\x0e\x32\".AcFunPack.DeviceInfo.PlatformType\x12\x11\n\tosVersion\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65viceModel\x18\x03 \x01(\t\x12\x0f\n\x07imeiMd5\x18\x04 \x01(\x0c\x12\x10\n\x08\x64\x65viceId\x18\x05 \x01(\t\x12\x0f\n\x07softDid\x18\x06 \x01(\t\x12\x0f\n\x07kwaiDid\x18\x07 \x01(\t\x12\x14\n\x0cmanufacturer\x18\x08 \x01(\t\x12\x12\n\ndeviceName\x18\t \x01(\t\"\xb8\x01\n\x0cPlatformType\x12\x0c\n\x08kInvalid\x10\x00\x12\x0c\n\x08kAndroid\x10\x01\x12\x08\n\x04kiOS\x10\x02\x12\x0c\n\x08kWindows\x10\x03\x12\x12\n\x0eWECHAT_ANDROID\x10\x04\x12\x0e\n\nWECHAT_IOS\x10\x05\x12\x06\n\x02H5\x10\x06\x12\x0e\n\nH5_ANDROID\x10\x07\x12\n\n\x06H5_IOS\x10\x08\x12\x0e\n\nH5_WINDOWS\x10\t\x12\n\n\x06H5_MAC\x10\n\x12\x10\n\x0ckPlatformNum\x10\x0b\"\x86\x01\n\x07\x45nvInfo\x12\x33\n\x0bnetworkType\x18\x01 \x01(\x0e\x32\x1e.AcFunPack.EnvInfo.NetworkType\x12\x0f\n\x07\x61pnName\x18\x02 \x01(\x0c\"5\n\x0bNetworkType\x12\x0c\n\x08kInvalid\x10\x00\x12\t\n\x05kWIFI\x10\x01\x12\r\n\tkCellular\x10\x02\"\xb6\x02\n\x10PushServiceToken\x12\x36\n\x08pushType\x18\x01 \x01(\x0e\x32$.AcFunPack.PushServiceToken.PushType\x12\r\n\x05token\x18\x02 \x01(\x0c\x12\x15\n\risPassThrough\x18\x03 \x01(\x08\"\xc3\x01\n\x08PushType\x12\x14\n\x10kPushTypeInvalid\x10\x00\x12\x11\n\rkPushTypeAPNS\x10\x01\x12\x13\n\x0fkPushTypeXmPush\x10\x02\x12\x13\n\x0fkPushTypeJgPush\x10\x03\x12\x13\n\x0fkPushTypeGtPush\x10\x04\x12\x13\n\x0fkPushTypeOpPush\x10\x05\x12\x13\n\x0fkPushTypeVvPush\x10\x06\x12\x13\n\x0fkPushTypeHwPush\x10\x07\x12\x10\n\x0ckPushTypeFcm\x10\x08\"B\n\x0cZtCommonInfo\x12\x0b\n\x03kpn\x18\x01 \x01(\t\x12\x0b\n\x03kpf\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x04 \x01(\x03\x12\x0b\n\x03\x64id\x18\x05 \x01(\t\"c\n\x0cPingResponse\x12\x17\n\x0fserverTimestamp\x18\x01 \x01(\x0f\x12\x10\n\x08\x63lientIp\x18\x02 \x01(\x07\x12\x12\n\nredirectIp\x18\x03 \x01(\x07\x12\x14\n\x0credirectPort\x18\x04 \x01(\r\"\x94\x01\n\x0bPingRequest\x12\x31\n\x08pingType\x18\x01 \x01(\x0e\x32\x1f.AcFunPack.PingRequest.PingType\x12\x11\n\tpingRound\x18\x02 \x01(\r\"?\n\x08PingType\x12\x0c\n\x08kInvalid\x10\x00\x12\x12\n\x0ekPriorRegister\x10\x01\x12\x11\n\rkPostRegister\x10\x02\"\xe4\x02\n\x0fUpstreamPayload\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\r\n\x05seqId\x18\x02 \x01(\x03\x12\x12\n\nretryCount\x18\x03 \x01(\r\x12\x13\n\x0bpayloadData\x18\x04 \x01(\x0c\x12-\n\x0cuserInstance\x18\x05 \x01(\x0b\x32\x17.AcFunPack.UserInstance\x12\x11\n\terrorCode\x18\x06 \x01(\x05\x12+\n\x0bsettingInfo\x18\x07 \x01(\x0b\x32\x16.AcFunPack.SettingInfo\x12\x35\n\x10requestBasicInfo\x18\x08 \x01(\x0b\x32\x1b.AcFunPack.RequsetBasicInfo\x12\x0e\n\x06subBiz\x18\t \x01(\t\x12-\n\x0c\x66rontendInfo\x18\n \x01(\x0b\x32\x17.AcFunPack.FrontendInfo\x12\x0b\n\x03kpn\x18\x0b \x01(\t\x12\x16\n\x0e\x61nonymouseUser\x18\x0c \x01(\x08\"\x90\x01\n\x11\x44ownstreamPayload\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\r\n\x05seqId\x18\x02 \x01(\x03\x12\x11\n\terrorCode\x18\x03 \x01(\x05\x12\x13\n\x0bpayloadData\x18\x04 \x01(\x0c\x12\x10\n\x08\x65rrorMsg\x18\x05 \x01(\t\x12\x11\n\terrorData\x18\x06 \x01(\x0c\x12\x0e\n\x06subBiz\x18\x07 \x01(\t\"A\n\x0cUserInstance\x12\x1d\n\x04user\x18\x01 \x01(\x0b\x32\x0f.AcFunPack.User\x12\x12\n\ninstanceId\x18\x02 \x01(\x03\"\"\n\x04User\x12\r\n\x05\x61ppId\x18\x01 \x01(\x05\x12\x0b\n\x03uid\x18\x02 \x01(\x03\"/\n\x0bSettingInfo\x12\x0e\n\x06locale\x18\x01 \x01(\t\x12\x10\n\x08timezone\x18\x02 \x01(\x11\"\xbb\x02\n\x10RequsetBasicInfo\x12\x36\n\nclientType\x18\x01 \x01(\x0e\x32\".AcFunPack.DeviceInfo.PlatformType\x12\x10\n\x08\x64\x65viceId\x18\x02 \x01(\t\x12\x10\n\x08\x63lientIp\x18\x03 \x01(\t\x12\x12\n\nappVersion\x18\x04 \x01(\t\x12\x0f\n\x07\x63hannel\x18\x05 \x01(\t\x12#\n\x07\x61ppInfo\x18\x06 \x01(\x0b\x32\x12.AcFunPack.AppInfo\x12)\n\ndeviceInfo\x18\x07 \x01(\x0b\x32\x15.AcFunPack.DeviceInfo\x12#\n\x07\x65nvInfo\x18\x08 \x01(\x0b\x32\x12.AcFunPack.EnvInfo\x12\x12\n\nclientPort\x18\t \x01(\x05\x12\x10\n\x08location\x18\n \x01(\t\x12\x0b\n\x03kpf\x18\x0b \x01(\t\"(\n\x0c\x46rontendInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\"\xdc\x04\n\x0cPacketHeader\x12\r\n\x05\x61ppId\x18\x01 \x01(\x05\x12\x0b\n\x03uid\x18\x02 \x01(\x03\x12\x12\n\ninstanceId\x18\x03 \x01(\x03\x12\r\n\x05\x66lags\x18\x04 \x01(\r\x12:\n\x0c\x65ncodingType\x18\x06 \x01(\x0e\x32$.AcFunPack.PacketHeader.EncodingType\x12\x19\n\x11\x64\x65\x63odedPayloadLen\x18\x07 \x01(\r\x12>\n\x0e\x65ncryptionMode\x18\x08 \x01(\x0e\x32&.AcFunPack.PacketHeader.EncryptionMode\x12\'\n\ttokenInfo\x18\t \x01(\x0b\x32\x14.AcFunPack.TokenInfo\x12\r\n\x05seqId\x18\n \x01(\x03\x12\x31\n\x08\x66\x65\x61tures\x18\x0b \x03(\x0e\x32\x1f.AcFunPack.PacketHeader.Feature\x12\x0b\n\x03kpn\x18\x0c \x01(\t\"?\n\x05\x46lags\x12\x10\n\x0ckDirUpstream\x10\x00\x12\x12\n\x0ekDirDownstream\x10\x01\x12\x0c\n\x08kDirMask\x10\x01\x1a\x02\x10\x01\"3\n\x0c\x45ncodingType\x12\x11\n\rkEncodingNone\x10\x00\x12\x10\n\x0ckEncodingLz4\x10\x01\"]\n\x0e\x45ncryptionMode\x12\x13\n\x0fkEncryptionNone\x10\x00\x12\x1b\n\x17kEncryptionServiceToken\x10\x01\x12\x19\n\x15kEncryptionSessionKey\x10\x02\")\n\x07\x46\x65\x61ture\x12\x0c\n\x08kReserve\x10\x00\x12\x10\n\x0ckCompressLz4\x10\x01\"{\n\tTokenInfo\x12\x31\n\ttokenType\x18\x01 \x01(\x0e\x32\x1e.AcFunPack.TokenInfo.TokenType\x12\r\n\x05token\x18\x02 \x01(\x0c\",\n\tTokenType\x12\x0c\n\x08kInvalid\x10\x00\x12\x11\n\rkServiceToken\x10\x01\"\xa7\x02\n\x10KeepAliveRequest\x12\x41\n\x0epresenceStatus\x18\x01 \x01(\x0e\x32).AcFunPack.RegisterRequest.PresenceStatus\x12@\n\x0f\x61ppActiveStatus\x18\x02 \x01(\x0e\x32\'.AcFunPack.RegisterRequest.ActiveStatus\x12\x35\n\x10pushServiceToken\x18\x03 \x01(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x39\n\x14pushServiceTokenList\x18\x04 \x03(\x0b\x32\x1b.AcFunPack.PushServiceToken\x12\x1c\n\x14keepaliveIntervalSec\x18\x05 \x03(\x05\"\x8b\x01\n\x0fZtLiveScMessage\x12\x13\n\x0bmessageType\x18\x01 \x01(\t\x12\x17\n\x0f\x63ompressionType\x18\x02 \x01(\x05\x12\x0f\n\x07payload\x18\x03 \x01(\x0c\x12\x0e\n\x06liveId\x18\x04 \x01(\t\x12\x0e\n\x06ticket\x18\x05 \x01(\t\x12\x19\n\x11serverTimestampMs\x18\x06 \x01(\x04\"\x9b\x01\n\x14ZtLiveScNotifySignal\x12\x44\n\x04item\x18\x01 \x03(\x0b\x32\x36.AcFunPack.ZtLiveScNotifySignal.ZtLiveNotifySignalItem\x1a=\n\x16ZtLiveNotifySignalItem\x12\x12\n\nsignalType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x03(\x0c\"\x9b\x01\n\x14ZtLiveScActionSignal\x12\x44\n\x04item\x18\x01 \x03(\x0b\x32\x36.AcFunPack.ZtLiveScActionSignal.ZtLiveActionSignalItem\x1a=\n\x16ZtLiveActionSignalItem\x12\x12\n\nsignalType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x03(\x0c\"\x97\x01\n\x13ZtLiveScStateSignal\x12\x42\n\x04item\x18\x01 \x03(\x0b\x32\x34.AcFunPack.ZtLiveScStateSignal.ZtLiveStateSignalItem\x1a<\n\x15ZtLiveStateSignalItem\x12\x12\n\nsignalType\x18\x01 \x01(\t\x12\x0f\n\x07payload\x18\x02 \x03(\x0c\"\xa1\x01\n\x15ZtLiveScStatusChanged\x12\x0c\n\x04type\x18\x01 \x01(\x05\x12\x18\n\x10maxRandomDelayMs\x18\x02 \x01(\x04\x12?\n\nbannedInfo\x18\x03 \x01(\x0b\x32+.AcFunPack.ZtLiveScStatusChanged.BannedInfo\x1a\x1f\n\nBannedInfo\x12\x11\n\tbanReason\x18\x01 \x01(\t\"m\n\x19\x43ommonActionSignalComment\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\x12+\n\x08userInfo\x18\x03 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\"Y\n\x16\x43ommonActionSignalLike\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\"\xe9\x01\n\x16\x43ommonActionSignalGift\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\x12\x0e\n\x06giftId\x18\x03 \x01(\x04\x12\x11\n\tbatchSize\x18\x04 \x01(\r\x12\x12\n\ncomboCount\x18\x05 \x01(\r\x12\x0c\n\x04rank\x18\x06 \x01(\x04\x12\x10\n\x08\x63omboKey\x18\x07 \x01(\t\x12\x1d\n\x15slotDisplayDurationMs\x18\x08 \x01(\x04\x12\x18\n\x10\x65xpireDurationMs\x18\t \x01(\x04\"[\n\x1c\x43ommonStateSignalDisplayInfo\x12\x15\n\rwatchingCount\x18\x01 \x01(\t\x12\x11\n\tlikeCount\x18\x02 \x01(\t\x12\x11\n\tlikeDelta\x18\x03 \x01(\r\"\xe5\x01\n\x19\x43ommonStateSignalTopUsers\x12=\n\x07topUser\x18\x01 \x03(\x0b\x32,.AcFunPack.CommonStateSignalTopUsers.TopUser\x1a\x88\x01\n\x07TopUser\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x1e\n\x16\x63ustomWatchingListData\x18\x02 \x01(\t\x12\x19\n\x11\x64isplaySendAmount\x18\x03 \x01(\t\x12\x15\n\ranonymousUser\x18\x04 \x01(\x08\"b\n\x1f\x43ommonActionSignalUserEnterRoom\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\"e\n\"CommonActionSignalUserFollowAuthor\x12+\n\x08userInfo\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x12\n\nsendTimeMs\x18\x02 \x01(\x04\"\x9a\x01\n\x1a\x43ommonActionSignalRichText\x12,\n\x08userInfo\x18\x01 \x01(\x0b\x32\x1a.AcFunPack.UserInfoSegment\x12&\n\x05plain\x18\x02 \x01(\x0b\x32\x17.AcFunPack.PlainSegment\x12&\n\x05image\x18\x03 \x01(\x0b\x32\x17.AcFunPack.ImageSegment\"I\n\x0fUserInfoSegment\x12\'\n\x04user\x18\x01 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\r\n\x05\x63olor\x18\x02 \x01(\t\"+\n\x0cPlainSegment\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\r\n\x05\x63olor\x18\x02 \x01(\t\"k\n\x0cImageSegment\x12(\n\x07\x63\x64nNode\x18\x01 \x01(\x0b\x32\x17.AcFunPack.ImageCdnNode\x12\x17\n\x0f\x61lternativeText\x18\x02 \x01(\t\x12\x18\n\x10\x61lternativeColor\x18\x03 \x01(\t\"-\n\x1b\x43ommonNotifySignalKickedOut\x12\x0e\n\x06reason\x18\x01 \x01(\t\"<\n CommonNotifySignalViolationAlert\x12\x18\n\x10violationContent\x18\x01 \x01(\t\"%\n#CommonStateSignalCurrentRedpackList\"W\n\x1e\x43ommonStateSignalRecentComment\x12\x35\n\x07\x63omment\x18\x01 \x01(\x0b\x32$.AcFunPack.CommonActionSignalComment\"q\n\x1a\x43ommonStateSignalChatReady\x12\x0e\n\x06\x63hatId\x18\x01 \x01(\t\x12\x30\n\rguestUserInfo\x18\x02 \x01(\x0b\x32\x19.AcFunPack.ZtLiveUserInfo\x12\x11\n\tmediaType\x18\x03 \x01(\x05\";\n\x18\x43ommonStateSignalChatEnd\x12\x0e\n\x06\x63hatId\x18\x01 \x01(\t\x12\x0f\n\x07\x65ndType\x18\x02 \x01(\x05\"g\n\x1c\x41\x63\x66unActionSignalThrowBanana\x12$\n\x07visitor\x18\x01 \x01(\x0b\x32\x13.AcFunPack.UserInfo\x12\r\n\x05\x63ount\x18\x02 \x01(\x05\x12\x12\n\nsendTimeMs\x18\x03 \x01(\x04\"2\n\x1b\x41\x63\x66unStateSignalDisplayInfo\x12\x13\n\x0b\x62\x61nanaCount\x18\x01 \x01(\t\"}\n\x19\x41\x63\x66unActionSignalJoinClub\x12%\n\x08\x66\x61nsInfo\x18\x01 \x01(\x0b\x32\x13.AcFunPack.UserInfo\x12%\n\x08uperInfo\x18\x02 \x01(\x0b\x32\x13.AcFunPack.UserInfo\x12\x12\n\njoinTimeMs\x18\x03 \x01(\x04\"[\n\x0eZtLiveUserInfo\x12\x0e\n\x06userId\x18\x01 \x01(\x04\x12\x10\n\x08nickname\x18\x02 \x01(\t\x12\'\n\x06\x61vatar\x18\x03 \x01(\x0b\x32\x17.AcFunPack.ImageCdnNode\"<\n\x0cImageCdnNode\x12\x0b\n\x03\x63\x64n\x18\x01 \x01(\t\x12\x0b\n\x03url\x18\x02 \x01(\t\x12\x12\n\nurlPattern\x18\x03 \x01(\t\"(\n\x08UserInfo\x12\x0e\n\x06userId\x18\x01 \x01(\x04\x12\x0c\n\x04name\x18\x02 \x01(\t'
 )
 
 
@@ -2074,8 +2074,8 @@ _ZTLIVESCNOTIFYSIGNAL_ZTLIVENOTIFYSIGNALITEM = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='payload', full_name='AcFunPack.ZtLiveScNotifySignal.ZtLiveNotifySignalItem.payload', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
+      number=2, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -2214,8 +2214,8 @@ _ZTLIVESCSTATESIGNAL_ZTLIVESTATESIGNALITEM = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='payload', full_name='AcFunPack.ZtLiveScStateSignal.ZtLiveStateSignalItem.payload', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
+      number=2, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -2725,6 +2725,176 @@ _COMMONACTIONSIGNALUSERFOLLOWAUTHOR = _descriptor.Descriptor(
 )
 
 
+_COMMONACTIONSIGNALRICHTEXT = _descriptor.Descriptor(
+  name='CommonActionSignalRichText',
+  full_name='AcFunPack.CommonActionSignalRichText',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='userInfo', full_name='AcFunPack.CommonActionSignalRichText.userInfo', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='plain', full_name='AcFunPack.CommonActionSignalRichText.plain', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='image', full_name='AcFunPack.CommonActionSignalRichText.image', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6849,
+  serialized_end=7003,
+)
+
+
+_USERINFOSEGMENT = _descriptor.Descriptor(
+  name='UserInfoSegment',
+  full_name='AcFunPack.UserInfoSegment',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='user', full_name='AcFunPack.UserInfoSegment.user', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='color', full_name='AcFunPack.UserInfoSegment.color', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7005,
+  serialized_end=7078,
+)
+
+
+_PLAINSEGMENT = _descriptor.Descriptor(
+  name='PlainSegment',
+  full_name='AcFunPack.PlainSegment',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='text', full_name='AcFunPack.PlainSegment.text', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='color', full_name='AcFunPack.PlainSegment.color', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7080,
+  serialized_end=7123,
+)
+
+
+_IMAGESEGMENT = _descriptor.Descriptor(
+  name='ImageSegment',
+  full_name='AcFunPack.ImageSegment',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='cdnNode', full_name='AcFunPack.ImageSegment.cdnNode', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='alternativeText', full_name='AcFunPack.ImageSegment.alternativeText', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='alternativeColor', full_name='AcFunPack.ImageSegment.alternativeColor', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7125,
+  serialized_end=7232,
+)
+
+
 _COMMONNOTIFYSIGNALKICKEDOUT = _descriptor.Descriptor(
   name='CommonNotifySignalKickedOut',
   full_name='AcFunPack.CommonNotifySignalKickedOut',
@@ -2752,8 +2922,8 @@ _COMMONNOTIFYSIGNALKICKEDOUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6848,
-  serialized_end=6893,
+  serialized_start=7234,
+  serialized_end=7279,
 )
 
 
@@ -2784,8 +2954,8 @@ _COMMONNOTIFYSIGNALVIOLATIONALERT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6895,
-  serialized_end=6955,
+  serialized_start=7281,
+  serialized_end=7341,
 )
 
 
@@ -2809,8 +2979,8 @@ _COMMONSTATESIGNALCURRENTREDPACKLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6957,
-  serialized_end=6994,
+  serialized_start=7343,
+  serialized_end=7380,
 )
 
 
@@ -2841,8 +3011,8 @@ _COMMONSTATESIGNALRECENTCOMMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6996,
-  serialized_end=7083,
+  serialized_start=7382,
+  serialized_end=7469,
 )
 
 
@@ -2887,8 +3057,8 @@ _COMMONSTATESIGNALCHATREADY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7085,
-  serialized_end=7198,
+  serialized_start=7471,
+  serialized_end=7584,
 )
 
 
@@ -2926,8 +3096,8 @@ _COMMONSTATESIGNALCHATEND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7200,
-  serialized_end=7259,
+  serialized_start=7586,
+  serialized_end=7645,
 )
 
 
@@ -2972,8 +3142,8 @@ _ACFUNACTIONSIGNALTHROWBANANA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7261,
-  serialized_end=7364,
+  serialized_start=7647,
+  serialized_end=7750,
 )
 
 
@@ -3004,8 +3174,54 @@ _ACFUNSTATESIGNALDISPLAYINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7366,
-  serialized_end=7416,
+  serialized_start=7752,
+  serialized_end=7802,
+)
+
+
+_ACFUNACTIONSIGNALJOINCLUB = _descriptor.Descriptor(
+  name='AcfunActionSignalJoinClub',
+  full_name='AcFunPack.AcfunActionSignalJoinClub',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='fansInfo', full_name='AcFunPack.AcfunActionSignalJoinClub.fansInfo', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='uperInfo', full_name='AcFunPack.AcfunActionSignalJoinClub.uperInfo', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='joinTimeMs', full_name='AcFunPack.AcfunActionSignalJoinClub.joinTimeMs', index=2,
+      number=3, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7804,
+  serialized_end=7929,
 )
 
 
@@ -3050,8 +3266,8 @@ _ZTLIVEUSERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7418,
-  serialized_end=7509,
+  serialized_start=7931,
+  serialized_end=8022,
 )
 
 
@@ -3096,8 +3312,8 @@ _IMAGECDNNODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7511,
-  serialized_end=7571,
+  serialized_start=8024,
+  serialized_end=8084,
 )
 
 
@@ -3135,8 +3351,8 @@ _USERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7573,
-  serialized_end=7613,
+  serialized_start=8086,
+  serialized_end=8126,
 )
 
 _REGISTERREQUEST.fields_by_name['appInfo'].message_type = _APPINFO
@@ -3206,9 +3422,16 @@ _COMMONSTATESIGNALTOPUSERS_TOPUSER.containing_type = _COMMONSTATESIGNALTOPUSERS
 _COMMONSTATESIGNALTOPUSERS.fields_by_name['topUser'].message_type = _COMMONSTATESIGNALTOPUSERS_TOPUSER
 _COMMONACTIONSIGNALUSERENTERROOM.fields_by_name['userInfo'].message_type = _ZTLIVEUSERINFO
 _COMMONACTIONSIGNALUSERFOLLOWAUTHOR.fields_by_name['userInfo'].message_type = _ZTLIVEUSERINFO
+_COMMONACTIONSIGNALRICHTEXT.fields_by_name['userInfo'].message_type = _USERINFOSEGMENT
+_COMMONACTIONSIGNALRICHTEXT.fields_by_name['plain'].message_type = _PLAINSEGMENT
+_COMMONACTIONSIGNALRICHTEXT.fields_by_name['image'].message_type = _IMAGESEGMENT
+_USERINFOSEGMENT.fields_by_name['user'].message_type = _ZTLIVEUSERINFO
+_IMAGESEGMENT.fields_by_name['cdnNode'].message_type = _IMAGECDNNODE
 _COMMONSTATESIGNALRECENTCOMMENT.fields_by_name['comment'].message_type = _COMMONACTIONSIGNALCOMMENT
 _COMMONSTATESIGNALCHATREADY.fields_by_name['guestUserInfo'].message_type = _ZTLIVEUSERINFO
 _ACFUNACTIONSIGNALTHROWBANANA.fields_by_name['visitor'].message_type = _USERINFO
+_ACFUNACTIONSIGNALJOINCLUB.fields_by_name['fansInfo'].message_type = _USERINFO
+_ACFUNACTIONSIGNALJOINCLUB.fields_by_name['uperInfo'].message_type = _USERINFO
 _ZTLIVEUSERINFO.fields_by_name['avatar'].message_type = _IMAGECDNNODE
 DESCRIPTOR.message_types_by_name['RegisterRequest'] = _REGISTERREQUEST
 DESCRIPTOR.message_types_by_name['RegisterResponse'] = _REGISTERRESPONSE
@@ -3247,6 +3470,10 @@ DESCRIPTOR.message_types_by_name['CommonStateSignalDisplayInfo'] = _COMMONSTATES
 DESCRIPTOR.message_types_by_name['CommonStateSignalTopUsers'] = _COMMONSTATESIGNALTOPUSERS
 DESCRIPTOR.message_types_by_name['CommonActionSignalUserEnterRoom'] = _COMMONACTIONSIGNALUSERENTERROOM
 DESCRIPTOR.message_types_by_name['CommonActionSignalUserFollowAuthor'] = _COMMONACTIONSIGNALUSERFOLLOWAUTHOR
+DESCRIPTOR.message_types_by_name['CommonActionSignalRichText'] = _COMMONACTIONSIGNALRICHTEXT
+DESCRIPTOR.message_types_by_name['UserInfoSegment'] = _USERINFOSEGMENT
+DESCRIPTOR.message_types_by_name['PlainSegment'] = _PLAINSEGMENT
+DESCRIPTOR.message_types_by_name['ImageSegment'] = _IMAGESEGMENT
 DESCRIPTOR.message_types_by_name['CommonNotifySignalKickedOut'] = _COMMONNOTIFYSIGNALKICKEDOUT
 DESCRIPTOR.message_types_by_name['CommonNotifySignalViolationAlert'] = _COMMONNOTIFYSIGNALVIOLATIONALERT
 DESCRIPTOR.message_types_by_name['CommonStateSignalCurrentRedpackList'] = _COMMONSTATESIGNALCURRENTREDPACKLIST
@@ -3255,6 +3482,7 @@ DESCRIPTOR.message_types_by_name['CommonStateSignalChatReady'] = _COMMONSTATESIG
 DESCRIPTOR.message_types_by_name['CommonStateSignalChatEnd'] = _COMMONSTATESIGNALCHATEND
 DESCRIPTOR.message_types_by_name['AcfunActionSignalThrowBanana'] = _ACFUNACTIONSIGNALTHROWBANANA
 DESCRIPTOR.message_types_by_name['AcfunStateSignalDisplayInfo'] = _ACFUNSTATESIGNALDISPLAYINFO
+DESCRIPTOR.message_types_by_name['AcfunActionSignalJoinClub'] = _ACFUNACTIONSIGNALJOINCLUB
 DESCRIPTOR.message_types_by_name['ZtLiveUserInfo'] = _ZTLIVEUSERINFO
 DESCRIPTOR.message_types_by_name['ImageCdnNode'] = _IMAGECDNNODE
 DESCRIPTOR.message_types_by_name['UserInfo'] = _USERINFO
@@ -3567,6 +3795,34 @@ CommonActionSignalUserFollowAuthor = _reflection.GeneratedProtocolMessageType('C
   })
 _sym_db.RegisterMessage(CommonActionSignalUserFollowAuthor)
 
+CommonActionSignalRichText = _reflection.GeneratedProtocolMessageType('CommonActionSignalRichText', (_message.Message,), {
+  'DESCRIPTOR' : _COMMONACTIONSIGNALRICHTEXT,
+  '__module__' : 'acfun_pb2'
+  # @@protoc_insertion_point(class_scope:AcFunPack.CommonActionSignalRichText)
+  })
+_sym_db.RegisterMessage(CommonActionSignalRichText)
+
+UserInfoSegment = _reflection.GeneratedProtocolMessageType('UserInfoSegment', (_message.Message,), {
+  'DESCRIPTOR' : _USERINFOSEGMENT,
+  '__module__' : 'acfun_pb2'
+  # @@protoc_insertion_point(class_scope:AcFunPack.UserInfoSegment)
+  })
+_sym_db.RegisterMessage(UserInfoSegment)
+
+PlainSegment = _reflection.GeneratedProtocolMessageType('PlainSegment', (_message.Message,), {
+  'DESCRIPTOR' : _PLAINSEGMENT,
+  '__module__' : 'acfun_pb2'
+  # @@protoc_insertion_point(class_scope:AcFunPack.PlainSegment)
+  })
+_sym_db.RegisterMessage(PlainSegment)
+
+ImageSegment = _reflection.GeneratedProtocolMessageType('ImageSegment', (_message.Message,), {
+  'DESCRIPTOR' : _IMAGESEGMENT,
+  '__module__' : 'acfun_pb2'
+  # @@protoc_insertion_point(class_scope:AcFunPack.ImageSegment)
+  })
+_sym_db.RegisterMessage(ImageSegment)
+
 CommonNotifySignalKickedOut = _reflection.GeneratedProtocolMessageType('CommonNotifySignalKickedOut', (_message.Message,), {
   'DESCRIPTOR' : _COMMONNOTIFYSIGNALKICKEDOUT,
   '__module__' : 'acfun_pb2'
@@ -3622,6 +3878,13 @@ AcfunStateSignalDisplayInfo = _reflection.GeneratedProtocolMessageType('AcfunSta
   # @@protoc_insertion_point(class_scope:AcFunPack.AcfunStateSignalDisplayInfo)
   })
 _sym_db.RegisterMessage(AcfunStateSignalDisplayInfo)
+
+AcfunActionSignalJoinClub = _reflection.GeneratedProtocolMessageType('AcfunActionSignalJoinClub', (_message.Message,), {
+  'DESCRIPTOR' : _ACFUNACTIONSIGNALJOINCLUB,
+  '__module__' : 'acfun_pb2'
+  # @@protoc_insertion_point(class_scope:AcFunPack.AcfunActionSignalJoinClub)
+  })
+_sym_db.RegisterMessage(AcfunActionSignalJoinClub)
 
 ZtLiveUserInfo = _reflection.GeneratedProtocolMessageType('ZtLiveUserInfo', (_message.Message,), {
   'DESCRIPTOR' : _ZTLIVEUSERINFO,

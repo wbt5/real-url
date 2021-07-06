@@ -382,6 +382,28 @@ message CommonActionSignalUserFollowAuthor {
     optional uint64 sendTimeMs = 2;
 }
 
+message CommonActionSignalRichText {
+    optional UserInfoSegment userInfo = 1;
+    optional PlainSegment plain = 2;
+    optional ImageSegment image = 3;
+}
+
+message UserInfoSegment {
+	optional ZtLiveUserInfo user = 1;
+	optional string color = 2;
+}
+
+message PlainSegment {
+	optional string text = 1;
+	optional string color = 2;
+}
+
+message ImageSegment {
+	optional ImageCdnNode cdnNode = 1;
+	optional string alternativeText = 2;
+	optional string alternativeColor = 3;
+}
+
 message CommonNotifySignalKickedOut {
     optional string reason = 1;
 }
@@ -417,6 +439,12 @@ message AcfunActionSignalThrowBanana {
 
 message AcfunStateSignalDisplayInfo {
     optional string bananaCount = 1;
+}
+
+message AcfunActionSignalJoinClub {
+    optional UserInfo fansInfo = 1;
+    optional UserInfo uperInfo = 2;
+	optional uint64 joinTimeMs = 3;
 }
 
 message ZtLiveUserInfo {
