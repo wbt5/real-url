@@ -126,7 +126,10 @@ class DouYu:
             raise Exception('房间未开播')
         else:
             key = self.get_js()
-        return "http://dyscdnali1.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        real_url = {}
+        real_url["flv"] = "http://dyscdnali1.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        real_url["x-p2p"] = "http://tx2play1.douyucdn.cn/live/{}.xs?uuid=".format(key)
+        return real_url
 
 
 if __name__ == '__main__':
