@@ -24,15 +24,32 @@ class HuYa:
                               '(KHTML, like Gecko) Chrome/75.0.3770.100 Mobile Safari/537.36 '
             }
             response = requests.get(url=room_url, headers=header).text
-            streamInfo = json.loads(re.findall(r"<script> window.HNF_GLOBAL_INIT = (.*)</script>", response)[0])["roomInfo"]["tLiveInfo"]["tLiveStreamInfo"]["vStreamInfo"]["value"]
-            if streamInfo == []:
-                raise Exception('未开播或直播间不存在')
+            info = json.loads(re.findall(r"<script> window.HNF_GLOBAL_INIT = (.*)</script>", response)[0])
+            if info == {'exceptionType': 0}:
+                raise Exception('房间不存在')
+            roomInfo = info["roomInfo"]
             real_url = {}
-            for info in streamInfo:
-                real_url[info["sCdnType"].lower() + "_flv"] = info["sFlvUrl"] + "/" + info["sStreamName"] + "." + info["sFlvUrlSuffix"] + "?" + info["sFlvAntiCode"]
-                real_url[info["sCdnType"].lower() + "_hls"] = info["sHlsUrl"] + "/" + info["sStreamName"] + "." + info["sHlsUrlSuffix"] + "?" + info["sHlsAntiCode"]
+
+            # not live
+            if roomInfo["eLiveStatus"] == 1:
+                raise Exception('未开播')
+
+            # live
+            elif roomInfo["eLiveStatus"] == 2:
+                streamInfos = roomInfo["tLiveInfo"]["tLiveStreamInfo"]["vStreamInfo"]["value"]
+                for streamInfo in streamInfos:
+                    real_url[streamInfo["sCdnType"].lower() + "_flv"] = streamInfo["sFlvUrl"] + "/" + streamInfo["sStreamName"] + "." + \
+                                                                  streamInfo["sFlvUrlSuffix"] + "?" + streamInfo["sFlvAntiCode"]
+                    real_url[streamInfo["sCdnType"].lower() + "_hls"] = streamInfo["sHlsUrl"] + "/" + streamInfo["sStreamName"] + "." + \
+                                                                  streamInfo["sHlsUrlSuffix"] + "?" + streamInfo["sHlsAntiCode"]
+
+            # replay
+            elif roomInfo["eLiveStatus"] == 3:
+                real_url["replay"] = roomInfo["tReplayInfo"]["tReplayVideoInfo"]["sUrl"]
+            else:
+                raise Exception('未知错误')
         except Exception as e:
-            raise Exception('未开播或直播间不存在')
+            raise Exception(e)
         return real_url
 
 
