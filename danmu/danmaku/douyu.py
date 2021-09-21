@@ -16,7 +16,7 @@ class Douyu:
         async with aiohttp.ClientSession() as session:
             async with session.get('https://m.douyu.com/' + str(room_id)) as resp:
                 room_page = await resp.text()
-                room_id = re.findall(r'"rid":(\d{1,7})', room_page)[0]
+                room_id = re.findall(r'"rid":(\d{1,8})', room_page)[0]
         reg_datas = []
         data = f'type@=loginreq/roomid@={room_id}/'
         s = pack('i', 9 + len(data)) * 2
