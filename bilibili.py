@@ -27,7 +27,7 @@ class BiliBili:
             print(f'bilibili {rid} 未开播')
         self.real_room_id = res['data']['room_id']
 
-    def get_stream_address(self, current_qn: int = 10000) -> list:
+    def get_real_url(self, current_qn: int = 10000) -> list:
         url = 'https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo'
         param = {
             'device': 'pc',
@@ -69,7 +69,15 @@ class BiliBili:
             return stream_url_list
 
 
+def get_real_url(rid):
+    try:
+        bilibili = BiliBili(rid)
+        return bilibili.get_real_url()
+    except Exception as e:
+        print('Exception：', e)
+        return False
+
+
 if __name__ == '__main__':
-    rid = input('请输入bilibili直播房间号：\n')
-    bilibili = BiliBili(rid)
-    print(bilibili.get_stream_address())
+    r = input('请输入bilibili直播房间号：\n')
+    print(get_real_url(r))
