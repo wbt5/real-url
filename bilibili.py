@@ -3,49 +3,70 @@
 # qn=250超清
 # qn=400蓝光
 # qn=10000原画
-import re
-
 import requests
 
 
 class BiliBili:
 
     def __init__(self, rid):
-        self.rid = rid
-
-    def get_real_url(self):
+        rid = rid
+        self.header = {
+            'User-Agent': 'Mozilla/5.0 (iPod; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.163 Mobile/15E148 Safari/604.1',
+        }
         # 先获取直播状态和真实房间号
-        r_url = 'https://api.live.bilibili.com/room/v1/Room/room_init?id={}'.format(self.rid)
+        r_url = 'https://api.live.bilibili.com/room/v1/Room/room_init'
+        param = {
+            'id': rid
+        }
         with requests.Session() as s:
-            res = s.get(r_url).json()
-        code = res['code']
-        if code == 0:
-            live_status = res['data']['live_status']
-            if live_status == 1:
-                room_id = res['data']['room_id']
+            res = s.get(r_url, headers=self.header, params=param).json()
+        if res['msg'] == '直播间不存在':
+            raise Exception(f'bilibili {rid} {res["msg"]}')
+        live_status = res['data']['live_status']
+        if live_status != 1:
+            raise Exception(f'bilibili {rid} 未开播')
+        self.real_room_id = res['data']['room_id']
 
-                def u(pf):
-                    f_url = 'https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl'
-                    params = {
-                        'cid': room_id,
-                        'platform': pf,
-                        'otype': 'json',
-                        'quality': 0
-                    }
-                    resp = s.get(f_url, params=params).json()
-                    try:
-                        durl = resp['data']['durl']
-                        real_url = durl[0]['url']
-                        real_url = re.sub(r'live_(\d+)_(\d+)_\d+.m3u8', r'live_\1_\2.m3u8', real_url)
-                        return real_url
-                    except KeyError or IndexError:
-                        raise Exception('获取失败')
-
-                return u('h5')
-            else:
-                raise Exception('未开播')
-        else:
-            raise Exception('房间不存在')
+    def get_real_url(self, current_qn: int = 10000) -> list:
+        url = 'https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo'
+        param = {
+            'device': 'pc',
+            'platform': 'h5',
+            'scale': 0,
+            'build': '10000',
+            'protocol': '0,1',
+            'format': '0,1,2',
+            'codec': '0,1',
+            'room_id': self.real_room_id,
+            'qn': current_qn
+        }
+        with requests.Session() as session:
+            res = session.get(url, headers=self.header, params=param)
+            res = res.json()
+            stream_info = res['data']['playurl_info']['playurl']['stream']
+            qn_max = 0
+            for data in stream_info:
+                accept_qn = data['format'][0]['codec'][0]['accept_qn']
+                for qn in accept_qn:
+                    qn_max = qn if qn > qn_max else qn_max
+            if qn_max != current_qn:
+                param['qn'] = qn_max
+                res = session.get(url, headers=self.header, params=param)
+                res = res.json()
+                stream_info = res['data']['playurl_info']['playurl']['stream']
+            stream_url_list = []
+            for data in stream_info:
+                format_name = data['format'][0]['format_name']
+                if format_name == 'flv':
+                    base_url = data['format'][0]['codec'][0]['base_url']
+                    url_info = data['format'][0]['codec'][0]['url_info']
+                    for info in url_info:
+                        host = info['host']
+                        extra = info['extra']
+                        # print(host + base_url + extra)
+                        stream_url_list.append(host + base_url + extra)
+                    break
+            return stream_url_list
 
 
 def get_real_url(rid):
