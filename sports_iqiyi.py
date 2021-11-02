@@ -50,8 +50,8 @@ class sIQiYi:
             i = n[:y - x]
             n = n[y - x:]
 
-        for r in range(0, len(a)):
-            if a[r] == n[r]:
+        for r, elem enumerate(a):
+            if elem == n[r]:
                 i += '0'
             else:
                 i += '1'
