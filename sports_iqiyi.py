@@ -19,6 +19,11 @@ import requests
 class sIQiYi:
 
     def __init__(self, rid):
+        """
+        收费直播间、未开播直播间、已结束直播间获取到的地址均无法播放；
+        Args:
+            rid: 这里传入完整的直播间地址
+        """
         url = rid
         self.rid = url.split('/')[-1]
         self.s = requests.Session()
@@ -50,8 +55,8 @@ class sIQiYi:
             i = n[:y - x]
             n = n[y - x:]
 
-        for r in range(0, len(a)):
-            if a[r] == n[r]:
+        for rs, ele in enumerate(a):
+            if ele == n[rs]:
                 i += '0'
             else:
                 i += '1'
@@ -108,12 +113,17 @@ class sIQiYi:
         # 请求url
         url = f'https://live.video.iqiyi.com{k}&vf={vf}'
         res = self.s.get(url).text
-
-        try:
-            res, = re.findall(r'try{[\s\S]{33}\((.*)\);}catch\(e\){};', res)
-            url = json.loads(res)['data']['streams'][-1]['url']
-        except ValueError:
-            raise Exception('Incorrect rid.')
+        data = re.search(r'try{\w{33}\(([\w\W]+)\s\);}catch\(e\){};', res).group(1)
+        data = json.loads(data)
+        if data['code'] == 'A00004':
+            raise Exception('直播间地址错误！')
+        elif data['code'] == 'A00000':
+            try:
+                url = data['data']['streams'][-1]['url']
+            except IndexError:
+                raise Exception('可能直播未开始直播或为付费直播！')
+        else:
+            raise Exception('无法定位错误原因，可提交issue！')
         return url
 
 
