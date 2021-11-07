@@ -10,7 +10,7 @@ class MHT:
 
     def get_real_url(self):
         with requests.Session() as s:
-            res = s.get('https://www.2cq.com/proxy/room/room/info?roomId={}&appId=1004'.format(self.rid))
+            res = s.get(f'https://www.2cq.com/proxy/room/room/info?roomId={self.rid}&appId=1004')
         res = res.json()
         if res['status'] == 1:
             result = res['result']
@@ -35,4 +35,3 @@ def get_real_url(rid):
 if __name__ == '__main__':
     r = input('输入棉花糖直播房间号：\n')
     print(get_real_url(r))
-
