@@ -11,7 +11,7 @@ class YQS:
     def get_real_url(self):
         params = 'roomId={}'.format(self.rid)
         with requests.Session() as s:
-            res = s.post('http://www.173.com/room/getVieoUrl', params=params).json()
+            res = s.post('https://www.173.com/room/getVieoUrl', params=params).json()
         data = res['data']
         if data:
             status = data['status']
@@ -35,4 +35,3 @@ def get_real_url(rid):
 if __name__ == '__main__':
     r = input('输入艺气山直播房间号：\n')
     print(get_real_url(r))
-
