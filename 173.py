@@ -9,7 +9,7 @@ class YQS:
         self.rid = rid
 
     def get_real_url(self):
-        params = 'roomId={}'.format(self.rid)
+        params = f'roomId={self.rid}'
         with requests.Session() as s:
             res = s.post('https://www.173.com/room/getVieoUrl', params=params).json()
         data = res['data']
