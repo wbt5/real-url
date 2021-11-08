@@ -10,13 +10,13 @@ class CC:
         self.rid = rid
 
     def get_real_url(self):
-        room_url = 'https://api.cc.163.com/v1/activitylives/anchor/lives?anchor_ccid=' + str(self.rid)
+        room_url = f'https://api.cc.163.com/v1/activitylives/anchor/lives?anchor_ccid={self.rid}'
         response = requests.get(url=room_url).json()
         data = response.get('data', 0)
         if data:
-            channel_id = data.get('{}'.format(self.rid)).get('channel_id', 0)
+            channel_id = data.get(f'{self.rid}').get('channel_id', 0)
             if channel_id:
-                response = requests.get('https://cc.163.com/live/channel/?channelids=' + str(channel_id)).json()
+                response = requests.get(f'https://cc.163.com/live/channel/?channelids={channel_id}').json()
                 real_url = response.get('data')[0].get('sharefile')
             else:
                 raise Exception('直播间不存在')
@@ -37,4 +37,3 @@ def get_real_url(rid):
 if __name__ == '__main__':
     r = input('请输入网易CC直播房间号：\n')
     print(get_real_url(r))
-
