@@ -32,7 +32,7 @@ class AcFun:
             'did': 'H5_',
             'acfun.api.visitor_st': visitor_st
         }
-        data = 'authorId={}&pullStreamType=FLV'.format(self.rid)
+        data = f'authorId={self.rid}&pullStreamType=FLV'
         res = s.post(url, params=params, data=data, headers=headers).json()
         if res['result'] == 1:
             data = res['data']
@@ -58,4 +58,3 @@ def get_real_url(rid):
 if __name__ == '__main__':
     r = input('请输入AcFun直播房间号：\n')
     print(get_real_url(r))
-
