@@ -10,16 +10,25 @@ import requests
 class ZhiBotv:
 
     def __init__(self, rid):
+        """
+        中国体育&新传宽频，直播间地址如：https://v.zhibo.tv/10007
+        Args:
+            rid:房间号
+        """
         self.rid = rid
         self.params = {
-
             'token': '',
             'roomId': self.rid,
             'angleId': '',
             'lineId': '',
             'definition': 'hd',
             'statistics': 'pc|web|1.0.0|0|0|0|local|5.0.1',
-
+        }
+        self.BASE_URL = 'https://rest.zhibo.tv/room/get-pull-stream-info-v430'
+        self.HEADERS = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/95.0.4638.69 Safari/537.36 ',
+            'Referer': 'https://www.zhibo.tv/live/'
         }
 
     def get_real_url(self):
@@ -29,7 +38,7 @@ class ZhiBotv:
         :return: url
         """
         with requests.Session() as s:
-            res = s.get('https://rest.zhibo.tv/room/get-pull-stream-info-v430', params=self.params).json()
+            res = s.get(self.BASE_URL, params=self.params, headers=self.HEADERS).json()
             if 'hlsHUrl' in res['data']:
                 url = res['data'].get('hlsHUrl')
                 if url:
