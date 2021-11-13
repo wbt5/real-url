@@ -15,7 +15,8 @@ class FengBo:
 
     def get_real_url(self):
         with requests.Session() as s:
-            res = s.get('https://external.fengbolive.com/cgi-bin/get_anchor_info_proxy.fcgi?anchorid=' + str(self.rid)).json()
+            res = s.get(f'https://external.fengbolive.com/cgi-bin/get_anchor_info_proxy.fcgi?anchorid={self.rid}')
+            res = res.json()
         if res['ret'] == 1:
             info = res['info']
             info = unquote(info, 'utf-8')
