@@ -7,21 +7,26 @@ import requests
 class Live17:
 
     def __init__(self, rid):
-        self.rid = rid
+        """
         # 可能需要挂代理。
         # self.proxies = {
         #     "http": "http://xxxx:1080",
         #     "https": "http://xxxx:1080",
         # }
+        Args:
+            rid:
+        """
+        self.rid = rid
+        self.BASE_URL = 'https://api-dsa.17app.co/api/v1/lives/'
 
     def get_real_url(self):
         try:
-            # response = requests.get(url='https://api-dsa.17app.co/api/v1/lives/' + self.rid, proxies=self.proxies).json()
-            response = requests.get(url='https://api-dsa.17app.co/api/v1/lives/' + self.rid).json()
-            real_url_default = response.get('rtmpUrls')[0].get('url')
+            # res = requests.get(f'{self.BASE_URL}{self.rid}', proxies=self.proxies).json()
+            res = requests.get(f'{self.BASE_URL}{self.rid}').json()
+            real_url_default = res.get('rtmpUrls')[0].get('url')
             real_url_modify = real_url_default.replace('global-pull-rtmp.17app.co', 'china-pull-rtmp-17.tigafocus.com')
             real_url = [real_url_modify, real_url_default]
-        except:
+        except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
 
