@@ -10,12 +10,13 @@ class LM:
 
     def __init__(self, rid):
         self.rid = rid
+        self.BASE_URL = 'https://www.51lm.tv/live/room/info/basic'
 
     def get_real_url(self):
         roominfo = {'programId': self.rid}
 
         def g(d):
-            return hashlib.md5((d + '#' + urlencode(roominfo) + '#Ogvbm2ZiKE').encode('utf-8')).hexdigest()
+            return hashlib.md5(f'{d}#{urlencode(roominfo)}#Ogvbm2ZiKE'.encode('utf-8')).hexdigest()
 
         lminfo = {
             'h': int(time.time()) * 1000,
@@ -27,9 +28,9 @@ class LM:
             'w': 'a710244508d3cc14f50d24e9fecc496a'
         }
         u = g(urlencode(lminfo))
-        lminfo = 'G=' + u + '&' + urlencode(lminfo)
+        lminfo = f'G={u}&{urlencode(lminfo)}'
         with requests.Session() as s:
-            res = s.post('https://www.51lm.tv/live/room/info/basic', json=roominfo, headers={'lminfo': lminfo}).json()
+            res = s.post(self.BASE_URL, json=roominfo, headers={'lminfo': lminfo}).json()
         code = res['code']
         if code == 200:
             status = res['data']['isLiving']
