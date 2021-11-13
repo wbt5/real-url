@@ -21,7 +21,7 @@ class HongLe:
             pass
 
         tt = int(time.time() * 1000)
-        url = 'https://service.hongle.tv/v2/userw/login?_st1={}'.format(tt)
+        url = f'https://service.hongle.tv/v2/userw/login?_st1={tt}'
         data = {
             '_st1': tt,
             'geetest_challenge': '7f4f6fd6257799c0bcac1f38c21c042dl0',
