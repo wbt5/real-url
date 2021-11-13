@@ -13,7 +13,7 @@ class LeHai:
         self.rid = rid
 
     def get_real_url(self):
-        url = 'https://service.lehaitv.com/v2/room/{}/enter'.format(self.rid)
+        url = f'https://service.lehaitv.com/v2/room/{self.rid}/media/advanceInfoRoom'
         params = {
             '_st1': int(time.time() * 1e3),
             'accessToken': 's7FUbTJ%2BjILrR7kicJUg8qr025ZVjd07DAnUQd8c7g%2Fo4OH9pdSX6w%3D%3D',
@@ -29,9 +29,8 @@ class LeHai:
             res = res.json()
             statuscode = res['status']['statuscode']
             if statuscode == '0':
-                if res['data']['live_status'] == '1':
-                    anchor, = res['data']['anchor']
-                    real_url = anchor['media_url']
+                if res['data']['live_status'] == 1:
+                    real_url = res['data']['medial_url_app_for_h264']
                     return real_url
                 else:
                     raise Exception('未开播')
