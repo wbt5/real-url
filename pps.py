@@ -9,20 +9,36 @@ class PPS:
 
     def __init__(self, rid):
         self.rid = rid
+        self.BASE_URL = 'https://m-x.pps.tv/api/stream/getH5'
+        self.s = requests.Session()
 
     def get_real_url(self):
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, '
+                          'like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+            'Referer': 'https://m-x.pps.tv/'
+        }
+        tt = int(time.time() * 1000)
         try:
-            response = requests.get('http://m-x.pps.tv/room/' + str(self.rid)).text
-            anchor_id = re.findall(r'anchor_id":(\d*),"online_uid', response)[0]
-            tt = int(time.time() * 1000)
-            url = 'http://m-x.pps.tv/api/stream/getH5?qd_tm={}&typeId=1&platform=7&vid=0&qd_vip=0&qd_uid={}&qd_ip=114.114.114.114&qd_vipres=0&qd_src=h5_xiu&qd_tvid=0&callback='.format(tt, anchor_id)
-            headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Referer': 'http://m-x.pps.tv/'
+            res = self.s.get(f'https://m-x.pps.tv/room/{self.rid}', headers=headers).text
+            anchor_id = re.findall(r'anchor_id":"(\d*)', res)[0]
+            params = {
+                'qd_tm': tt,
+                'typeId': 1,
+                'platform': 7,
+                'vid': 0,
+                'qd_vip': 0,
+                'qd_uid': anchor_id,
+                'qd_ip': '114.114.114.114',
+                'qd_vipres': 0,
+                'qd_src': 'h5_xiu',
+                'qd_tvid': 0,
+                'callback': '',
             }
-            response = requests.get(url=url, headers=headers).text
-            real_url = re.findall(r'"hls":"(.*)","rate_list', response)[0]
-        except:
+            res = self.s.get(self.BASE_URL, headers=headers, params=params).text
+            real_url = re.findall(r'"hls":"(.*)","rate_list', res)[0]
+        except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
 
