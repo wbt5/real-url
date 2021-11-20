@@ -7,33 +7,24 @@ import re
 class YiZhiBo:
 
     def __init__(self, rid):
+        """
+        一直播需要传入直播间的完整地址
+        Args:
+            rid:完整地址
+        """
         self.rid = rid
+        self.s = requests.Session()
 
     def get_real_url(self):
         try:
-            scid = re.findall(r'/l/(\S*).html', self.rid)[0]
-            flvurl = 'http://alcdn.f01.xiaoka.tv/live/{}.flv'.format(scid)
-            m3u8url = 'http://al01.alcdn.hls.xiaoka.tv/live/{}.m3u8'.format(scid)
-            rtmpurl = 'rtmp://alcdn.r01.xiaoka.tv/live/live/{}'.format(scid)
-            real_url = {
-                'flvurl': flvurl,
-                'm3u8url': m3u8url,
-                'rtmpurl': rtmpurl
-            }
-        except:
-            raise Exception('链接错误')
-        return real_url
-
-    def get_status(self):
-        try:
-            scid = re.findall(r'/l/(\S*).html', self.rid)[0]
-            response = requests.get(
-                url='https://m.yizhibo.com/www/live/get_live_video?scid=' + str(scid)).json()
-            status_code = response.get('data').get('info').get('status')
-            status = '直播中' if status_code == 10 else '未开播'
-        except:
-            raise Exception('链接错误')
-        return status
+            res = self.s.get(self.rid).text
+            play_url, status_code = re.findall(r'play_url:"(.*?)"[\s\S]*status:(\d+),', res)[0]
+            if status_code == '10':
+                return play_url
+            else:
+                raise Exception('未开播')
+        except Exception:
+            raise Exception('获取错误')
 
 
 def get_real_url(rid):
