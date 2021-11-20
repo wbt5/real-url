@@ -11,7 +11,7 @@ class WaLi:
     def get_real_url(self):
         zuid = self.rid.split('_')[0]
         with requests.Session() as s:
-            res = s.get('https://s.zb.mi.com/get_liveinfo?lid={}&zuid={}'.format(self.rid, zuid)).json()
+            res = s.get(f'https://s.zb.mi.com/get_liveinfo?lid={self.rid}&zuid={zuid}').json()
         status = res['data']['status']
         if status == 1:
             flv = res['data']['video']['flv']
