@@ -11,14 +11,14 @@ class V6CN:
 
     def get_real_url(self):
         try:
-            response = requests.get('https://v.6.cn/' + str(self.rid)).text
+            response = requests.get(f'https://v.6.cn/{self.rid}').text
             result = re.findall(r'"flvtitle":"v(\d*?)-(\d*?)"', response)[0]
             uid = result[0]
             flvtitle = 'v{}-{}'.format(*result)
-            response = requests.get('https://rio.6rooms.com/live/?s=' + str(uid)).text
-            hip = 'https://' + re.findall(r'<watchip>(.*\.xiu123\.cn).*</watchip>', response)[0]
-            real_url = [hip + '/' + flvtitle + '/playlist.m3u8', hip + '/httpflv/' + flvtitle]
-        except:
+            response = requests.get(f'https://rio.6rooms.com/live/?s={uid}').text
+            hip = 'https://' + re.search(r'<watchip>(.*\.com).*?</watchip>', response).group(1)
+            real_url = [f'{hip}/{flvtitle}/palylist.m3u8', f'{hip}/httpflv/{flvtitle}']
+        except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
 
@@ -35,4 +35,3 @@ def get_real_url(rid):
 if __name__ == '__main__':
     r = input('请输入六间房直播房间号：\n')
     print(get_real_url(r))
-
