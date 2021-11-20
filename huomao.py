@@ -12,34 +12,33 @@ import re
 class HuoMao:
 
     def __init__(self, rid):
+        """
+        火猫直播已经倒闭了
+        Args:
+            rid: 房间号
+        """
         self.rid = rid
 
     @staticmethod
-    def get_time():
-        tt = str(int((time.time() * 1000)))
-        return tt
-
-    @staticmethod
     def get_videoids(rid):
-        room_url = 'https://www.huomao.com/mobile/mob_live/' + str(rid)
+        room_url = f'https://www.huomao.com/mobile/mob_live/{rid}'
         response = requests.get(url=room_url).text
         try:
             videoids = re.findall(r'var stream = "([\w\W]+?)";', response)[0]
-        except:
+        except IndexError:
             videoids = 0
         return videoids
 
     @staticmethod
-    def get_token(videoids, time):
-        token = hashlib.md5((str(videoids) + 'huomaoh5room' + str(time) +
-                             '6FE26D855E1AEAE090E243EB1AF73685').encode('utf-8')).hexdigest()
+    def get_token(videoids):
+        tt = str(int((time.time() * 1000)))
+        token = hashlib.md5(f'{videoids}huomaoh5room{tt}6FE26D855E1AEAE090E243EB1AF73685'.encode('utf-8')).hexdigest()
         return token
 
     def get_real_url(self):
         videoids = self.get_videoids(self.rid)
         if videoids:
-            time = self.get_time()
-            token = self.get_token(videoids, time)
+            token = self.get_token(videoids)
             room_url = 'https://www.huomao.com/swf/live_data'
             post_data = {
                 'cdns': 1,
