@@ -11,12 +11,12 @@ class IMFun:
 
     def get_real_url(self):
         with requests.Session() as s:
-            res = s.get('https://www.imifun.com/' + str(self.rid)).text
-        roomid = re.search(r"roomId:\s'([\w-]+)'", res)
+            res = s.get(f'https://www.imifun.com/{self.rid}').text
+        roomid = re.search(r'mixPkPlayUrl ="rtmp://wsmd.happyia.com/ivp/(\d+-\d+)"', res).group(1)
         if roomid:
             status = re.search(r"isLive:(\d),", res).group(1)
             if status == '1':
-                real_url = 'https://wsmd.happyia.com/ivp/{}.flv'.format(roomid.group(1))
+                real_url = f'https://wsmd.happyia.com/ivp/{roomid}.flv'
                 return real_url
             else:
                 raise Exception('未开播')
