@@ -11,7 +11,7 @@ class TuHo:
 
     def get_real_url(self):
         with requests.Session() as s:
-            res = s.get('https://www.tuho.tv/' + str(self.rid)).text
+            res = s.get(f'https://www.tuho.tv/{self.rid}').text
         flv = re.search(r'videoPlayFlv":"(https[\s\S]+?flv)', res)
         if flv:
             status = re.search(r'isPlaying\s:\s(\w+),', res).group(1)
