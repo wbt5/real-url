@@ -27,7 +27,7 @@ class XunLei:
             'uuid': self.rid,
         }
         data = urlencode(params)
-        p = hashlib.md5((u + data + f).encode('utf-8')).hexdigest()
+        p = hashlib.md5(f'{u}{data}{f}'.encode('utf-8')).hexdigest()
         params['sign'] = p
         with requests.Session() as s:
             res = s.get(url, params=params, headers=headers).json()
@@ -54,4 +54,3 @@ def get_real_url(rid):
 if __name__ == '__main__':
     r = input('请输入迅雷直播房间号：\n')
     print(get_real_url(r))
-
