@@ -2,36 +2,28 @@
 
 import requests
 import re
-import hashlib
 
 
 class RenRen:
 
     def __init__(self, rid):
+        """
+        直播间地址形式：http://activity.renren.com/live/liveroom/970302934_21348
+        rid即970302934_21348
+        Args:
+            rid:房间号
+        """
         self.rid = rid
+        self.s = requests.Session()
 
     def get_real_url(self):
-        with requests.Session() as s:
-            res = s.get('http://activity.renren.com/liveroom/' + str(self.rid))
-        livestate = re.search(r'"liveState":(\d)', res.text)
-        if livestate:
-            try:
-                s = re.search(r'"playUrl":"([\s\S]*?)"', res.text).group(1)
-                if livestate.group(1) == '0':
-                    # accesskey = re.search(r'accesskey=(\w+)', s).group(1)
-                    # expire = re.search(r'expire=(\d+)', s).group(1)
-                    # live = re.search(r'(/live/\d+)', s).group(1)
-                    # c = accesskey + expire + live
-                    # key = hashlib.md5(c.encode('utf-8')).hexdigest()
-                    # e = s.split('?')[0].split('/')[4]
-                    # t = 'http://ksy-hls.renren.com/live/' + e + '/index.m3u8?key=' + key
-                    return s
-                elif livestate.group(1) == '1':
-                    return '回放：' + s
-            except IndexError:
-                raise Exception('解析错误')
-        else:
-            raise Exception('直播间不存在')
+        res = self.s.get(f'http://activity.renren.com/live/liveroom/{self.rid}').text
+        try:
+            s = re.search(r'playUrl":"(.*?)"', res)
+            play_url = s.group(1)
+            return play_url
+        except Exception:
+            raise Exception('解析错误')
 
 
 def get_real_url(rid):
