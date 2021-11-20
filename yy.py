@@ -13,11 +13,11 @@ class YY:
 
     def get_real_url(self):
         headers = {
-            'referer': 'http://wap.yy.com/mobileweb/{rid}'.format(rid=self.rid),
-            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko)'
-                          ' Version/11.0 Mobile/15A372 Safari/604.1'
+            'referer': f'https://wap.yy.com/mobileweb/{self.rid}',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/95.0.4638.69 Safari/537.36 '
         }
-        room_url = 'http://interface.yy.com/hls/new/get/{rid}/{rid}/1200?source=wapyy&callback='.format(rid=self.rid)
+        room_url = f'https://interface.yy.com/hls/new/get/{self.rid}/{self.rid}/1200?source=wapyy&callback='
         with requests.Session() as s:
             res = s.get(room_url, headers=headers)
         if res.status_code == 200:
@@ -26,7 +26,7 @@ class YY:
                 xa = data['audio']
                 xv = data['video']
                 xv = re.sub(r'_0_\d+_0', '_0_0_0', xv)
-                url = 'https://interface.yy.com/hls/get/stream/15013/{}/15013/{}?source=h5player&type=m3u8'.format(xv, xa)
+                url = f'https://interface.yy.com/hls/get/stream/15013/{xv}/15013/{xa}?source=h5player&type=m3u8'
                 res = s.get(url).json()
                 real_url = res['hls']
                 return real_url
