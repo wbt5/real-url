@@ -13,28 +13,32 @@ import json
 class YouKu:
 
     def __init__(self, rid):
+        """
+        获取优酷轮播台的流媒体地址
+        Args:
+            rid: 直播间url中id=8019610，其中id即为房间号
+        """
         self.rid = rid
+        self.s = requests.Session()
 
     def get_real_url(self):
         try:
             tt = str(int(time.time() * 1000))
             data = json.dumps({'liveId': self.rid, 'app': 'Pc'}, separators=(',', ':'))
             url = 'https://acs.youku.com/h5/mtop.youku.live.com.livefullinfo/1.0/?appKey=24679788'
-            s = requests.Session()
-            cookies = s.get(url).cookies
-            token = requests.utils.dict_from_cookiejar(cookies).get('_m_h5_tk')[0:32]
-            sign = hashlib.md5((token + '&' + tt + '&' + '24679788' + '&' + data).encode('utf-8')).hexdigest()
+            cookies = self.s.get(url).cookies
+            token = cookies.get_dict().get('_m_h5_tk')[0:32]
+            sign = hashlib.md5(f'{token}&{tt}&24679788&{data}'.encode('utf-8')).hexdigest()
             params = {
                 't': tt,
                 'sign': sign,
                 'data': data
             }
-            response = s.get(url, params=params).json()
-            # name = response.get('data').get('data').get('name')
+            response = self.s.get(url, params=params).json()
             streamname = response.get('data').get('data').get('stream')[0].get('streamName')
-            real_url = 'http://lvo-live.youku.com/vod2live/{}_mp4hd2v3.m3u8?&expire=21600&psid=1&ups_ts={}&vkey='.format(
-                streamname, int(time.time()))
-        except:
+            real_url = f'https://lvo-live.youku.com/vod2live/{streamname}_mp4hd2v3.m3u8?&expire=21600&psid=1&ups_ts=' \
+                       f'{int(time.time())}&vkey= '
+        except Exception:
             raise Exception('请求错误')
         return real_url
 
