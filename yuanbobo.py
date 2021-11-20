@@ -10,12 +10,12 @@ class YuanBoBo:
 
     def get_real_url(self):
         with requests.Session() as s:
-            res = s.get('https://zhibo.yuanbobo.com/' + str(self.rid)).text
+            res = s.get(f'https://zhibo.yuanbobo.com/{self.rid}').text
         stream_id = re.search(r"stream_id:\s+'(\d+)'", res)
         if stream_id:
             status = re.search(r"status:\s+'(\d)'", res).group(1)
             if status == '1':
-                real_url = 'http://ks-hlslive.yuanbobo.com/live/{}/index.m3u8'.format(stream_id.group(1))
+                real_url = f'https://tliveplay.yuanbobo.com/live/{stream_id.group(1)}.m3u8'
                 return real_url
             else:
                 raise Exception('未开播')
