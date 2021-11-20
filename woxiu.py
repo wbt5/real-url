@@ -10,15 +10,15 @@ class WoXiu:
 
     def get_real_url(self):
         headers = {
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) '
-                          'Version/11.0 Mobile/15A372 Safari/604.1'
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, '
+                          'like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 '
         }
-        url = 'https://m.woxiu.com/index.php?action=M/Live&do=LiveInfo&room_id={}'.format(self.rid)
+        url = f'https://m.woxiu.com/index.php?action=M/Live&do=LiveInfo&room_id={self.rid}'
         with requests.Session() as s:
             res = s.get(url, headers=headers)
         try:
             res = res.json()
-        except:
+        except Exception:
             raise Exception('直播间不存在')
         status = res['online']
         if status:
