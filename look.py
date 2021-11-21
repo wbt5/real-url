@@ -17,12 +17,14 @@ import random
 import requests
 from Crypto.Cipher import AES
 
-modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7'
+modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee34' \
+          '1f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e' \
+          '82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7'
 nonce = b'0CoJUm6Qyw8W8jud'
 pubKey = '010001'
 
 
-def aes_encrypt(text, secKey):
+def aes_encrypt(text, seckey):
     pad = 16 - len(text) % 16
 
     # aes加密需要byte类型。
@@ -31,16 +33,16 @@ def aes_encrypt(text, secKey):
 
     try:
         text = text.decode()
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     text = text + pad * chr(pad)
     try:
         text = text.encode()
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
-    encryptor = AES.new(secKey, 2, bytes('0102030405060708', 'utf-8'))
+    encryptor = AES.new(seckey, 2, bytes('0102030405060708', 'utf-8'))
     ciphertext = encryptor.encrypt(text)
     ciphertext = base64.b64encode(ciphertext)
     return ciphertext
@@ -56,10 +58,10 @@ def create_secret_key(size):
     return bytes(''.join(random.sample('1234567890qwertyuipasdfghjklzxcvbnm', size)), 'utf-8')
 
 
-def rsa_encrypt(text, pub_key, modulus):
+def rsa_encrypt(text, pub_key, mod):
     text = text[::-1]
     # 3中将字符串转成hex的函数变成了binascii.hexlify, 2中可以直接 str.encode('hex')
-    rs = int(binascii.hexlify(text), 16) ** int(pub_key, 16) % int(modulus, 16)
+    rs = int(binascii.hexlify(text), 16) ** int(pub_key, 16) % int(mod, 16)
     return format(rs, 'x').zfill(256)
 
 
@@ -82,11 +84,9 @@ class Look:
     def get_real_url(self):
         try:
             request_data = encrypted_request({"liveRoomNo": self.rid})
-            response = requests.post(url='https://api.look.163.com/weapi/livestream/room/get/v3',
-                                     data=request_data)
+            response = requests.post(url='https://api.look.163.com/weapi/livestream/room/get/v3', data=request_data)
             real_url = response.json()['data']['roomInfo']['liveUrl']
-
-        except:
+        except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
 
