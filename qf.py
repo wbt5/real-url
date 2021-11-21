@@ -18,8 +18,13 @@ class QF:
 
     def get_real_url(self):
         try:
-            res = self.s.post(url=f'https://qf.56.com/{self.rid}').text
-            real_url = re.search(r"flvUrl:'(.*)\?wsSecret", res).group(1)
+            res = self.s.get(f'https://qf.56.com/{self.rid}').text
+            flvurl = re.search(r"flvUrl:'(.*)?'", res).group(1)
+            if 'flv' in flvurl:
+                real_url = flvurl
+            else:
+                res = self.s.get(flvurl).json()
+                real_url = res['url']
         except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
