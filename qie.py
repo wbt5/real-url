@@ -11,7 +11,7 @@ class ESport:
 
     def get_real_url(self):
         with requests.Session() as s:
-            res = s.get('https://m.live.qq.com/' + str(self.rid))
+            res = s.get(f'https://m.live.qq.com/{self.rid}')
         show_status = re.search(r'"show_status":"(\d)"', res.text)
         if show_status:
             if show_status.group(1) == '1':
