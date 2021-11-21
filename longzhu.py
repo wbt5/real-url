@@ -7,15 +7,22 @@ import re
 class LongZhu:
 
     def __init__(self, rid):
+        """
+        龙珠直播，获取hls格式的播放地址
+        Args:
+            rid: 直播房间号
+        """
         self.rid = rid
+        self.s = requests.Session()
 
     def get_real_url(self):
         try:
-            response = requests.get('http://star.longzhu.com/' + str(self.rid)).text
-            roomId = re.findall(r'roomid":(\d+)', response)[0]
-            response = requests.get('http://livestream.longzhu.com/live/getlivePlayurl?roomId={}&utmSr=&platform=h5&device=ios'.format(roomId)).json()
-            real_url = response.get('playLines')[0].get('urls')[0].get('securityUrl')
-        except:
+            res = self.s.get(f'http://star.longzhu.com/{self.rid}').text
+            roomId = re.search(r'roomid":(\d+)', res).group(1)
+            res = self.s.get(f'http://livestream.longzhu.com/live/getlivePlayurl?roomId={roomId}&utmSr=&platform=h5'
+                             f'&device=ios').json()
+            real_url = res.get('playLines')[0].get('urls')[-1].get('securityUrl')
+        except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
 
