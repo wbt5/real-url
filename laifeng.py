@@ -9,19 +9,26 @@ import re
 class LaiFeng:
 
     def __init__(self, rid):
+        """
+        来疯直播
+        Args:
+            rid: 房间号
+        """
         self.rid = rid
+        self.s = requests.Session()
 
     def get_real_url(self):
         try:
-            response_main = requests.get(url='http://v.laifeng.com/{}/m'.format(self.rid)).text
-            stream_name = re.findall(r"initAlias:'(.*)?'", response_main)[0]
+            response_main = self.s.get(f'http://v.laifeng.com/{self.rid}/m').text
+            stream_name = re.search(r"initAlias:'(.*)?'", response_main).group(1)
             real_url = {}
             for stream_format in ['HttpFlv', 'Hls']:
-                request_url = 'https://lapi.lcloud.laifeng.com/Play?AppId=101&CallerVersion=2.0&StreamName={}&Action=Schedule&Version=2.0&Format={}'.format(stream_name, stream_format)
-                response = requests.get(url=request_url).json()
+                request_url = f'https://lapi.lcloud.laifeng.com/Play?AppId=101&CallerVersion=2.0&StreamName' \
+                              f'={stream_name}&Action=Schedule&Version=2.0&Format={stream_format}'
+                response = self.s.get(request_url).json()
                 real_url[stream_format] = response.get(stream_format)[0].get('Url')
-        except:
-           raise Exception('该直播间不存在或未开播')
+        except Exception:
+            raise Exception('该直播间不存在或未开播')
         return real_url
 
 
