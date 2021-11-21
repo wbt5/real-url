@@ -10,7 +10,7 @@ class Now:
 
     def get_real_url(self):
         try:
-            room_url = 'https://now.qq.com/cgi-bin/now/web/room/get_live_room_url?room_id={}&platform=8'.format(self.rid)
+            room_url = f'https://now.qq.com/cgi-bin/now/web/room/get_live_room_url?room_id={self.rid}&platform=8'
             response = requests.get(url=room_url).json()
             result = response.get('result')
             real_url = {
@@ -18,7 +18,7 @@ class Now:
                 'raw_rtmp_url': result.get('raw_rtmp_url', 0),
                 'raw_flv_url': result.get('raw_flv_url', 0)
             }
-        except:
+        except Exception:
             raise Exception('直播间不存在或未开播')
         return real_url
 
