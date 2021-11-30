@@ -68,7 +68,13 @@ class DanmakuClient:
         self.__hs = aiohttp.ClientSession()
 
     async def init_ws(self):
-        ws_url, reg_datas = await self.__site.get_ws_info(self.__url)
+        try:
+            ws_url, reg_datas = await self.__site.get_ws_info(self.__url)
+        except Exception as e:
+            raise 
+        finally:
+            await self.__hs.close()
+            
         self.__ws = await self.__hs.ws_connect(ws_url)
         if reg_datas:
             for reg_data in reg_datas:
