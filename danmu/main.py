@@ -4,14 +4,21 @@
 
 import asyncio
 import danmaku
-
+import time
+import csv
 
 async def printer(q):
     while True:
+        list_info = []
         m = await q.get()
         if m['msg_type'] == 'danmaku':
-            print(f'{m["name"]}：{m["content"]}')
-
+            danmu = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()) + ' ' + f'{m["name"]}：{m["content"]}'
+            print(danmu)
+            list_info.append(danmu)
+            f = open('douyu_info.csv', 'a+', encoding='utf-8-sig')
+            csv_writer = csv.writer(f)
+            csv_writer.writerow(list_info)
+            f.close()
 
 async def main(url):
     q = asyncio.Queue()
