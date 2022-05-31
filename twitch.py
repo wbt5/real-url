@@ -23,7 +23,7 @@ class Twitch:
     def get_client_id(self):
         try:
             res = self.s.get(f'https://www.twitch.tv/{self.rid}').text
-            client_id = re.search(r'"Client-ID":"(.*?)"', res).group(1)
+            client_id = re.search(r'clientId="(.*?)"', res).group(1)
             return client_id
         except requests.exceptions.ConnectionError:
             raise Exception('ConnectionError')
