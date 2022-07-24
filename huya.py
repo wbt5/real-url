@@ -54,5 +54,6 @@ def get_real_url(room_id):
 
 rid = input('输入虎牙直播房间号：\n')
 real_url = get_real_url(rid)
+real_url = re.findall(r'^(.*?)&ctype',real_url)[0]
 print('该直播间源地址为：')
 print(real_url)
