@@ -61,11 +61,13 @@ class DouYu:
         key = ''
         if data:
             rtmp_live = data['rtmp_live']
-            key = re.search(r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(/playlist|.m3u8)', rtmp_live).group(1)
+            key = re.search(
+                r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(/playlist|.m3u8)', rtmp_live).group(1)
         return error, key
 
     def get_js(self):
-        result = re.search(r'(function ub98484234.*)\s(var.*)', self.res).group()
+        result = re.search(
+            r'(function ub98484234.*)\s(var.*)', self.res).group()
         func_ub9 = re.sub(r'eval.*;}', 'strc;}', result)
         js = execjs.compile(func_ub9)
         res = js.call('ub98484234')
@@ -75,7 +77,8 @@ class DouYu:
 
         func_sign = re.sub(r'return rt;}\);?', 'return rt;}', res)
         func_sign = func_sign.replace('(function (', 'function sign(')
-        func_sign = func_sign.replace('CryptoJS.MD5(cb).toString()', '"' + rb + '"')
+        func_sign = func_sign.replace(
+            'CryptoJS.MD5(cb).toString()', '"' + rb + '"')
 
         js = execjs.compile(func_sign)
         params = js.call('sign', self.rid, self.did, self.t10)
@@ -83,7 +86,8 @@ class DouYu:
 
         url = 'https://m.douyu.com/api/room/ratestream'
         res = self.s.post(url, params=params).text
-        key = re.search(r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res).group(1)
+        key = re.search(
+            r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res).group(1)
 
         return key
 
@@ -95,7 +99,8 @@ class DouYu:
         :return: JSON格式
         """
         res = self.s.get('https://www.douyu.com/' + str(self.rid)).text
-        result = re.search(r'(vdwdae325w_64we[\s\S]*function ub98484234[\s\S]*?)function', res).group(1)
+        result = re.search(
+            r'(vdwdae325w_64we[\s\S]*function ub98484234[\s\S]*?)function', res).group(1)
         func_ub9 = re.sub(r'eval.*?;}', 'strc;}', result)
         js = execjs.compile(func_ub9)
         res = js.call('ub98484234')
@@ -105,7 +110,8 @@ class DouYu:
 
         func_sign = re.sub(r'return rt;}\);?', 'return rt;}', res)
         func_sign = func_sign.replace('(function (', 'function sign(')
-        func_sign = func_sign.replace('CryptoJS.MD5(cb).toString()', '"' + rb + '"')
+        func_sign = func_sign.replace(
+            'CryptoJS.MD5(cb).toString()', '"' + rb + '"')
 
         js = execjs.compile(func_sign)
         params = js.call('sign', self.rid, self.did, self.t10)
@@ -127,9 +133,14 @@ class DouYu:
         else:
             key = self.get_js()
         real_url = {}
-        real_url["flv"] = "http://vplay1a.douyucdn.cn/live/{}.flv?uuid=".format(key)
-        real_url["x-p2p"] = "http://tx2play1.douyucdn.cn/live/{}.xs?uuid=".format(key)
+        real_url["flv"] = "http://ws-tct.douyucdn.cn/live/{}.flv?uuid=".format(
+            key)
+        real_url["x-p2p"] = "http://ws-tct.douyucdn.cn/live/{}.xs?uuid=".format(
+            key)
+        real_url["aliyun"] = "http://dyscdnali1.douyucdn.cn/live/{}.flv?uuid=".format(
+            key)
         return real_url
+
 
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')
