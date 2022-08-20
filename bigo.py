@@ -3,11 +3,12 @@
 # @Project: my-spiders
 # @Author: wbt5
 # @Blog: https://wbt5.com
+# BIGO LIVE:https://www.bigo.tv/cn/
 
 import requests
 
 
-class bigo:
+class Bigo:
 
     def __init__(self, rid):
         self.rid = rid
@@ -23,7 +24,7 @@ class bigo:
 
 def get_real_url(rid):
     try:
-        url = bigo(rid)
+        url = Bigo(rid)
         return url.get_real_url()
     except Exception as e:
         print('Exception：', e)
