@@ -12,8 +12,8 @@ class DouYu:
     """
     可用来替换返回链接中的主机部分
     两个网宿的CDN：
-    vplay1a.douyucdn.cn
-    vplay3a.douyucdn.cn
+    vplay1a.douyucdn.cn（失效）
+    vplay3a.douyucdn.cn（失效）
     墙外不用带尾巴的akm cdn：
     hls3-akm.douyucdn.cn
     hlsa-akm.douyucdn.cn
@@ -127,7 +127,8 @@ class DouYu:
         else:
             key = self.get_js()
         real_url = {}
-        real_url["flv"] = "http://akm-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        real_url["flv1"] = "http://akm-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        real_url["flv2"] = "http://ws-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
         return real_url
 
 if __name__ == '__main__':
