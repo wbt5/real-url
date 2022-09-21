@@ -3,7 +3,7 @@
 import hashlib
 import re
 import time
-
+import json
 import execjs
 import requests
 
@@ -79,13 +79,13 @@ class DouYu:
 
         js = execjs.compile(func_sign)
         params = js.call('sign', self.rid, self.did, self.t10)
-        params += '&ver=219032101&rid={}&rate=-1'.format(self.rid)
+        params += '&ver=219032101&rid={}&rate=0'.format(self.rid)
 
         url = 'https://m.douyu.com/api/room/ratestream'
         res = self.s.post(url, params=params).text
         key = re.search(r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res).group(1)
 
-        return key
+        return res
 
     def get_pc_js(self, cdn='ws-h5', rate=0):
         """
@@ -129,9 +129,14 @@ class DouYu:
         real_url = {}
         real_url["flv1"] = "http://akm-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
         real_url["flv2"] = "http://ws-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        try:
+            real_url["m3u8"] = json.loads(s.get_js())["data"]["url"]
+        except:
+            pass
         return real_url
 
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')
     s = DouYu(r)
     print(s.get_real_url())
+
