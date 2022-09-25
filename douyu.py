@@ -84,8 +84,10 @@ class DouYu:
         url = 'https://m.douyu.com/api/room/ratestream'
         res = self.s.post(url, params=params).text
         key = re.search(r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res).group(1)
-
-        return res
+        data = {}
+        data["res"] = res
+        data["key"] = key
+        return data
 
     def get_pc_js(self, cdn='ws-h5', rate=0):
         """
@@ -117,20 +119,23 @@ class DouYu:
         return res
 
     def get_real_url(self):
+        data = {}
         error, key = self.get_pre()
         if error == 0:
+            data["key"] = key
             pass
         elif error == 102:
             raise Exception('房间不存在')
         elif error == 104:
             raise Exception('房间未开播')
         else:
-            key = self.get_js()
+            data = self.get_js()
         real_url = {}
-        real_url["flv1"] = "http://akm-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
-        real_url["flv2"] = "http://ws-tct.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        real_url["flv1"] = "http://akm-tct.douyucdn.cn/live/{}.flv?uuid=".format(data["key"])
+        real_url["flv2"] = "http://ws-tct.douyucdn.cn/live/{}.flv?uuid=".format(data["key"])
+
         try:
-            real_url["m3u8"] = json.loads(s.get_js())["data"]["url"]
+            real_url["m3u8"] = json.loads(data["res"])["data"]["url"]
         except:
             pass
         return real_url
