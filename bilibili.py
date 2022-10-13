@@ -41,7 +41,7 @@ class BiliBili:
             'format': '0,1,2',
             'codec': '0,1',
             'qn': current_qn,
-            'platform': 'h5',
+            'platform': 'web',
             'ptype': 8,
         }
         res = self.s.get(url, headers=self.header, params=param).json()
