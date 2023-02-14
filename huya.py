@@ -1,31 +1,73 @@
 # 获取虎牙直播的真实流媒体地址。
-
+import json
+import math
 import requests
 import re
-import base64
-import urllib.parse
-import hashlib
 import time
+import base64
+import hashlib
+from urllib.parse import parse_qs, urlencode
+from datetime import datetime
+import random
 
 
-def live(e):
-    i, b = e.split('?')
-    r = i.split('/')
-    s = re.sub(r'.(flv|m3u8)', '', r[-1])
-    c = b.split('&', 3)
-    c = [i for i in c if i != '']
-    n = {i.split('=')[0]: i.split('=')[1] for i in c}
-    fm = urllib.parse.unquote(n['fm'])
-    u = base64.b64decode(fm).decode('utf-8')
-    p = u.split('_')[0]
-    f = str(int(time.time() * 1e7))
-    l = n['wsTime']
-    t = '0'
-    h = '_'.join([p, t, s, f, l])
-    m = hashlib.md5(h.encode('utf-8')).hexdigest()
-    y = c[-1]
-    url = "{}?wsSecret={}&wsTime={}&u={}&seqid={}&{}".format(i, m, l, t, f, y)
-    return url
+def live(info):
+    stream_info = dict({'flv':{},'hls':{}})
+    cdn_type = dict({'AL': '阿里', 'TX': '腾讯', 'HW': '华为', 'HS': '火山'})
+    uid = get_anonymous_uid()
+    for s in info["roomInfo"]["tLiveInfo"]["tLiveStreamInfo"]["vStreamInfo"]["value"]:
+        if s["sFlvUrl"]:
+            q = dict(parse_qs(s["sFlvAntiCode"]))
+            q["ver"] = ["1"]
+            q["sv"] = ["2110211124"]
+            q["seqid"] = [str(int(uid) + int(datetime.now().timestamp() * 1000))]
+            q["uid"] = [str(uid)]
+            q["uuid"] = [str(get_uuid())]
+            ss = hashlib.md5("{}|{}|{}".format(q["seqid"][0], q["ctype"][0], q["t"][0]).encode("UTF-8")).hexdigest()
+            q["fm"][0] = base64.b64decode(q["fm"][0]).decode('utf-8').replace("$0", q["uid"][0]).replace("$1", s[
+                "sStreamName"]).replace("$2", ss).replace("$3", q["wsTime"][0])
+            q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
+            del q["fm"]
+            del q["txyp"]
+            qs = urlencode({x: y[0] for x, y in q.items()})
+            stream_info["flv"][cdn_type[s["sCdnType"]]] = "{}/{}.{}?{}".format(s["sFlvUrl"], s["sStreamName"],
+                                                                        s["sFlvUrlSuffix"], qs)
+        if s["sHlsUrl"]:
+            q = dict(parse_qs(s["sHlsAntiCode"]))
+            q["ver"] = ["1"]
+            q["sv"] = ["2110211124"]
+            q["seqid"] = [str(int(uid) + int(datetime.now().timestamp() * 1000))]
+            q["uid"] = [str(uid)]
+            q["uuid"] = [str(get_uuid())]
+            ss = hashlib.md5("{}|{}|{}".format(q["seqid"][0], q["ctype"][0], q["t"][0]).encode("UTF-8")).hexdigest()
+            q["fm"][0] = base64.b64decode(q["fm"][0]).decode('utf-8').replace("$0", q["uid"][0]).replace("$1", s[
+                "sStreamName"]).replace("$2", ss).replace("$3", q["wsTime"][0])
+            q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
+            del q["fm"]
+            del q["txyp"]
+            qs = urlencode({x: y[0] for x, y in q.items()})
+            stream_info["hls"][cdn_type[s["sCdnType"]]] = "{}/{}.{}?{}".format(s["sHlsUrl"], s["sStreamName"],
+                                                                        s["sHlsUrlSuffix"], qs)
+    return stream_info
+
+
+def get_anonymous_uid():
+    url = "https://udblgn.huya.com/web/anonymousLogin"
+    resp = requests.post(url, json={
+        "appId": 5002,
+        "byPass": 3,
+        "context": "",
+        "version": "2.4",
+        "data": {}
+    })
+    return resp.json()["data"]["uid"]
+
+
+def get_uuid():
+    # Number((Date.now() % 1e10 * 1e3 + (1e3 * Math.random() | 0)) % 4294967295))
+    now = datetime.now().timestamp() * 1000
+    rand = random.randint(0, 1000) | 0
+    return int((now % 10000000000 * 1000 + rand) % 4294967295)
 
 
 def get_real_url(room_id):
@@ -37,22 +79,20 @@ def get_real_url(room_id):
                           'Chrome/75.0.3770.100 Mobile Safari/537.36 '
         }
         response = requests.get(url=room_url, headers=header).text
-        liveLineUrl = re.findall(r'"liveLineUrl":"([\s\S]*?)",', response)[0]
-        liveline = base64.b64decode(liveLineUrl).decode('utf-8')
-        if liveline:
-            if 'replay' in liveline:
-                return '直播录像：' + liveline
-            else:
-                liveline = live(liveline)
-                real_url = ("https:" + liveline).replace("hls", "flv").replace("m3u8", "flv")
+        room_info_str = re.findall(r'\<script\> window.HNF_GLOBAL_INIT = (.*) \</script\>', response)[0]
+        room_info = json.loads(room_info_str)
+        if room_info["roomInfo"]["eLiveStatus"] == 2:
+            print('该直播间源地址为：')
+            return live(room_info)
         else:
-            real_url = '未开播或直播间不存在'
-    except:
-        real_url = '未开播或直播间不存在'
+            real_url = '未开播'
+
+    except Exception as e:
+        print(e)
+        real_url = '直播间不存在'
     return real_url
 
 
 rid = input('输入虎牙直播房间号：\n')
 real_url = get_real_url(rid)
-print('该直播间源地址为：')
 print(real_url)
