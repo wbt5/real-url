@@ -6,6 +6,7 @@ import time
 import json
 import execjs
 import requests
+import json
 
 
 class DouYu:
@@ -138,7 +139,7 @@ class DouYu:
             real_url["m3u8"] = json.loads(data["res"])["data"]["url"]
         except:
             pass
-        return real_url
+        return json.dumps(real_url, indent=2, ensure_ascii=False)
 
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')

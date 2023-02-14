@@ -12,43 +12,38 @@ import random
 
 
 def live(info):
-    stream_info = dict({'flv':{},'hls':{}})
+    stream_info = dict({'flv': {}, 'hls': {}})
     cdn_type = dict({'AL': '阿里', 'TX': '腾讯', 'HW': '华为', 'HS': '火山'})
     uid = get_anonymous_uid()
     for s in info["roomInfo"]["tLiveInfo"]["tLiveStreamInfo"]["vStreamInfo"]["value"]:
         if s["sFlvUrl"]:
-            q = dict(parse_qs(s["sFlvAntiCode"]))
-            q["ver"] = ["1"]
-            q["sv"] = ["2110211124"]
-            q["seqid"] = [str(int(uid) + int(datetime.now().timestamp() * 1000))]
-            q["uid"] = [str(uid)]
-            q["uuid"] = [str(get_uuid())]
-            ss = hashlib.md5("{}|{}|{}".format(q["seqid"][0], q["ctype"][0], q["t"][0]).encode("UTF-8")).hexdigest()
-            q["fm"][0] = base64.b64decode(q["fm"][0]).decode('utf-8').replace("$0", q["uid"][0]).replace("$1", s[
-                "sStreamName"]).replace("$2", ss).replace("$3", q["wsTime"][0])
-            q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
-            del q["fm"]
-            del q["txyp"]
-            qs = urlencode({x: y[0] for x, y in q.items()})
             stream_info["flv"][cdn_type[s["sCdnType"]]] = "{}/{}.{}?{}".format(s["sFlvUrl"], s["sStreamName"],
-                                                                        s["sFlvUrlSuffix"], qs)
+                                                                               s["sFlvUrlSuffix"],
+                                                                               process_anticode(s["sFlvAntiCode"], uid,
+                                                                               s["sStreamName"]))
         if s["sHlsUrl"]:
-            q = dict(parse_qs(s["sHlsAntiCode"]))
-            q["ver"] = ["1"]
-            q["sv"] = ["2110211124"]
-            q["seqid"] = [str(int(uid) + int(datetime.now().timestamp() * 1000))]
-            q["uid"] = [str(uid)]
-            q["uuid"] = [str(get_uuid())]
-            ss = hashlib.md5("{}|{}|{}".format(q["seqid"][0], q["ctype"][0], q["t"][0]).encode("UTF-8")).hexdigest()
-            q["fm"][0] = base64.b64decode(q["fm"][0]).decode('utf-8').replace("$0", q["uid"][0]).replace("$1", s[
-                "sStreamName"]).replace("$2", ss).replace("$3", q["wsTime"][0])
-            q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
-            del q["fm"]
-            del q["txyp"]
-            qs = urlencode({x: y[0] for x, y in q.items()})
             stream_info["hls"][cdn_type[s["sCdnType"]]] = "{}/{}.{}?{}".format(s["sHlsUrl"], s["sStreamName"],
-                                                                        s["sHlsUrlSuffix"], qs)
+                                                                               s["sHlsUrlSuffix"],
+                                                                               process_anticode(s["sHlsAntiCode"], uid,
+                                                                               s["sStreamName"]))
     return stream_info
+
+
+def process_anticode(anticode, uid, streamname):
+    q = dict(parse_qs(anticode))
+    q["ver"] = ["1"]
+    q["sv"] = ["2110211124"]
+    q["seqid"] = [str(int(uid) + int(datetime.now().timestamp() * 1000))]
+    q["uid"] = [str(uid)]
+    q["uuid"] = [str(get_uuid())]
+    ss = hashlib.md5("{}|{}|{}".format(q["seqid"][0], q["ctype"][0], q["t"][0]).encode("UTF-8")).hexdigest()
+    q["fm"][0] = base64.b64decode(q["fm"][0]).decode('utf-8').replace("$0", q["uid"][0]).replace("$1",
+                                                                                                 streamname).replace(
+        "$2", ss).replace("$3", q["wsTime"][0])
+    q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
+    del q["fm"]
+    del q["txyp"]
+    return urlencode({x: y[0] for x, y in q.items()})
 
 
 def get_anonymous_uid():
@@ -83,7 +78,7 @@ def get_real_url(room_id):
         room_info = json.loads(room_info_str)
         if room_info["roomInfo"]["eLiveStatus"] == 2:
             print('该直播间源地址为：')
-            return live(room_info)
+            real_url = json.dumps(live(room_info), indent=2, ensure_ascii=False)
         else:
             real_url = '未开播'
 
