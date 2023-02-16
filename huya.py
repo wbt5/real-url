@@ -42,7 +42,8 @@ def process_anticode(anticode, uid, streamname):
         "$2", ss).replace("$3", q["wsTime"][0])
     q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
     del q["fm"]
-    del q["txyp"]
+    if "txyp" in q:
+        del q["txyp"]
     return urlencode({x: y[0] for x, y in q.items()})
 
 
