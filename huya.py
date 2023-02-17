@@ -13,7 +13,7 @@ import random
 
 def live(info):
     stream_info = dict({'flv': {}, 'hls': {}})
-    cdn_type = dict({'AL': '阿里', 'TX': '腾讯', 'HW': '华为', 'HS': '火山'})
+    cdn_type = dict({'AL': '阿里', 'TX': '腾讯', 'HW': '华为', 'HS': '火山', 'WS': '网宿'})
     uid = get_anonymous_uid()
     for s in info["roomInfo"]["tLiveInfo"]["tLiveStreamInfo"]["vStreamInfo"]["value"]:
         if s["sFlvUrl"]:
@@ -42,7 +42,8 @@ def process_anticode(anticode, uid, streamname):
         "$2", ss).replace("$3", q["wsTime"][0])
     q["wsSecret"][0] = hashlib.md5(q["fm"][0].encode("UTF-8")).hexdigest()
     del q["fm"]
-    del q["txyp"]
+    if "txyp" in q:
+        del q["txyp"]
     return urlencode({x: y[0] for x, y in q.items()})
 
 
