@@ -1,9 +1,7 @@
 # 获取虎牙直播的真实流媒体地址。
 import json
-import math
 import requests
 import re
-import time
 import base64
 import hashlib
 from urllib.parse import parse_qs, urlencode
@@ -80,6 +78,9 @@ def get_real_url(room_id):
         if room_info["roomInfo"]["eLiveStatus"] == 2:
             print('该直播间源地址为：')
             real_url = json.dumps(live(room_info), indent=2, ensure_ascii=False)
+        elif room_info["roomInfo"]["eLiveStatus"] == 3:
+            print('该直播间正在回放历史直播，低清晰度源地址为：')
+            real_url = "https:{}".format(base64.b64decode(room_info["roomProfile"]["liveLineUrl"]).decode('utf-8'))
         else:
             real_url = '未开播'
 
