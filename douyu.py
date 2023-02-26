@@ -3,23 +3,12 @@
 import hashlib
 import re
 import time
-import json
 import execjs
 import requests
 import json
 
 
 class DouYu:
-    """
-    可用来替换返回链接中的主机部分
-    两个网宿的CDN：
-    vplay1a.douyucdn.cn（失效）
-    vplay3a.douyucdn.cn（失效）
-    墙外不用带尾巴的akm cdn：
-    hls3-akm.douyucdn.cn
-    hlsa-akm.douyucdn.cn
-    hls1a-akm.douyucdn.cn
-    """
 
     def __init__(self, rid):
         """
@@ -80,7 +69,7 @@ class DouYu:
 
         js = execjs.compile(func_sign)
         params = js.call('sign', self.rid, self.did, self.t10)
-        params += '&ver=219032101&rid={}&rate=0'.format(self.rid)
+        params += '&ver=22107261&rid={}&rate=-1'.format(self.rid)
 
         url = 'https://m.douyu.com/api/room/ratestream'
         res = self.s.post(url, params=params).text
@@ -90,50 +79,16 @@ class DouYu:
         data["key"] = key
         return data
 
-    def get_pc_js(self, cdn='ws-h5', rate=0):
-        """
-        通过PC网页端的接口获取完整直播源。
-        :param cdn: 主线路ws-h5、备用线路tct-h5
-        :param rate: 1流畅；2高清；3超清；4蓝光4M；0蓝光8M或10M
-        :return: JSON格式
-        """
-        res = self.s.get('https://www.douyu.com/' + str(self.rid)).text
-        result = re.search(r'(vdwdae325w_64we[\s\S]*function ub98484234[\s\S]*?)function', res).group(1)
-        func_ub9 = re.sub(r'eval.*?;}', 'strc;}', result)
-        js = execjs.compile(func_ub9)
-        res = js.call('ub98484234')
-
-        v = re.search(r'v=(\d+)', res).group(1)
-        rb = DouYu.md5(self.rid + self.did + self.t10 + v)
-
-        func_sign = re.sub(r'return rt;}\);?', 'return rt;}', res)
-        func_sign = func_sign.replace('(function (', 'function sign(')
-        func_sign = func_sign.replace('CryptoJS.MD5(cb).toString()', '"' + rb + '"')
-
-        js = execjs.compile(func_sign)
-        params = js.call('sign', self.rid, self.did, self.t10)
-
-        params += '&cdn={}&rate={}'.format(cdn, rate)
-        url = 'https://www.douyu.com/lapi/live/getH5Play/{}'.format(self.rid)
-        res = self.s.post(url, params=params).json()
-
-        return res
-
     def get_real_url(self):
         data = {}
         error, key = self.get_pre()
-        if error == 0:
-            data["key"] = key
-            pass
-        elif error == 102:
+        if error == 102:
             raise Exception('房间不存在')
         elif error == 104:
             raise Exception('房间未开播')
         else:
             data = self.get_js()
         real_url = {}
-        real_url["flv1"] = "http://akm-tct.douyucdn.cn/live/{}.flv?uuid=".format(data["key"])
-        real_url["flv2"] = "http://ws-tct.douyucdn.cn/live/{}.flv?uuid=".format(data["key"])
 
         try:
             real_url["m3u8"] = json.loads(data["res"])["data"]["url"]
