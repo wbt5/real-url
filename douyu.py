@@ -1,5 +1,4 @@
 # 获取斗鱼直播间的真实流媒体地址，默认最高画质
-# 使用 两位大佬@limitcool @wc7086，在此感谢！
 import hashlib
 import re
 import time
@@ -47,12 +46,23 @@ class DouYu:
         }
         res = self.s.post(url, headers=headers, data=data).json()
         error = res['error']
-        data = res['data']
-        key = ''
-        if data:
-            rtmp_live = data['rtmp_live']
-            key = re.search(r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(/playlist|.m3u8)', rtmp_live).group(1)
-        return error, key
+        return error
+
+    def get_did(self):
+        did = '10000000000000000000000000001501'
+        url = "https://passport.douyu.com/lapi/did/api/get?client_id=25&_={}&callback=axiosJsonpCallback1".format(self.t13)
+        headers = {
+            'referer': 'https://m.douyu.com/'
+        }
+        try:
+            res = self.s.get(url=url,headers=headers).text
+            result = json.loads(re.search(r"axiosJsonpCallback1\((.*)\)", res).group(1))
+            if result["error"] == 0:
+                if "did" in result["data"]:
+                    did = result["data"]["did"]
+        except Exception as e:
+            print(e)
+        return did
 
     def get_js(self):
         result = re.search(r'(function ub98484234.*)\s(var.*)', self.res).group()
@@ -72,32 +82,27 @@ class DouYu:
         params += '&ver=22107261&rid={}&rate=-1'.format(self.rid)
 
         url = 'https://m.douyu.com/api/room/ratestream'
-        res = self.s.post(url, params=params).text
-        key = re.search(r'(\d{1,8}[0-9a-zA-Z]+)_?\d{0,4}(.m3u8|/playlist)', res).group(1)
-        data = {}
-        data["res"] = res
-        data["key"] = key
-        return data
+        res = self.s.post(url, params=params).json()
+        return res
 
     def get_real_url(self):
-        data = {}
-        error, key = self.get_pre()
+        real_url = {}
+        error = self.get_pre()
         if error == 102:
             raise Exception('房间不存在')
         elif error == 104:
             raise Exception('房间未开播')
         else:
-            data = self.get_js()
-        real_url = {}
-
-        try:
-            real_url["m3u8"] = json.loads(data["res"])["data"]["url"]
-        except:
-            pass
+            try:
+                data = self.get_js()
+                real_url["m3u8"] = data["data"]["url"]
+            except:
+                pass
         return json.dumps(real_url, indent=2, ensure_ascii=False)
 
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')
     s = DouYu(r)
+    s.did = s.get_did()
     print(s.get_real_url())
 
