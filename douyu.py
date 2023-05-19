@@ -127,8 +127,8 @@ class DouYu:
         else:
             key = self.get_js()
         real_url = {}
-        real_url["flv"] = "http://vplay1a.douyucdn.cn/live/{}.flv?uuid=".format(key)
-        real_url["x-p2p"] = "http://tx2play1.douyucdn.cn/live/{}.xs?uuid=".format(key)
+        real_url["flv"] = "http://openhls-tct.douyucdn2.cn/dyliveflv1/{}.flv?uuid=".format(key)
+        real_url["x-p2p"] = "http://openhls-tct.douyucdn2.cn/dyliveflv1/{}.xs?uuid=".format(key)
         return real_url
 
 if __name__ == '__main__':
