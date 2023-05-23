@@ -34,3 +34,5 @@ urllib3==1.25.11
 wget==3.2
 wincertstore==0.2
 yarl==1.5.1
+selenium==4.9.1
+urllib3==1.26.7
