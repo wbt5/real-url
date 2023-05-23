@@ -1,18 +1,33 @@
 import re
 import sys
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from urllib import parse
 
 import requests
 
-DEBUG = False
+DEBUG = True
 
 headers = {
     'authority': 'v.douyin.com',
     'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
 }
 
-url = input('请输入抖音直播链接或19位room_id：')
+url = input('请输入【抖音直播链接】或【19位room_id】或【网页端直播间链接】：')
 if re.match(r'\d{19}', url):
     room_id = url
+
+if 'live' in url:
+    option = Options()
+    option.add_argument('--headless')
+    browser = webdriver.Chrome(options=option)
+    browser.get(url)
+    ps = browser.page_source
+    ps_parsed = parse.unquote(ps)
+    id_raw = ps_parsed.split('roomId')[1].split('id_str')[0]
+    room_id = re.search(r'\d{19}', id_raw).group(0)
+
+
 else:
     try:
         url = re.search(r'(https.*)', url).group(1)
