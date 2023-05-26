@@ -8,8 +8,11 @@ multidict==4.7.6
 protobuf==3.12.2
 pycryptodome==3.9.8
 PyExecJS==1.5.1
-requests==2.26.0
+requests
 six==1.15.0
 typing-extensions==3.7.4.3
 urllib3==1.26.5
 yarl==1.5.1
+selenium
+urllib3
+progressbar
