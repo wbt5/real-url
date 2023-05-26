@@ -1,5 +1,11 @@
 # Real-Url
 
+## 2023.05 add support of web live url to douyin.py
+selenium依赖已添加入requirements.txt
+手动安装chrome浏览器
+手动下载对应版本chromedriver，跟douyin.py放在同一个文件夹中
+[CNPM Binaries Mirror (npmmirror.com)](https://registry.npmmirror.com/binary.html?path=chromedriver/)
+
 ## 说明
 
 没想到还有这么多朋友发 issue 和邮件咨询问题，感谢大家的支持🎈！因为有时很忙，回复和提交代码的周期会有点长，抱歉哦😋
