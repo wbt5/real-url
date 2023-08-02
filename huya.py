@@ -11,7 +11,7 @@ import random
 
 def live(info):
     stream_info = dict({'flv': {}, 'hls': {}})
-    cdn_type = dict({'AL': '阿里', 'TX': '腾讯', 'HW': '华为', 'HS': '火山', 'WS': '网宿'})
+    cdn_type = dict({'AL': '阿里', 'TX': '腾讯', 'HW': '华为', 'HS': '火山', 'WS': '网宿', 'HY': '虎牙'})
     uid = get_anonymous_uid()
     for s in info["roomInfo"]["tLiveInfo"]["tLiveStreamInfo"]["vStreamInfo"]["value"]:
         if s["sFlvUrl"]:
