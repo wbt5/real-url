@@ -1,5 +1,6 @@
 import asyncio
 import re
+import ssl
 
 import aiohttp
 
@@ -35,6 +36,8 @@ class DanmakuClient:
         self.__stop = False
         self.__dm_queue = q
         self.__link_status = True
+        self.__ssl_ctx = ssl.create_default_context()
+        self.__ssl_ctx.set_ciphers("DEFAULT")
         if 'http://' == url[:7] or 'https://' == url[:8]:
             self.__url = url
         else:
@@ -69,7 +72,7 @@ class DanmakuClient:
 
     async def init_ws(self):
         ws_url, reg_datas = await self.__site.get_ws_info(self.__url)
-        self.__ws = await self.__hs.ws_connect(ws_url)
+        self.__ws = await self.__hs.ws_connect(ws_url, ssl_context=self.__ssl_ctx)
         if reg_datas:
             for reg_data in reg_datas:
                 if self.__u == 'qf.56.com' or self.__u == 'laifeng.com' or self.__u == 'look.163.com':
@@ -102,7 +105,7 @@ class DanmakuClient:
     async def init_ws_huajiao(self):
         rid = re.search(r'\d+', self.__url).group(0)
         s = self.__site(rid)
-        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url, ssl_context=self.__ssl_ctx)
         await self.__ws.send_bytes(s.sendHandshakePack())
         count = 0
         async for msg in self.__ws:
@@ -117,7 +120,7 @@ class DanmakuClient:
             count += 1
 
     async def init_ws_acfun(self):
-        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url, ssl_context=self.__ssl_ctx)
         await self.__ws.send_bytes(self.__s.encode_packet('register'))
 
     async def ping_acfun(self):
@@ -147,7 +150,7 @@ class DanmakuClient:
                 await self.__dm_queue.put(m)
 
     async def init_ws_173(self):
-        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url, ssl_context=self.__ssl_ctx)
         await self.__ws.send_bytes(self.__s.pack('startup'))
         await asyncio.sleep(1)
         await self.__ws.send_bytes(self.__s.pack('enterroomreq'))
@@ -170,7 +173,7 @@ class DanmakuClient:
                 await self.__dm_queue.put(m)
 
     async def init_ws_yy(self):
-        self.__ws = await self.__hs.ws_connect(self.__site.ws_url)
+        self.__ws = await self.__hs.ws_connect(self.__site.ws_url, ssl_context=self.__ssl_ctx)
         await self.__ws.send_bytes(self.__s.LoginUDB())
 
     async def heartbeat_yy(self):
