@@ -126,10 +126,44 @@ class DouYu:
             raise Exception('房间未开播')
         else:
             key = self.get_js()
+        if key:
+            loopid,upid = self.get_room_infos()
+            if loopid == 1:
+                raise Exception('房间轮播中')
+        
+        # real_url = {}
+        # real_url["flv"] = "http://vplay1a.douyucdn.cn/live/{}.flv?uuid=".format(key)
+        # real_url["x-p2p"] = "http://tx2play1.douyucdn.cn/live/{}.xs?uuid=".format(key)
+        # return real_url
+
+        # 不再使用key获取对应的m3u8链接 大佬们可以提供新的cdn吗
+        # 抓取可以选择lsar抓取链接 更加易懂 详见大佬提供的lsar
+        # https://github.com/thep0y/lsar 来自thep0y大佬 测试好用 链接表示更加直观
+
+        # 修改为pcjs的获取链接
         real_url = {}
-        real_url["flv"] = "http://vplay1a.douyucdn.cn/live/{}.flv?uuid=".format(key)
-        real_url["x-p2p"] = "http://tx2play1.douyucdn.cn/live/{}.xs?uuid=".format(key)
-        return real_url
+        res = self.get_pc_js()
+        error = res['error']
+        new_url = urljoin(res['data']['rtmp_url'],res['data']['rtmp_live'])
+        new_url = new_url.replace(':443',':443/live')
+        real_url["flv"] = new_url
+        return new_url
+
+    def get_room_infos(self):
+        """
+        # title = roomInfos['room_name']
+        # owner = roomInfos['owner_name']
+        # did = roomInfos['did']
+        
+        # # real time pic
+        # roompic = roomInfos['room_pic']
+        # # status 1
+        # status = roomInfos['status']
+        """
+        urllink = f'https://www.douyu.com/betard/{self.rid}'
+        result = self.s.get(urllink, headers = {'rid': self.rid, }).json()
+        roomInfos = result['room']        
+        return roomInfos['videoLoop'],roomInfos['up_id']
 
 if __name__ == '__main__':
     r = input('输入斗鱼直播间号：\n')
